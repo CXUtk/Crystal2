@@ -1,0 +1,27 @@
+{
+    "Width": 800,
+    "Height": 600,
+    "SamplesPerPixel": 64,
+    "Integrator": "PathTracer",
+    "Camera": {
+        "Type": "Normal",
+        "Position": [ 0, 0, -5 ],
+        "FOV": 90,
+        "LookAt": [ 0, 0, 0 ],
+        "Up": [ 0, 1, 0 ]
+    },
+    "Objects": [
+        {
+            "Type": "TriangleMesh",
+            "FilePath": "cube2.obj",
+            "Position": [ 0, 0, 0 ],
+            "Scale": [ 1, 1, 1 ]
+        },
+        {
+            "Type": "TriangleMesh",
+            "FilePath": "bunny.obj",
+            "Position": [ 0, 1, 0 ],
+            "Scale": [ 1, 1, 1 ]
+        }
+    ]
+}
