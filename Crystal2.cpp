@@ -9,7 +9,10 @@ int main(int argc, char** argv){
 	}
 	else {
 		auto info = Scene::SceneLoader::LoadSceneInfo(std::string(argv[1]));
-		fprintf(stdout, "Load Succeed!\n");
+		fprintf(stdout, "Scene Loaded!\n");
+
+		auto engine = Engine(info);
+		engine.Run();
 	}
 	return 0;
 }

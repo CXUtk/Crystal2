@@ -5,7 +5,7 @@
 #include <sstream>
 
 
-namespace Scene {
+namespace SceneLoader {
 
     static void parse_integrator(SceneInfo& info, const std::shared_ptr<SJsonNode>& nodes) {
         auto integratorTypeString = nodes->GetMember("Integrator")->GetString();

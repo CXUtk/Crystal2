@@ -2,7 +2,7 @@
 
 project ("Crystal2")
 
-add_executable (Crystal2 "Crystal2.cpp" "Crystal2.h" "src/Scene/SceneLoader.h" "src/Scene/SceneLoader.cpp" "src/Engine.cpp" "src/Scene/SceneInfo.h")
+add_executable (Crystal2 "Crystal2.cpp" "Crystal2.h" "src/Scene/SceneLoader.h" "src/Scene/SceneLoader.cpp" "src/Engine.cpp" "src/Scene/SceneInfo.h" "src/Engine.h" "src/Core/RayTracer.h" "src/Core/Scene.h" "src/Core/Scene.cpp" "src/Core/RayTracer.cpp")
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)

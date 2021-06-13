@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace Scene {
+namespace scene {
     enum class IntegratorType {
         WhittedStyle,
         PathTracer,
