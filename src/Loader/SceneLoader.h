@@ -1,7 +1,7 @@
 #pragma once
 #include "SceneInfo.h"
 
-namespace SceneLoader {
+namespace scene {
     class SceneLoader {
     public:
         static SceneInfo LoadSceneInfo(const std::string& filePath);

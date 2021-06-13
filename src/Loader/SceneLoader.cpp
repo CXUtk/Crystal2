@@ -5,7 +5,7 @@
 #include <sstream>
 
 
-namespace SceneLoader {
+namespace scene {
 
     static void parse_integrator(SceneInfo& info, const std::shared_ptr<SJsonNode>& nodes) {
         auto integratorTypeString = nodes->GetMember("Integrator")->GetString();
@@ -35,7 +35,7 @@ namespace SceneLoader {
     }
 
     static void parse_camera(SceneInfo& info, const std::shared_ptr<SJsonNode>& nodes) {
-        auto cameraNode = nodes->GetMember("Camera");
+        auto& cameraNode = nodes->GetMember("Camera");
         assert(cameraNode->GetType() == SJsonNodeType::JSON_OBJECT);
 
 
