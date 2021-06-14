@@ -1,6 +1,9 @@
 #pragma once
 #include <memory>
 #include "Loaders/SceneInfo.h"
+#include <Core/Scene.h>
+#include <Core/Camera.h>
+#include <Core/FrameBuffer.h>
 class Integrator {
 public:
     static std::shared_ptr<Integrator> LoadIntegrator(const scene::SceneInfo& sceneInfo);

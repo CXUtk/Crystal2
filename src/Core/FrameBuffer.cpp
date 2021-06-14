@@ -22,6 +22,14 @@ void FrameBuffer::AddSample(int x, int y, glm::vec3 hdr, float weight) {
     pixel.weight += weight;
 }
 
+void FrameBuffer::Clear() {
+    for (int i = 0; i < _height; i++) {
+        for (int j = 0; j < _width; j++) {
+            memset(&_hdrData[i * _width + j], 0, sizeof(Pixel));
+        }
+    }
+}
+
 FrameBuffer::~FrameBuffer() {
     
 }

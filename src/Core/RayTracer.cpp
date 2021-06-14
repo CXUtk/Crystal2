@@ -13,6 +13,7 @@ RayTracer::RayTracer(const scene::SceneInfo& sceneInfo) {
 
 std::shared_ptr<FrameBuffer> RayTracer::Trace() {
     auto fb = std::make_shared<FrameBuffer>(_width, _height);
+    fb->Clear();
     _integrator->Render(_scene, _camera, fb);
     return fb;
 }

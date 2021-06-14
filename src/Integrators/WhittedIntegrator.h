@@ -1,14 +1,8 @@
 #pragma once
 #include <memory>
-#include "Integrator.h"
+#include "SamplerIntegrator.h"
 
-class WhittedIntegrator : public Integrator {
+class WhittedIntegrator : public SamplerIntegrator {
 public:
-    static std::shared_ptr<Integrator> LoadIntegrator(const scene::SceneInfo& sceneInfo);
-
-    Integrator() {}
-    virtual ~Integrator() = 0 {}
-
-    virtual void Preprocess(const std::shared_ptr<Scene>& scene) {}
-    virtual void Render(std::shared_ptr<const Scene> scene, std::shared_ptr<FrameBuffer> frameBuffer) = 0;
+    glm::vec3 Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene) override;
 };

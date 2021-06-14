@@ -13,8 +13,7 @@ public:
 
     void SetEyePos(glm::vec3 pos) { eyePos = pos; }
     glm::vec3 GetEyePos() const { return eyePos; }
-
-    glm::vec3 GetDir(float x, float y);
+    glm::vec3 GetDir(glm::vec2 pos);
 
 private:
     ~PerspCamera() = default;

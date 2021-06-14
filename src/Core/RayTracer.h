@@ -10,7 +10,6 @@
 class RayTracer {
 public:
     RayTracer(const scene::SceneInfo& sceneInfo);
-
     std::shared_ptr<FrameBuffer> Trace();
 
 private:

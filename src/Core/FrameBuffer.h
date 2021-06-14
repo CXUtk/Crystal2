@@ -6,6 +6,9 @@ public:
     FrameBuffer(int width, int height);
 
     void AddSample(int x, int y, glm::vec3 hdr, float weight = 1.f);
+    int Width() const { return _width; }
+    int Height() const { return _height; }
+    void Clear();
 
 private:
     ~FrameBuffer();

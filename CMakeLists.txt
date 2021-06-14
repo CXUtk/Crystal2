@@ -20,7 +20,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Shapes/Shape.h"
 "src/Shapes/Shape.cpp"
 "src/Cameras/PerspCamera.h"
-"src/Integrators/WhittedIntegrator.h" "src/Integrators/SamplerIntegrator.h" "src/Integrators/SamplerIntegrator.cpp" "src/Samplers/Sampler.h" )
+"src/Integrators/WhittedIntegrator.h" "src/Integrators/SamplerIntegrator.h" "src/Integrators/SamplerIntegrator.cpp" "src/Samplers/Sampler.h"  "src/Samplers/DefaultSampler.h" "src/Samplers/DefaultSampler.cpp" "src/Core/Geometry.h" "src/Core/Geometry.cpp" "src/Integrators/WhittedIntegrator.cpp" "src/Core/SurfaceInteraction.h")
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)
