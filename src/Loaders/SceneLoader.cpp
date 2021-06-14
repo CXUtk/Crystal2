@@ -24,6 +24,8 @@ namespace scene {
             throw;
         }
         info.IntegratorType = integratorType;
+
+        info.SamplerType = nodes->GetMember("Sampler")->GetString();
     }
 
     static glm::vec3 parse_vec3(const std::shared_ptr<SJsonNode>& node) {
@@ -41,6 +43,7 @@ namespace scene {
 
         auto cameraTypeString = cameraNode->GetMember("Type")->GetString();
         if (cameraTypeString == "Normal") {
+            info.Camera.Type = CameraType::Normal;
             info.Camera.Position = parse_vec3(cameraNode->GetMember("Position"));
             info.Camera.LookAt = parse_vec3(cameraNode->GetMember("LookAt"));
             info.Camera.Up = parse_vec3(cameraNode->GetMember("Up"));

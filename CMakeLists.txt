@@ -3,10 +3,11 @@
 project ("Crystal2")
 
 add_executable (Crystal2 "Crystal2.cpp"
-"Crystal2.h" "src/Loader/SceneLoader.h" 
-"src/Loader/SceneLoader.cpp" 
+"Crystal2.h"
+"src/Loaders/SceneLoader.h" 
+"src/Loaders/SceneLoader.cpp" 
 "src/Engine.cpp" 
-"src/Loader/SceneInfo.h"
+"src/Loaders/SceneInfo.h"
 "src/Engine.h"
 "src/Core/RayTracer.h"
 "src/Core/Scene.h"
@@ -14,7 +15,12 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Core/RayTracer.cpp"
 "src/Core/FrameBuffer.h"
 "src/Core/FrameBuffer.cpp"
-"src/Core/Camera.h" "src/Accelerator/Accelerator.cpp" "src/Shape/Shape.h" "src/Shape/Shape.cpp")
+"src/Core/Camera.h"
+"src/Accelerators/Accelerator.cpp"
+"src/Shapes/Shape.h"
+"src/Shapes/Shape.cpp"
+"src/Cameras/PerspCamera.h"
+"src/Integrators/WhittedIntegrator.h" "src/Integrators/SamplerIntegrator.h" "src/Integrators/SamplerIntegrator.cpp" "src/Samplers/Sampler.h" )
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)

@@ -16,6 +16,7 @@ namespace scene {
         HDRSphere,
     };
 
+
     struct SceneObject {
         std::string Type;
         std::string FilePath;
@@ -23,6 +24,7 @@ namespace scene {
     };
 
     struct CameraInfo {
+        CameraType Type;
         glm::vec3 Position, LookAt, Up;
         float FOV;
     };
@@ -31,6 +33,7 @@ namespace scene {
     struct SceneInfo {
         int Width, Height;
         int SamplesPerPixel;
+        std::string SamplerType;
         IntegratorType IntegratorType;
         CameraInfo Camera;
         std::vector<SceneObject> Objects;

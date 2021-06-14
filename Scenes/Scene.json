@@ -3,6 +3,7 @@
     "Height": 600,
     "SamplesPerPixel": 64,
     "Integrator": "PathTracer",
+    "Sampler": "Default",
     "Camera": {
         "Type": "Normal",
         "Position": [ 0, 0, -5 ],

@@ -1,5 +1,5 @@
 ﻿#include "Crystal2.h"
-#include "Scene/SceneLoader.h"
+#include "Loader/SceneLoader.h"
 #include <string>
 
 int main(int argc, char** argv){
@@ -8,7 +8,7 @@ int main(int argc, char** argv){
 		return 0;
 	}
 	else {
-		auto info = Scene::SceneLoader::LoadSceneInfo(std::string(argv[1]));
+		auto info = scene::SceneLoader::LoadSceneInfo(std::string(argv[1]));
 		fprintf(stdout, "Scene Loaded!\n");
 
 		auto engine = Engine(info);
