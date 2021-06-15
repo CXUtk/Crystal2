@@ -7,7 +7,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Loaders/SceneLoader.h" 
 "src/Loaders/SceneLoader.cpp" 
 "src/Engine.cpp" 
-"src/Loaders/SceneInfo.h"
+"src/Loaders/ConfigInfo.h"
 "src/Engine.h"
 "src/Core/RayTracer.h"
 "src/Core/Scene.h"
@@ -20,7 +20,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Shapes/Shape.h"
 "src/Shapes/Shape.cpp"
 "src/Cameras/PerspCamera.h"
-"src/Integrators/WhittedIntegrator.h" "src/Integrators/SamplerIntegrator.h" "src/Integrators/SamplerIntegrator.cpp" "src/Samplers/Sampler.h"  "src/Samplers/DefaultSampler.h" "src/Samplers/DefaultSampler.cpp" "src/Core/Geometry.h" "src/Core/Geometry.cpp" "src/Integrators/WhittedIntegrator.cpp" "src/Core/SurfaceInteraction.h")
+"src/Integrators/WhittedIntegrator.h" "src/Integrators/SamplerIntegrator.h" "src/Integrators/SamplerIntegrator.cpp" "src/Samplers/Sampler.h"  "src/Samplers/DefaultSampler.h" "src/Samplers/DefaultSampler.cpp" "src/Core/Geometry.h" "src/Core/Geometry.cpp" "src/Integrators/WhittedIntegrator.cpp" "src/Core/SurfaceInteraction.h" "src/Shapes/Sphere.h" "src/Shapes/Sphere.cpp" "src/Core/Utils.h" "src/Core/Utils.cpp" "src/Accelerators/Brute.h" "src/Accelerators/Brute.cpp" "src/Core/SurfaceInteraction.cpp" "src/Core/Object.h" "src/Loaders/ConfigLoader.h" "src/Loaders/ConfigLoader.cpp")
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)

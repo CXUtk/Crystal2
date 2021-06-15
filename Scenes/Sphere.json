@@ -1,0 +1,32 @@
+{
+    "Width": 800,
+    "Height": 600,
+    "SamplesPerPixel": 4,
+    "Integrator": "WhittedStyle",
+    "Sampler": "Default",
+    "Camera": {
+        "Type": "Normal",
+        "Position": [ 0, 0, -5 ],
+        "FOV": 90,
+        "LookAt": [ 0, 0, 0 ],
+        "Up": [ 0, 1, 0 ]
+    },
+    "Objects": [
+        {
+            "Type": "Geometry",
+            "Shape": {
+                "Type": "Sphere",
+                "Position": [ -1, 0, 0 ],
+                "Radius": 1.0
+            }
+        },
+        {
+            "Type": "Geometry",
+            "Shape": {
+                "Type": "Sphere",
+                "Position": [ 1, 0, 0 ],
+                "Radius": 1.0
+            }
+        }
+    ]
+}

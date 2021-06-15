@@ -1,11 +1,11 @@
 #include "Engine.h"
 #include "Core/Scene.h"
 
-Engine::Engine(const scene::SceneInfo& sceneInfo) {
-    _width = sceneInfo.Width;
-    _height = sceneInfo.Height;
+Engine::Engine(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo) {
+    _width = configInfo.Width;
+    _height = configInfo.Height;
 
-    _rayTracer = std::make_shared<RayTracer>(sceneInfo);
+    _rayTracer = std::make_shared<RayTracer>(configInfo, sceneInfo);
 }
 
 Engine::~Engine() {

@@ -1,0 +1,7 @@
+{
+    "Width": 800,
+    "Height": 600,
+    "SamplesPerPixel": 64,
+    "Integrator": "PathTracer",
+    "Sampler": "Default"
+}

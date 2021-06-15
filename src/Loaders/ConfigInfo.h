@@ -3,20 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace scene {
-    enum class IntegratorType {
-        WhittedStyle,
-        PathTracer,
-        PRTTracer,
-    };
-
-    enum class CameraType {
-        Normal,
-        Spherical,
-        HDRSphere,
-    };
-
-
+namespace config {
     struct SceneObject {
         std::string Type;
         std::string FilePath;
@@ -24,18 +11,19 @@ namespace scene {
     };
 
     struct CameraInfo {
-        CameraType Type;
+        std::string Type;
         glm::vec3 Position, LookAt, Up;
         float FOV;
     };
 
-
     struct SceneInfo {
+        std::vector<SceneObject> Objects;
+    };
+
+    struct ConfigInfo {
         int Width, Height;
         int SamplesPerPixel;
         std::string SamplerType;
-        IntegratorType IntegratorType;
-        CameraInfo Camera;
-        std::vector<SceneObject> Objects;
+        std::string IntegratorType;
     };
 }

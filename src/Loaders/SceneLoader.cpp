@@ -67,11 +67,9 @@ namespace scene {
             SceneObject object;
             auto typeString = node->GetMember("Type")->GetString();
             object.Type = typeString;
-            if (typeString == "TriangleMesh") {
-                object.FilePath = node->GetMember("FilePath")->GetString();
+            if (typeString == "Geometry") {
+
             }
-            object.Position = parse_vec3(node->GetMember("Position"));
-            object.Scale = parse_vec3(node->GetMember("Scale"));
             sceneObjects.push_back(object);
         }
         info.Objects = sceneObjects;

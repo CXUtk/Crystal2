@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Loader/SceneInfo.h"
+#include <Loaders/ConfigInfo.h>
 #include "Core/RayTracer.h"
 #include <memory>
 
 class Engine {
 public:
-    Engine(const scene::SceneInfo& sceneInfo);
+    Engine(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo);
     ~Engine();
 
     void Run();

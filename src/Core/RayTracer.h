@@ -3,13 +3,13 @@
 #include <memory>
 #include "Scene.h"
 #include "FrameBuffer.h"
-#include "Loaders/SceneInfo.h"
+#include <Loaders/ConfigInfo.h>
 #include "Integrators/Integrator.h"
 #include <Core/Camera.h>
 
 class RayTracer {
 public:
-    RayTracer(const scene::SceneInfo& sceneInfo);
+    RayTracer(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo);
     std::shared_ptr<FrameBuffer> Trace();
 
 private:

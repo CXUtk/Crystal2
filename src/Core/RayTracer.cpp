@@ -1,12 +1,12 @@
 #include "RayTracer.h"
 
-RayTracer::RayTracer(const scene::SceneInfo& sceneInfo) {
-    _width = sceneInfo.Width;
-    _height = sceneInfo.Height;
+RayTracer::RayTracer(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo) {
+    _width = configInfo.Width;
+    _height = configInfo.Height;
 
     _scene = Scene::CreateScene(sceneInfo);
-    _integrator = Integrator::LoadIntegrator(sceneInfo);
     _camera = Camera::CreateCamera(sceneInfo);
+    _integrator = Integrator::LoadIntegrator(configInfo);
 
     _integrator->Preprocess(_scene);
 }
