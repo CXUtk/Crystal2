@@ -2,6 +2,11 @@
     "Width": 800,
     "Height": 600,
     "SamplesPerPixel": 64,
-    "Integrator": "PathTracer",
-    "Sampler": "Default"
+    "Integrator": {
+        "Type": "WhittedStyle",
+        "Sampler": {
+            "Type": "Default",
+            "Seed": 0
+        }
+    }
 }

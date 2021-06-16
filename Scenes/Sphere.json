@@ -1,9 +1,4 @@
 {
-    "Width": 800,
-    "Height": 600,
-    "SamplesPerPixel": 4,
-    "Integrator": "WhittedStyle",
-    "Sampler": "Default",
     "Camera": {
         "Type": "Normal",
         "Position": [ 0, 0, -5 ],

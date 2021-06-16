@@ -1,15 +1,11 @@
 #pragma once
-
+#include <Crystal2.h>
 #include <memory>
-#include "Scene.h"
-#include "FrameBuffer.h"
-#include <Loaders/ConfigInfo.h>
-#include "Integrators/Integrator.h"
-#include <Core/Camera.h>
+#include <Loaders/ConfigLoader.h>
 
 class RayTracer {
 public:
-    RayTracer(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo);
+    RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJsonNode>& configNode, const std::shared_ptr<SJsonNode>& sceneNode);
     std::shared_ptr<FrameBuffer> Trace();
 
 private:

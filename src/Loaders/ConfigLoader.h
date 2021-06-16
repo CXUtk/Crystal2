@@ -1,9 +1,10 @@
 #pragma once
-#include "ConfigInfo.h"
+#include <Crystal2.h>
+#include <Core/ConfigInfo.h>
 
 namespace config {
     class ConfigLoader {
     public:
-        static ConfigInfo LoadConfigInfo(const std::string& filePath);
+        static ConfigInfo LoadConfigInfo(const std::shared_ptr<SJsonNode>& nodes);
     };
 }

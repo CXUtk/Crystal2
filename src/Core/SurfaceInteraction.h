@@ -1,9 +1,8 @@
 #pragma once
+#include <Crystal2.h>
 #include <glm/glm.hpp>
-#include "Geometry.h"
 #include <Shapes/Shape.h>
 
-class Object;
 class SurfaceInteraction {
 public:
     SurfaceInteraction();

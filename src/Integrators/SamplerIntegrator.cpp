@@ -1,4 +1,6 @@
 #include "SamplerIntegrator.h"
+#include <Core/FrameBuffer.h>
+#include <Cameras/Camera.h>
 
 SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler>& sampler) : Integrator(), _sampler(sampler) {
 }

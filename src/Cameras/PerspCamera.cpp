@@ -20,9 +20,10 @@ glm::mat4 PerspCamera::GetProjectionTransform() const {
     return glm::perspective(fov, aspect, zNear, zFar);
 }
 
-glm::vec3 PerspCamera::GetDir(float x, float y) {
-    x = x * 2 - 1;
-    y = y * 2 - 1;
-    x *= W, y *= H;
-    return glm::normalize(_left * x + _up * y + _look * zNear);
+Ray PerspCamera::GenerateRay(glm::vec2 pos) {
+    pos.x = pos.x * 2 - 1;
+    pos.y = pos.y * 2 - 1;
+    pos.x *= W, pos.y *= H;
+    auto dir = glm::normalize(_left * pos.x + _up * pos.y + _look * zNear);
+    return Ray(eyePos, dir);
 }

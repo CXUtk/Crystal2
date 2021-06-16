@@ -1,16 +1,15 @@
 #pragma once
-
-#include <Loaders/ConfigInfo.h>
-#include "Core/RayTracer.h"
+#include <Crystal2.h>
 #include <memory>
+#include <Core/ConfigInfo.h>
 
 class Engine {
 public:
-    Engine(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo);
+    Engine(const std::shared_ptr<SJsonNode>& configInfo, const std::shared_ptr<SJsonNode>& sceneInfo);
     ~Engine();
 
     void Run();
 private:
-    int _width, _height;
     std::shared_ptr<RayTracer> _rayTracer;
+    config::ConfigInfo _config;
 };

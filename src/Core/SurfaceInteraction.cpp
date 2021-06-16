@@ -8,10 +8,6 @@ SurfaceInteraction::SurfaceInteraction() : _hitObject(nullptr), _hitShape(nullpt
     _frontFace(false) {
 
 }
-
-SurfaceInteraction::~SurfaceInteraction() {
-}
-
 Ray SurfaceInteraction::SpawnRay(glm::vec3 dir, bool pass) const {
     bool back = glm::dot(dir, _normal) < 0;
     return Ray(_hitPos + ((back ^ pass) ? -_normal : _normal) * EPS, dir);

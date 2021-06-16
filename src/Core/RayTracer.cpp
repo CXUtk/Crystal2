@@ -1,12 +1,17 @@
 #include "RayTracer.h"
+#include <Integrators/Integrator.h>
+#include <Core/FrameBuffer.h>
+#include <Core/Scene.h>
+#include <SJson/SJson.h>
+#include <Cameras/Camera.h>
 
-RayTracer::RayTracer(const config::ConfigInfo& configInfo, const config::SceneInfo& sceneInfo) {
+RayTracer::RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJsonNode>& configNode, const std::shared_ptr<SJsonNode>& sceneNode) {
     _width = configInfo.Width;
     _height = configInfo.Height;
 
-    _scene = Scene::CreateScene(sceneInfo);
-    _camera = Camera::CreateCamera(sceneInfo);
-    _integrator = Integrator::LoadIntegrator(configInfo);
+    _scene = Scene::CreateScene(sceneNode->GetMember("Objects"));
+    _camera = Camera::CreateCamera(sceneNode->GetMember("Camera"), configInfo);
+    _integrator = Integrator::LoadIntegrator(configNode, configInfo);
 
     _integrator->Preprocess(_scene);
 }

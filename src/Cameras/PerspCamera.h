@@ -1,8 +1,9 @@
 #pragma once
+#include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-class PerspCamera {
+class PerspCamera : public Camera {
 public:
     PerspCamera() = default;
     PerspCamera(glm::vec3 eyePos, glm::vec3 lookat, glm::vec3 up, float fov, float aspect, float zNear, float zFar);
@@ -13,7 +14,7 @@ public:
 
     void SetEyePos(glm::vec3 pos) { eyePos = pos; }
     glm::vec3 GetEyePos() const { return eyePos; }
-    glm::vec3 GetDir(glm::vec2 pos);
+    Ray GenerateRay(glm::vec2 pos) override;
 
 private:
     ~PerspCamera() = default;
