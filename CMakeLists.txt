@@ -15,10 +15,14 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Core/FrameBuffer.cpp"
 "src/Cameras/Camera.h"
 "src/Cameras/Camera.cpp"
+"src/Cameras/PerspCamera.h"
+"src/Cameras/PerspCamera.cpp"
 "src/Accelerators/Accelerator.cpp"
 "src/Shapes/Shape.h"
 "src/Shapes/Shape.cpp"
 "src/Cameras/PerspCamera.h"
+"src/Integrators/Integrator.h"
+"src/Integrators/Integrator.cpp"
 "src/Integrators/WhittedIntegrator.h"
 "src/Integrators/SamplerIntegrator.h"
 "src/Integrators/SamplerIntegrator.cpp"
@@ -40,8 +44,10 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Loaders/ConfigLoader.h"
 "src/Loaders/ConfigLoader.cpp"
 "src/Loaders/JsonLoader.h"
+"src/Loaders/JsonLoader.cpp"
 "src/Core/ConfigInfo.h"
-"src/Crystal2.h" "src/Samplers/Sampler.cpp")
+"src/Crystal2.h"
+"src/Samplers/Sampler.cpp")
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)

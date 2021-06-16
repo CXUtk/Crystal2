@@ -11,7 +11,6 @@ public:
     void Clear();
 
 private:
-    ~FrameBuffer();
     struct Pixel {
         glm::vec3 color;
         float weight;

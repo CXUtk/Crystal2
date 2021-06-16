@@ -29,7 +29,3 @@ void FrameBuffer::Clear() {
         }
     }
 }
-
-FrameBuffer::~FrameBuffer() {
-    
-}

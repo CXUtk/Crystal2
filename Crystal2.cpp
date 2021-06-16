@@ -11,15 +11,16 @@ int main(int argc, char** argv) {
 	else {
 		try {
 			auto configNode = loader::JsonLoader::LoadJsonFile(std::string(argv[1]));
-			fprintf(stdout, "Config Loaded!\n");
+			fprintf(stdout, "Config Config File Loaded!\n");
 
 			auto sceneNode = loader::JsonLoader::LoadJsonFile(std::string(argv[2]));
-			fprintf(stdout, "Scene Loaded!\n");
+			fprintf(stdout, "Scene Config File Loaded!\n");
 
 			auto engine = Engine(configNode, sceneNode);
 			engine.Run();
 		}
 		catch (std::exception& e) {
+			fprintf(stderr, "ERROR: %s\n", e.what());
 			fprintf(stderr, "Exiting...\n");
 		}
 	}

@@ -17,7 +17,6 @@ public:
     Ray GenerateRay(glm::vec2 pos) override;
 
 private:
-    ~PerspCamera() = default;
     glm::vec3 eyePos, lookAt, up;
     float fov, aspect, zNear, zFar;
 

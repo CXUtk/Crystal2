@@ -1,4 +1,7 @@
 #include "JsonLoader.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 std::shared_ptr<SJsonNode> loader::JsonLoader::LoadJsonFile(const std::string& filePath) {
     std::ifstream sceneFile;

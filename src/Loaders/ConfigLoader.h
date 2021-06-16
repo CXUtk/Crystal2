@@ -1,6 +1,7 @@
 #pragma once
 #include <Crystal2.h>
 #include <Core/ConfigInfo.h>
+#include <memory>
 
 namespace config {
     class ConfigLoader {

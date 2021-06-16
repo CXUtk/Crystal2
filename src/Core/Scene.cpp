@@ -22,7 +22,7 @@ static std::shared_ptr<Shape> parse_shape(const std::shared_ptr<SJsonNode>& shap
 std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& sceneNode) {
     assert(sceneNode->GetType() == SJsonNodeType::JSON_ARRAY);
 
-    auto scene = std::make_shared<Scene>();
+    auto scene = std::shared_ptr<Scene>(new Scene());
 
     std::vector<std::shared_ptr<Shape>> sceneObjects;
 
@@ -41,4 +41,7 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& scen
 }
 
 Scene::~Scene() {
+}
+
+Scene::Scene() {
 }
