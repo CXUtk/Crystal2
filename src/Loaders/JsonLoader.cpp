@@ -1,4 +1,4 @@
-#include "JsonLoader.h"
+﻿#include "JsonLoader.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -24,7 +24,7 @@ std::shared_ptr<SJsonNode> loader::JsonLoader::LoadJsonFile(const std::string& f
     SJsonErrorCode error;
     auto node = SJsonParse(sceneString, error);
     if (error != SJsonErrorCode::SJSON_OK) {
-        fprintf(stderr, "Parse Scene File Failed! Error: %s\n", SJsonGetErrEnumName(error).c_str());
+        fprintf(stderr, "Parse File %s Failed! Error: %s\n", filePath.c_str(), SJsonGetErrEnumName(error).c_str());
         throw;
     }
     return node;
