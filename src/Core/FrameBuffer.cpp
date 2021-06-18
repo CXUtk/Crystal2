@@ -37,6 +37,8 @@ std::shared_ptr<unsigned char[]> FrameBuffer::GetImageData() const {
             int orig = (_height - i - 1) * _width + j;
             int dest = i * _width + j;
             auto c = _hdrData[orig].color / _hdrData[orig].weight;
+            c = glm::pow(c, glm::vec3(1.0 / 2.2));
+
             data[dest * 3] = (unsigned char)floor(glm::clamp(c.r, 0.f, 0.999f) * 256);
             data[dest * 3 + 1] = (unsigned char)floor(glm::clamp(c.g, 0.f, 0.999f) * 256);
             data[dest * 3 + 2] = (unsigned char)floor(glm::clamp(c.b, 0.f, 0.999f) * 256);

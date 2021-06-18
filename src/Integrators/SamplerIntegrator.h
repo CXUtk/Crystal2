@@ -10,7 +10,7 @@ public:
 
     void Preprocess(const std::shared_ptr<Scene>& scene) override;
     void Render(const std::shared_ptr<Scene>& scene, const std::shared_ptr<Camera>& camera, const std::shared_ptr<FrameBuffer>& frameBuffer) override;
-    virtual glm::vec3 Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene) = 0;
+    virtual glm::vec3 Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene, const std::shared_ptr<Sampler>& sampler) = 0;
 
 private:
     std::shared_ptr<Sampler> _sampler;

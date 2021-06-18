@@ -7,7 +7,7 @@ class Sampler {
 public:
     static std::shared_ptr<Sampler> LoadSampler(const std::shared_ptr<SJsonNode>& samplerNode, const config::ConfigInfo& configInfo);
 
-    Sampler(int samplesPerPixel) : _samplesPerPixel(samplesPerPixel), _currentSampleIndex(0) { }
+    Sampler(int samplesPerPixel) : _samplesPerPixel(samplesPerPixel), _currentSampleIndex(0), _currentPixel(glm::vec2(0)){ }
     int GetSamplesPerPixel() const { return _samplesPerPixel; }
 
     virtual float Get1D() = 0;

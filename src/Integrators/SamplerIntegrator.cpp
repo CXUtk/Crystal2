@@ -27,7 +27,7 @@ void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
                 pos.y = pos.y / h;
                 
                 auto ray = camera->GenerateRay(pos);
-                auto color = Evaluate(ray, scene);
+                auto color = Evaluate(ray, scene, _sampler);
 
                 frameBuffer->AddSample(j, i, color);
                 current++;

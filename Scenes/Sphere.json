@@ -11,7 +11,7 @@
             "Type": "Geometry",
             "Shape": {
                 "Type": "Sphere",
-                "Position": [ -1, 0, 0 ],
+                "Position": [ -1.5, 0, 0 ],
                 "Radius": 1.0
             }
         },
@@ -19,7 +19,7 @@
             "Type": "Geometry",
             "Shape": {
                 "Type": "Sphere",
-                "Position": [ 1, 0, 0 ],
+                "Position": [ 1.5, 0, 0 ],
                 "Radius": 1.0
             }
         }
