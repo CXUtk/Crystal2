@@ -7,5 +7,6 @@ namespace config {
     struct ConfigInfo {
         int Width, Height;
         int SamplesPerPixel;
+        std::string AccelType;
     };
 }

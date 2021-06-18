@@ -13,5 +13,6 @@ class Scene;
 class Integrator;
 class Camera;
 class Shape;
+class Accelerator;
 
 

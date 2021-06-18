@@ -1,5 +1,5 @@
 #include "FrameBuffer.h"
-
+#include <glm/glm.hpp>
 //FrameBuffer::FrameBuffer(glm::vec3* data, int width, int height) {
 //    
 //    for (int i = 0; i < height; i++) {
@@ -28,4 +28,19 @@ void FrameBuffer::Clear() {
             memset(&_hdrData[i * _width + j], 0, sizeof(Pixel));
         }
     }
+}
+
+std::shared_ptr<unsigned char[]> FrameBuffer::GetImageData() const {
+    auto data = std::shared_ptr<unsigned char[]>(new unsigned char[_width * _height * 3]);
+    for (int i = 0; i < _height; i++) {
+        for (int j = 0; j < _width; j++) {
+            int orig = (_height - i - 1) * _width + j;
+            int dest = i * _width + j;
+            auto c = _hdrData[orig].color / _hdrData[orig].weight;
+            data[dest * 3] = (unsigned char)floor(glm::clamp(c.r, 0.f, 0.999f) * 256);
+            data[dest * 3 + 1] = (unsigned char)floor(glm::clamp(c.g, 0.f, 0.999f) * 256);
+            data[dest * 3 + 2] = (unsigned char)floor(glm::clamp(c.b, 0.f, 0.999f) * 256);
+        }
+    }
+    return data;
 }

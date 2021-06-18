@@ -12,7 +12,9 @@ public:
 
     virtual float Get1D() = 0;
     virtual glm::vec2 Get2D() = 0;
-    virtual void StartPixel(const glm::vec2& pt) { _currentPixel = pt; }
+    virtual void StartPixel(const glm::vec2& pt) {
+        _currentPixel = pt, _currentSampleIndex = 0;
+    }
     virtual void Preprocess() = 0;
     virtual bool StartNextSample() {
         return ++_currentSampleIndex < _samplesPerPixel;

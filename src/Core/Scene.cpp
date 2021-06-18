@@ -4,6 +4,7 @@
 #include <Shapes/Shape.h>
 #include <Loaders/JsonLoader.h>
 #include <Shapes/Sphere.h>
+#include <Accelerators/Accelerator.h>
 
 static std::shared_ptr<Shape> parse_shape(const std::shared_ptr<SJsonNode>& shapeNode) {
     assert(shapeNode->GetType() == SJsonNodeType::JSON_OBJECT);
@@ -19,28 +20,32 @@ static std::shared_ptr<Shape> parse_shape(const std::shared_ptr<SJsonNode>& shap
     return nullptr;
 }
 
-std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& sceneNode) {
+std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
     assert(sceneNode->GetType() == SJsonNodeType::JSON_ARRAY);
-
     auto scene = std::shared_ptr<Scene>(new Scene());
-
-    std::vector<std::shared_ptr<Shape>> sceneObjects;
 
     for (auto it = sceneNode->begin(); it != sceneNode->end(); it++) {
         auto& node = (*it);
         assert(node->GetType() == SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
         if (typeString == "Geometry") {
-            sceneObjects.push_back(parse_shape(node->GetMember("Shape")));
+            scene->_sceneObjects.push_back(parse_shape(node->GetMember("Shape")));
         }
         else {
             throw std::invalid_argument("Invalid Object Type!");
         }
     }
+
+    scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType);
+    scene->_accelStructure->Build(scene->_sceneObjects);
     return scene;
 }
 
 Scene::~Scene() {
+}
+
+bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const {
+    return _accelStructure->Intersect(ray, info);
 }
 
 Scene::Scene() {

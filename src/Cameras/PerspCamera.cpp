@@ -3,7 +3,7 @@
 PerspCamera::PerspCamera(glm::vec3 eyePos, glm::vec3 lookat, glm::vec3 up, float fov, float aspect, float zNear, float zFar)
     :eyePos(eyePos), lookAt(lookat), up(up), fov(fov), aspect(aspect), zNear(zNear), zFar(zFar) {
 
-    H = zNear * tan(fov / 2);
+    H = zNear * std::tan(fov / 2);
     W = H * aspect;
 
     _look = glm::normalize(lookAt - eyePos);

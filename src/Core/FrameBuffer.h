@@ -10,6 +10,8 @@ public:
     int Height() const { return _height; }
     void Clear();
 
+    std::shared_ptr<unsigned char[]> GetImageData() const;
+
 private:
     struct Pixel {
         glm::vec3 color;
