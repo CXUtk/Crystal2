@@ -15,7 +15,7 @@ glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float& pdf) {
 
     auto x = r * std::cos(phi);
     auto z = r * std::sin(phi);
-    auto y = std::sqrt(1.0f - r);
+    auto y = std::sqrt(1.0f - r * r);
     pdf = y / glm::pi<float>();
     return glm::vec3(x, y, z);
 }
@@ -42,7 +42,7 @@ glm::vec3 WhittedIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scen
         auto B = glm::normalize(info.GetDpDv());
 
         float pdf;
-        auto wo = NextUnitHemiSphere(sampler->Get2D(), pdf);
+        auto wo = NextCosineUnitHemiSphere(sampler->Get2D(), pdf);
         auto cosine = wo.y;
         wo = wo.x * T + wo.y * N + wo.z * B;
 

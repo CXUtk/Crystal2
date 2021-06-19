@@ -6,7 +6,7 @@
     "Integrator": {
         "Type": "WhittedStyle",
         "Sampler": {
-            "Type": "Stratified",
+            "Type": "Default",
             "Seed": 0
         }
     }
