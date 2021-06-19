@@ -1,4 +1,4 @@
-#include "FrameBuffer.h"
+﻿#include "FrameBuffer.h"
 #include <glm/glm.hpp>
 //FrameBuffer::FrameBuffer(glm::vec3* data, int width, int height) {
 //    
@@ -17,6 +17,8 @@ FrameBuffer::FrameBuffer(int width, int height) :_width(width), _height(height) 
 }
 
 void FrameBuffer::AddSample(int x, int y, glm::vec3 hdr, float weight) {
+    if (glm::isnan(hdr) != glm::bvec3(false)) return;
+    if (glm::isinf(hdr) != glm::bvec3(false)) return;
     auto& pixel = _hdrData[y * _width + x];
     pixel.color += hdr * weight;
     pixel.weight += weight;

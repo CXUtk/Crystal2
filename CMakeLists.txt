@@ -47,7 +47,12 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Loaders/JsonLoader.cpp"
 "src/Core/ConfigInfo.h"
 "src/Crystal2.h"
-"src/Samplers/Sampler.cpp" "deps/stbi/stb_image.h" "deps/stbi/stb_image_write.h" "src/ToneMapper/ToneMapper.h" "src/Samplers/StratifiedSampler.cpp" "src/Shapes/Triangle.cpp" "src/Shapes/Triangle.h" "src/Shapes/TriangleMesh.h" "src/Shapes/TriangleMesh.cpp")
+"src/Samplers/Sampler.cpp" "deps/stbi/stb_image.h" "deps/stbi/stb_image_write.h" "src/ToneMapper/ToneMapper.h" "src/Samplers/StratifiedSampler.cpp" "src/Shapes/Triangle.cpp" "src/Shapes/Triangle.h" "src/Shapes/TriangleMesh.h" "src/Shapes/TriangleMesh.cpp" "src/Loaders/ObjLoader.cpp" "src/Loaders/ObjLoader.h")
+
+set_target_properties (Crystal2 PROPERTIES
+                      CXX_STANDARD 17
+                      CXX_EXTENSIONS OFF
+                      )
 
 # 导入包含文件夹
 include_directories (${PROJECT_SOURCE_DIR}/src)

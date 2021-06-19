@@ -1,5 +1,13 @@
-#include "Sphere.h"
+﻿#include "Sphere.h"
 #include <glm/gtx/transform.hpp>
+#include <SJson/SJson.h>
+#include <Loaders/JsonLoader.h>
+
+std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<SJsonNode>& shapeNode) {
+    auto pos = loader::parse_vec3(shapeNode->GetMember("Position"));
+    auto r = shapeNode->GetMember("Radius")->GetFloat();
+    return std::make_shared<Sphere>(pos, r, glm::vec3(0));
+}
 
 Sphere::Sphere(glm::vec3 pos, float radius, glm::vec3 rotation) : _pos(pos), _radius(radius), _rot(rotation) {
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
@@ -44,9 +52,10 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     N = front_face ? N : -N;
 
     auto realHitPos = _local2World * dummyHitPos + _pos;
+    auto dpdu = _local2World * glm::vec3(-dummyHitPos.z, 0, dummyHitPos.x);
     info->SetHitInfo(t, realHitPos, _local2World * N, glm::vec2(theta, phi), front_face, this,
-        _local2World * glm::vec3(-dummyHitPos.z, 0, dummyHitPos.x),
-        _local2World * glm::vec3(0));
+        dpdu,
+        glm::cross(N, dpdu));
     return true;
 }
 

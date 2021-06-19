@@ -1,10 +1,12 @@
-#pragma once
+﻿#pragma once
 #include <Core/Geometry.h>
 #include <Core/SurfaceInteraction.h>
 #include "Shape.h"
+#include <memory>
 
 class Sphere : public Shape {
 public:
+    static std::shared_ptr<Shape> CreateSphere(const std::shared_ptr<SJsonNode>& shapeNode);
     Sphere(glm::vec3 pos, float radius, glm::vec3 rotation);
     ~Sphere() override;
     BoundingBox GetBoundingBox() const override;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Crystal2.h>
 #include <memory>
 #include <vector>
@@ -16,4 +16,7 @@ private:
     Scene();
     std::vector<std::shared_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
+    std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
+
+    std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<SJsonNode>& shapeNode);
 };

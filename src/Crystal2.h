@@ -15,4 +15,5 @@ class Camera;
 class Shape;
 class Accelerator;
 
-
+// Shapes
+class TriangleMesh;
