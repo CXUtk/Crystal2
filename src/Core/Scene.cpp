@@ -1,10 +1,13 @@
-#include "Scene.h"
+﻿#include "Scene.h"
 #include <SJson/SJson.h>
 #include <cassert>
 #include <Shapes/Shape.h>
 #include <Loaders/JsonLoader.h>
-#include <Shapes/Sphere.h>
 #include <Accelerators/Accelerator.h>
+#include <Core/Utils.h>
+
+#include <Shapes/Triangle.h>
+#include <Shapes/Sphere.h>
 
 static std::shared_ptr<Shape> parse_shape(const std::shared_ptr<SJsonNode>& shapeNode) {
     assert(shapeNode->GetType() == SJsonNodeType::JSON_OBJECT);
@@ -19,7 +22,7 @@ static std::shared_ptr<Shape> parse_shape(const std::shared_ptr<SJsonNode>& shap
     }
     return nullptr;
 }
-
+static std::vector<VertexData> vertices;
 std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
     assert(sceneNode->GetType() == SJsonNodeType::JSON_ARRAY);
     auto scene = std::shared_ptr<Scene>(new Scene());
@@ -35,6 +38,14 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& scen
             throw std::invalid_argument("Invalid Object Type!");
         }
     }
+
+    vertices.push_back({ glm::vec3(-3, -1, 3), glm::vec3(0, 1, 0), glm::vec2(0, 0) });
+    vertices.push_back({ glm::vec3(-3, -1, -3), glm::vec3(0, 1, 0), glm::vec2(0, 1) });
+    vertices.push_back({ glm::vec3(3, -1, -3), glm::vec3(0, 1, 0), glm::vec2(1, 1) });
+    vertices.push_back({ glm::vec3(3, -1, 3), glm::vec3(0, 1, 0), glm::vec2(1, 0) });
+
+    scene->_sceneObjects.push_back(std::make_shared<Triangle>(&vertices[0], &vertices[1], &vertices[2]));
+    scene->_sceneObjects.push_back(std::make_shared<Triangle>(&vertices[0], &vertices[2], &vertices[3]));
 
     scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType);
     scene->_accelStructure->Build(scene->_sceneObjects);

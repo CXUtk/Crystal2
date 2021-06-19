@@ -1,7 +1,13 @@
-#pragma once
+﻿#pragma once
 #include <glm/glm.hpp>
 
 constexpr float EPS = 1e-6;
+
+struct VertexData {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+};
 
 // Solve for Ax = b
 template <int N>
@@ -17,7 +23,7 @@ inline bool matSolve(glm::mat<N, N, glm::f32, glm::packed_highp> A,
                 maxR = j;
             }
         }
-        if (std::abs(A[i][maxR]) < EPS) return false;
+        if (absMax < EPS) return false;
         for (int j = i; j < N; j++) {
             std::swap(A[j][i], A[j][maxR]);
         }
@@ -31,10 +37,23 @@ inline bool matSolve(glm::mat<N, N, glm::f32, glm::packed_highp> A,
         }
     }
     for (int i = N - 1; i >= 0; i--) {
-        for (int j = i + 1; j < N; j++) b[i] -= v[j][i] * b[j];
+        for (int j = i + 1; j < N; j++) b[i] -= A[j][i] * b[j];
         b[i] /= A[i][i];
     }
     x = b;
     return true;
 }
 
+inline glm::mat3 adjoint(const glm::mat3& m, float invDet) {
+    glm::mat3 Inverse;
+    Inverse[0][0] = +(m[1][1] * m[2][2] - m[2][1] * m[1][2]) * invDet;
+    Inverse[1][0] = -(m[1][0] * m[2][2] - m[2][0] * m[1][2]) * invDet;
+    Inverse[2][0] = +(m[1][0] * m[2][1] - m[2][0] * m[1][1]) * invDet;
+    Inverse[0][1] = -(m[0][1] * m[2][2] - m[2][1] * m[0][2]) * invDet;
+    Inverse[1][1] = +(m[0][0] * m[2][2] - m[2][0] * m[0][2]) * invDet;
+    Inverse[2][1] = -(m[0][0] * m[2][1] - m[2][0] * m[0][1]) * invDet;
+    Inverse[0][2] = +(m[0][1] * m[1][2] - m[1][1] * m[0][2]) * invDet;
+    Inverse[1][2] = -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) * invDet;
+    Inverse[2][2] = +(m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invDet;
+    return Inverse;
+}

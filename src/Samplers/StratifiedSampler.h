@@ -6,6 +6,7 @@
 class StratifiedSampler : public Sampler {
 public:
     StratifiedSampler(int samplesPerPixel, int seed = 0);
+    ~StratifiedSampler();
 
     float Get1D() override;
     glm::vec2 Get2D() override;

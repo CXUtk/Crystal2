@@ -5,6 +5,11 @@ StratifiedSampler::StratifiedSampler(int samplesPerPixel, int seed) : Sampler(sa
     _sequence2D = new glm::vec2[samplesPerPixel];
 }
 
+StratifiedSampler::~StratifiedSampler() {
+    delete[] _sequence1D;
+    delete[] _sequence2D;
+}
+
 float StratifiedSampler::Get1D() {
     return _sequence1D[_currentSampleIndex];
 }

@@ -1,12 +1,12 @@
 {
     "Width": 800,
     "Height": 600,
-    "SamplesPerPixel": 64,
+    "SamplesPerPixel": 4,
     "Acceleration": "Brute",
     "Integrator": {
         "Type": "WhittedStyle",
         "Sampler": {
-            "Type": "Stratified",
+            "Type": "Default",
             "Seed": 0
         }
     }
