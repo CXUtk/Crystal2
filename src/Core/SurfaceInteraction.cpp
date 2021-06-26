@@ -19,6 +19,8 @@ void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 normal,
     _hitPos = hitPos;
     _distance = t;
     _hitShape = shape;
+    _prototype = _hitShape->GetPrototype();
+
     _uv = uv;
     _normal = normal;
     _frontFace = frontFace;
