@@ -6,7 +6,7 @@
 
 class Shape {
 public:
-    Shape(const std::shared_ptr<Prototype>& prototype) : _prototype(prototype) {}
+    Shape(std::shared_ptr<Prototype> prototype) : _prototype(prototype) {}
     virtual ~Shape() = 0 {}
     virtual BoundingBox GetBoundingBox() const = 0;
     virtual bool Intersect(const Ray& ray, SurfaceInteraction* info) const = 0;

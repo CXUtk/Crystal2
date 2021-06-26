@@ -38,8 +38,8 @@ void ObjLoader::load(const std::string& path) {
     fclose(file);
 }
 
-std::shared_ptr<TriangleMesh> ObjLoader::GetMesh(const glm::mat4& transform) {
-    return std::make_shared<TriangleMesh>(Vertices, Triangles, transform);
+std::shared_ptr<TriangleMesh> ObjLoader::GetMesh(const std::shared_ptr<Prototype>& prototype, const glm::mat4& transform) {
+    return std::make_shared<TriangleMesh>(prototype, Vertices, Triangles, transform);
 }
 
 int fix(int id, int maxsz) {

@@ -5,6 +5,7 @@
 
 class Prototype {
 public:
+    static std::shared_ptr<Prototype> CreatePrototype(const std::shared_ptr<SJson::SJsonNode>& node);
     Prototype(const std::shared_ptr<Light>& light, const std::shared_ptr<Material>& _material);
     ~Prototype();
 

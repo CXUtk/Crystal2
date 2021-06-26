@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 constexpr float EPS = 1e-6;
 
@@ -56,4 +57,27 @@ inline glm::mat3 adjoint(const glm::mat3& m, float invDet) {
     Inverse[1][2] = -(m[0][0] * m[1][2] - m[1][0] * m[0][2]) * invDet;
     Inverse[2][2] = +(m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invDet;
     return Inverse;
+}
+
+inline glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float& pdf) {
+    auto r = std::sqrt(sample.x);
+    auto phi = sample.y * glm::two_pi<float>();
+
+    auto x = r * std::cos(phi);
+    auto z = r * std::sin(phi);
+    auto y = std::sqrt(1.0f - r * r);
+    pdf = y / glm::pi<float>();
+    return glm::vec3(x, y, z);
+}
+
+inline glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float& pdf) {
+    auto y = sample.x;
+    auto phi = sample.y * glm::two_pi<float>();
+
+    float r = std::sqrt(1 - y * y);
+    auto x = r * std::cos(phi);
+    auto z = r * std::sin(phi);
+
+    pdf = 1.0f / glm::two_pi<float>();
+    return glm::vec3(x, y, z);
 }

@@ -5,11 +5,11 @@ DefaultSampler::DefaultSampler(int samplesPerPixel, int seed) : Sampler(samplesP
 }
 
 float DefaultSampler::Get1D() {
-    return (float)mt() / mt.max();
+    return (double)mt() / ((long long)mt.max() + 1LL);
 }
 
 glm::vec2 DefaultSampler::Get2D() {
-    return glm::vec2((float)mt() / mt.max(), (float)mt() / mt.max());
+    return glm::vec2((double)mt() / ((long long)mt.max() + 1LL), (double)mt() / ((long long)mt.max() + 1LL));
 }
 
 void DefaultSampler::Preprocess() {

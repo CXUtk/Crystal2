@@ -17,8 +17,12 @@ FrameBuffer::FrameBuffer(int width, int height) :_width(width), _height(height) 
 }
 
 void FrameBuffer::AddSample(int x, int y, glm::vec3 hdr, float weight) {
-    if (glm::isnan(hdr) != glm::bvec3(false)) return;
-    if (glm::isinf(hdr) != glm::bvec3(false)) return;
+    if (glm::isnan(hdr) != glm::bvec3(false)) {
+        hdr = glm::vec3(0);
+    }
+    if (glm::isinf(hdr) != glm::bvec3(false)) {
+        hdr = glm::vec3(0);
+    }
     auto& pixel = _hdrData[y * _width + x];
     pixel.color += hdr * weight;
     pixel.weight += weight;

@@ -5,7 +5,7 @@
 #include <Loaders/JsonLoader.h>
 #include <Loaders/ObjLoader.h>
 
-std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
+std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
     auto filePath = shapeNode->GetMember("ObjFile")->GetString();
     ObjLoader loader;
     loader.load(filePath);
@@ -21,7 +21,7 @@ std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared
     matrix = glm::rotate(matrix, rotation.z, glm::vec3(0, 0, 1));
     matrix = glm::scale(matrix, scale);
 
-    return loader.GetMesh(matrix);
+    return loader.GetMesh(prototype, matrix);
 }
 
 TriangleMesh::TriangleMesh(const std::shared_ptr<Prototype>& prototype,

@@ -35,5 +35,5 @@ void StratifiedSampler::Preprocess() {
 }
 
 float StratifiedSampler::unifromFloat() {
-    return (float)mt() / mt.max();
+    return (double)mt() / ((long long)mt.max() + 1LL);
 }

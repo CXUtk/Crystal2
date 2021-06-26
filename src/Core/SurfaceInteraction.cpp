@@ -1,8 +1,9 @@
 #include "SurfaceInteraction.h"
+#include <Shapes/Shape.h>
 
 static constexpr float EPS = 1e-4f;
 
-SurfaceInteraction::SurfaceInteraction() : _hitObject(nullptr), _hitShape(nullptr),
+SurfaceInteraction::SurfaceInteraction() :  _hitShape(nullptr),
     _distance(std::numeric_limits<float>::infinity()),
     _hitPos(0), _uv(0), _normal(0), _dpdu(0), _dpdv(0),
     _frontFace(false) {
@@ -23,4 +24,8 @@ void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 normal,
     _frontFace = frontFace;
     _dpdu = dpdu;
     _dpdv = dpdv;
+}
+
+std::shared_ptr<Prototype> SurfaceInteraction::GetHitPrototype() const {
+    return _hitShape->GetPrototype();
 }

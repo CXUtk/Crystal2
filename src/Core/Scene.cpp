@@ -5,6 +5,7 @@
 #include <Loaders/JsonLoader.h>
 #include <Accelerators/Accelerator.h>
 #include <Core/Utils.h>
+#include <Core/Prototype.h>
 
 #include <Shapes/Triangle.h>
 #include <Shapes/Sphere.h>
@@ -20,7 +21,8 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode
         assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
         if (typeString == "Geometry") {
-            for (auto& s : scene->parse_shape(node->GetMember("Shape"))) {
+            auto prototype = Prototype::CreatePrototype(node);
+            for (auto& s : scene->parse_shape(prototype, node->GetMember("Shape"))) {
                 scene->_sceneObjects.push_back(s);
             }
         }
@@ -44,15 +46,15 @@ bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const {
 Scene::Scene() {
 }
 
-std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
+std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
     assert(shapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
     auto shapeType = shapeNode->GetMember("Type")->GetString();
     std::vector<std::shared_ptr<Shape>> shapes;
     if (shapeType == "Sphere") {
-        shapes.push_back(Sphere::CreateSphere(shapeNode));
+        shapes.push_back(Sphere::CreateSphere(prototype, shapeNode));
     }
     else if (shapeType == "TriangleMesh") {
-        auto mesh = TriangleMesh::CreateTriangleMesh(shapeNode);
+        auto mesh = TriangleMesh::CreateTriangleMesh(prototype, shapeNode);
         this->_triangleMeshes.push_back(mesh);
         shapes = mesh->GetTriangles();
     }

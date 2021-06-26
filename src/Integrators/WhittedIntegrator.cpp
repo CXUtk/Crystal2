@@ -3,50 +3,36 @@
 #include <Core/Geometry.h>
 #include <Core/SurfaceInteraction.h>
 #include <glm/gtx/transform.hpp>
+#include <Core/Prototype.h>
+#include <BSDFs/BSDF.h>
+
+static constexpr float pRR = 0.8f;
+static constexpr float EPS = 1e-5;
 
 glm::vec3 WhittedIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler) {
     return eval_rec(ray, scene, sampler, 0);
 }
 
-glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float& pdf) {
-    auto r = std::sqrt(sample.x);
-    auto phi = sample.y * glm::two_pi<float>();
-
-    auto x = r * std::cos(phi);
-    auto z = r * std::sin(phi);
-    auto y = std::sqrt(1.0f - r * r);
-    pdf = y / glm::pi<float>();
-    return glm::vec3(x, y, z);
-}
-
-glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float& pdf) {
-    auto y = sample.x;
-    auto phi = sample.y * glm::two_pi<float>();
-
-    float r = std::sqrt(1 - y * y);
-    auto x = r * std::cos(phi);
-    auto z = r * std::sin(phi);
-
-    pdf = 1.0f / glm::two_pi<float>();
-    return glm::vec3(x, y, z);
-}
 
 glm::vec3 WhittedIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler, int level) {
     if (level == 3) return glm::vec3(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {
-        auto N = glm::normalize(info.GetNormal());
-        auto T = glm::normalize(info.GetDpDu());
-        auto B = glm::normalize(info.GetDpDv());
+        glm::vec3 N = info.GetNormal();
+        glm::vec3 hitPos = info.GetHitPos();
+        auto prototype = info.GetHitPrototype();
+        auto bsdf = prototype->ComputeScatteringFunctions(info);
 
+        glm::vec3 wIn;
         float pdf;
-        auto wo = NextCosineUnitHemiSphere(sampler->Get2D(), pdf);
-        auto cosine = wo.y;
-        wo = wo.x * T + wo.y * N + wo.z * B;
+        auto brdf = bsdf->SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL);
+        if (std::abs(pdf) < EPS) return glm::vec3(0);
 
-        auto Li = eval_rec(info.SpawnRay(wo), scene, sampler, level + 1) * cosine / glm::pi<float>() / pdf;
+        bool specular = (bsdf->Flags() & BxDF_SPECULAR) != 0;
+        auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
+        auto Li = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1) * brdf * cosine / pdf;
         return Li;
     }
     auto Lenvir = ray.dir.y * 0.5f + 0.5f;

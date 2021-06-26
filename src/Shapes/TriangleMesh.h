@@ -6,7 +6,7 @@
 
 class TriangleMesh {
 public:
-    static std::shared_ptr<TriangleMesh> CreateTriangleMesh(const std::shared_ptr<SJson::SJsonNode>& shapeNode);
+    static std::shared_ptr<TriangleMesh> CreateTriangleMesh(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode);
     TriangleMesh(const std::shared_ptr<Prototype>& prototype, const std::vector<VertexData>& vertices, const std::vector<glm::ivec3> faceIndices, const glm::mat4& transform);
     ~TriangleMesh();
 

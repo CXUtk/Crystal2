@@ -18,5 +18,5 @@ private:
     std::unique_ptr<Accelerator> _accelStructure;
     std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
 
-    std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<SJson::SJsonNode>& shapeNode);
+    std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode);
 };

@@ -7,7 +7,6 @@ namespace SJson {
 // Core
 class Engine;
 class RayTracer;
-class Object;
 class SurfaceInteraction;
 class FrameBuffer;
 class Scene;
@@ -18,7 +17,9 @@ class Accelerator;
 class Light;
 class Material;
 class BSDF;
+class BxDF;
 class Prototype;
+
 
 // Shapes
 class TriangleMesh;

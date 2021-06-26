@@ -6,7 +6,7 @@
 
 class Sphere : public Shape {
 public:
-    static std::shared_ptr<Shape> CreateSphere(const std::shared_ptr<SJson::SJsonNode>& shapeNode);
+    static std::shared_ptr<Shape> CreateSphere(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode);
     Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, float radius, glm::vec3 rotation);
     ~Sphere() override;
     BoundingBox GetBoundingBox() const override;
