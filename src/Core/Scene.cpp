@@ -11,13 +11,13 @@
 #include <Shapes/TriangleMesh.h>
 
 
-std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
-    assert(sceneNode->GetType() == SJsonNodeType::JSON_ARRAY);
+std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
+    assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
     auto scene = std::shared_ptr<Scene>(new Scene());
 
     for (auto it = sceneNode->begin(); it != sceneNode->end(); it++) {
         auto& node = (*it);
-        assert(node->GetType() == SJsonNodeType::JSON_OBJECT);
+        assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
         if (typeString == "Geometry") {
             for (auto& s : scene->parse_shape(node->GetMember("Shape"))) {
@@ -44,8 +44,8 @@ bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const {
 Scene::Scene() {
 }
 
-std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<SJsonNode>& shapeNode) {
-    assert(shapeNode->GetType() == SJsonNodeType::JSON_OBJECT);
+std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
+    assert(shapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
     auto shapeType = shapeNode->GetMember("Type")->GetString();
     std::vector<std::shared_ptr<Shape>> shapes;
     if (shapeType == "Sphere") {

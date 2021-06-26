@@ -4,7 +4,7 @@
 #include <Loaders/JsonLoader.h>
 
 
-std::shared_ptr<Camera> Camera::CreateCamera(const std::shared_ptr<SJsonNode>& cameraNode, const config::ConfigInfo& configInfo) {
+std::shared_ptr<Camera> Camera::CreateCamera(const std::shared_ptr<SJson::SJsonNode>& cameraNode, const config::ConfigInfo& configInfo) {
 	auto cameraType = cameraNode->GetMember("Type")->GetString();
 	if (cameraType == "Normal") {
 		auto lookAt = loader::parse_vec3(cameraNode->GetMember("LookAt"));

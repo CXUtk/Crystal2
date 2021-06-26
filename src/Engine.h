@@ -5,7 +5,7 @@
 
 class Engine {
 public:
-    Engine(const std::shared_ptr<SJsonNode>& configInfo, const std::shared_ptr<SJsonNode>& sceneInfo);
+    Engine(const std::shared_ptr<SJson::SJsonNode>& configInfo, const std::shared_ptr<SJson::SJsonNode>& sceneInfo);
     ~Engine();
 
     void Run();

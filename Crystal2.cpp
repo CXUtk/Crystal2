@@ -20,8 +20,7 @@ int main(int argc, char** argv) {
 			engine.Run();
 		}
 		catch (std::exception& e) {
-			fprintf(stderr, "ERROR: %s\n", e.what());
-			fprintf(stderr, "Exiting...\n");
+			fprintf(stderr, "Terminated with error: %s\n", e.what());
 		}
 	}
 	return 0;

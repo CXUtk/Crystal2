@@ -3,7 +3,7 @@
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
 
-std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<SJsonNode>& shapeNode) {
+std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
     auto pos = loader::parse_vec3(shapeNode->GetMember("Position"));
     auto r = shapeNode->GetMember("Radius")->GetFloat();
     return std::make_shared<Sphere>(pos, r, glm::vec3(0));

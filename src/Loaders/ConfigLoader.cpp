@@ -6,8 +6,8 @@
 
 namespace config {
 
-    ConfigInfo ConfigLoader::LoadConfigInfo(const std::shared_ptr<SJsonNode>& nodes) {
-        assert(nodes->GetType() == SJsonNodeType::JSON_OBJECT);
+    ConfigInfo ConfigLoader::LoadConfigInfo(const std::shared_ptr<SJson::SJsonNode>& nodes) {
+        assert(nodes->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         ConfigInfo info;
         info.Width = nodes->GetMember("Width")->GetInt();
         info.Height = nodes->GetMember("Height")->GetInt();

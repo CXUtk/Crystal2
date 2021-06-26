@@ -6,6 +6,6 @@
 namespace config {
     class ConfigLoader {
     public:
-        static ConfigInfo LoadConfigInfo(const std::shared_ptr<SJsonNode>& nodes);
+        static ConfigInfo LoadConfigInfo(const std::shared_ptr<SJson::SJsonNode>& nodes);
     };
 }

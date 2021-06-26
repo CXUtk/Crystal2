@@ -5,7 +5,7 @@
 
 class RayTracer {
 public:
-    RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJsonNode>& configNode, const std::shared_ptr<SJsonNode>& sceneNode);
+    RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJson::SJsonNode>& configNode, const std::shared_ptr<SJson::SJsonNode>& sceneNode);
     ~RayTracer();
 
     std::shared_ptr<FrameBuffer> Trace();

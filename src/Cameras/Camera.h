@@ -8,7 +8,7 @@
 
 class Camera {
 public:
-    static std::shared_ptr<Camera> CreateCamera(const std::shared_ptr<SJsonNode>& cameraNode, const config::ConfigInfo& configInfo);
+    static std::shared_ptr<Camera> CreateCamera(const std::shared_ptr<SJson::SJsonNode>& cameraNode, const config::ConfigInfo& configInfo);
 
     virtual Ray GenerateRay(glm::vec2 pos) = 0;
 };

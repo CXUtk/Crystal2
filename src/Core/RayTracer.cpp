@@ -5,7 +5,7 @@
 #include <SJson/SJson.h>
 #include <Cameras/Camera.h>
 
-RayTracer::RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJsonNode>& configNode, const std::shared_ptr<SJsonNode>& sceneNode) {
+RayTracer::RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJson::SJsonNode>& configNode, const std::shared_ptr<SJson::SJsonNode>& sceneNode) {
     _width = configInfo.Width;
     _height = configInfo.Height;
 

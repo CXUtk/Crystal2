@@ -1,7 +1,8 @@
 ﻿#pragma once
-
-// Loaders
-class SJsonNode;
+namespace SJson {
+    // Loaders
+    class SJsonNode;
+}
 
 // Core
 class Engine;

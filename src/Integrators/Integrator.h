@@ -4,7 +4,7 @@
 #include <Core/ConfigInfo.h>
 class Integrator {
 public:
-    static std::shared_ptr<Integrator> LoadIntegrator(const std::shared_ptr<SJsonNode>& configNode, const config::ConfigInfo& configInfo);
+    static std::shared_ptr<Integrator> LoadIntegrator(const std::shared_ptr<SJson::SJsonNode>& configNode, const config::ConfigInfo& configInfo);
 
     Integrator() {}
     virtual ~Integrator() = 0 {}
