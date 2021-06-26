@@ -9,7 +9,9 @@ std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<SJson::SJsonNo
     return std::make_shared<Sphere>(pos, r, glm::vec3(0));
 }
 
-Sphere::Sphere(glm::vec3 pos, float radius, glm::vec3 rotation) : _pos(pos), _radius(radius), _rot(rotation) {
+Sphere::Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, float radius, glm::vec3 rotation) : Shape(prototype),
+    _pos(pos), _radius(radius), _rot(rotation) {
+
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
     rotMatrix = glm::rotate(rotMatrix, rotation.x, glm::vec3(1, 0, 0));
     rotMatrix = glm::rotate(rotMatrix, rotation.y, glm::vec3(0, 1, 0));

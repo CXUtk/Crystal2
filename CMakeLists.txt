@@ -19,7 +19,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Cameras/PerspCamera.cpp"
 "src/Accelerators/Accelerator.cpp"
 "src/Shapes/Shape.h"
-"src/Shapes/Shape.cpp"
+
 "src/Cameras/PerspCamera.h"
 "src/Integrators/Integrator.h"
 "src/Integrators/Integrator.cpp"
@@ -40,14 +40,14 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Accelerators/Brute.h"
 "src/Accelerators/Brute.cpp"
 "src/Core/SurfaceInteraction.cpp"
-"src/Core/Object.h"
+
 "src/Loaders/ConfigLoader.h"
 "src/Loaders/ConfigLoader.cpp"
 "src/Loaders/JsonLoader.h"
 "src/Loaders/JsonLoader.cpp"
 "src/Core/ConfigInfo.h"
 "src/Crystal2.h"
-"src/Samplers/Sampler.cpp" "deps/stbi/stb_image.h" "deps/stbi/stb_image_write.h" "src/ToneMapper/ToneMapper.h" "src/Samplers/StratifiedSampler.cpp" "src/Shapes/Triangle.cpp" "src/Shapes/Triangle.h" "src/Shapes/TriangleMesh.h" "src/Shapes/TriangleMesh.cpp" "src/Loaders/ObjLoader.cpp" "src/Loaders/ObjLoader.h")
+"src/Samplers/Sampler.cpp" "deps/stbi/stb_image.h" "deps/stbi/stb_image_write.h" "src/ToneMapper/ToneMapper.h" "src/Samplers/StratifiedSampler.cpp" "src/Shapes/Triangle.cpp" "src/Shapes/Triangle.h" "src/Shapes/TriangleMesh.h" "src/Shapes/TriangleMesh.cpp" "src/Loaders/ObjLoader.cpp" "src/Loaders/ObjLoader.h" "src/Accelerators/BVH.h" "src/Accelerators/BVH.cpp" "src/Core/Prototype.h" "src/Core/Prototype.cpp" "src/Materials/Material.h")
 
 set_target_properties (Crystal2 PROPERTIES
                       CXX_STANDARD 17

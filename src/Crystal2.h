@@ -15,6 +15,10 @@ class Integrator;
 class Camera;
 class Shape;
 class Accelerator;
+class Light;
+class Material;
+class BSDF;
+class Prototype;
 
 // Shapes
 class TriangleMesh;

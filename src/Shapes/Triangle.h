@@ -5,7 +5,7 @@ struct VertexData;
 
 class Triangle : public Shape {
 public:
-    Triangle(const VertexData* a, const VertexData* b, const VertexData* c);
+    Triangle(const std::shared_ptr<Prototype>& prototype, const VertexData* a, const VertexData* b, const VertexData* c);
     ~Triangle() override;
 
     BoundingBox GetBoundingBox() const override;

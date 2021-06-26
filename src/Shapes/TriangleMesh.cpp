@@ -23,9 +23,11 @@ std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared
 
     return loader.GetMesh(matrix);
 }
-TriangleMesh::TriangleMesh(const std::vector<VertexData>& vertices,
+
+TriangleMesh::TriangleMesh(const std::shared_ptr<Prototype>& prototype,
+    const std::vector<VertexData>& vertices,
     const std::vector<glm::ivec3> faceIndices,
-    const glm::mat4& transform) : _numVertices(vertices.size()), _faces(faceIndices), _transform(transform) {
+    const glm::mat4& transform) : _prototype(prototype), _numVertices(vertices.size()), _faces(faceIndices), _transform(transform) {
     _vertices = std::unique_ptr<VertexData[]>(new VertexData[_numVertices]);
     memcpy(_vertices.get(), vertices.data(), sizeof(VertexData) * _numVertices);
     glm::mat4 normalTrans = glm::transpose(glm::inverse(transform));
@@ -43,7 +45,7 @@ std::vector<std::shared_ptr<Shape>> TriangleMesh::GetTriangles() const {
     std::vector<std::shared_ptr<Shape>> res;
     int numFaces = _faces.size();
     for (int i = 0; i < numFaces; i++) {
-        res.push_back(std::make_shared<Triangle>(&_vertices[_faces[i][0]],
+        res.push_back(std::make_shared<Triangle>(_prototype, &_vertices[_faces[i][0]],
             &_vertices[_faces[i][1]],
             &_vertices[_faces[i][2]]));
     }
