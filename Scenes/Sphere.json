@@ -75,7 +75,7 @@
                 ]
             },
             "Material": {
-                "Type": "Diffuse",
+                "Type": "Mirror",
                 "Color": [ 1.0, 1.0, 1.0 ]
             },
             "Light": null

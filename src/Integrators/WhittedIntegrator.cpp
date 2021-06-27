@@ -22,7 +22,7 @@ glm::vec3 WhittedIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<Scen
 
 glm::vec3 WhittedIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler, int level) {
-    if (level == 3) return glm::vec3(0);
+    if (level == 5) return glm::vec3(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {
         glm::vec3 N = info.GetNormal();
