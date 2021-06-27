@@ -28,7 +28,7 @@ glm::vec3 WhittedIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scen
         glm::vec3 N = info.GetNormal();
         glm::vec3 hitPos = info.GetHitPos();
         auto prototype = info.GetHitPrototype();
-        auto bsdf = prototype->ComputeScatteringFunctions(info);
+        auto bsdf = prototype->ComputeScatteringFunctions(info, ray.dir);
 
         glm::vec3 wIn;
         float pdf;

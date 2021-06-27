@@ -17,3 +17,4 @@ glm::vec3 SpecularReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut, 
     *pdf = 1.0f;
     return _albedo;
 }
+

@@ -2,6 +2,7 @@
 #include <Crystal2.h>
 #include <memory>
 #include <vector>
+#include <glm/glm.hpp>
 
 class Prototype {
 public:
@@ -12,7 +13,7 @@ public:
     std::shared_ptr<Light> GetLight() const { return _light; }
     std::shared_ptr<Material> GetMaterial() const { return _material; }
 
-    std::shared_ptr<BSDF> ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera = true) const;
+    std::shared_ptr<BSDF> ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera = true) const;
 
 private:
     std::shared_ptr<Light> _light;

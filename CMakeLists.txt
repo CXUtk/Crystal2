@@ -73,7 +73,9 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Materials/MirrorMaterial.h"
 "src/Materials/MirrorMaterial.cpp"
 "src/BSDFs/SpecularReflection.h"
-"src/BSDFs/SpecularReflection.cpp")
+"src/BSDFs/SpecularReflection.cpp" 
+"src/BSDFs/SpecularTransmission.h" 
+"src/BSDFs/SpecularTransmission.cpp" "src/Materials/Glass.h" "src/Materials/Glass.cpp")
 
 set_target_properties (Crystal2 PROPERTIES
                       CXX_STANDARD 17

@@ -3,7 +3,7 @@
         "Type": "Normal",
         "Position": [
             0,
-            0,
+            2,
             -5
         ],
         "FOV": 90,
@@ -31,8 +31,9 @@
                 "Radius": 1.0
             },
             "Material": {
-                "Type": "Diffuse",
-                "Color": [1.0, 1.0, 1.0]
+                "Type": "Glass",
+                "Color": [ 1.0, 1.0, 1.0 ],
+                "IOR": 1.333
             },
             "Light": null
         },
@@ -75,8 +76,8 @@
                 ]
             },
             "Material": {
-                "Type": "Mirror",
-                "Color": [ 1.0, 1.0, 1.0 ]
+                "Type": "Diffuse",
+                "Color": [ 1.0, 0.0, 0.0 ]
             },
             "Light": null
         }
