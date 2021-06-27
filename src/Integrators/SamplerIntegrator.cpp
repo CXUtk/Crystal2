@@ -1,6 +1,7 @@
-#include "SamplerIntegrator.h"
+﻿#include "SamplerIntegrator.h"
 #include <Core/FrameBuffer.h>
 #include <Cameras/Camera.h>
+#include <Samplers/DefaultSampler.h>
 
 SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler>& sampler) : Integrator(), _sampler(sampler) {
 }
@@ -10,7 +11,7 @@ void SamplerIntegrator::Preprocess(const std::shared_ptr<Scene>& scene) {
     _sampler->Preprocess();
 }
 
-void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene, 
+void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Camera>& camera,
     const std::shared_ptr<FrameBuffer>& frameBuffer) {
     int w = frameBuffer->Width(), h = frameBuffer->Height();
@@ -25,7 +26,7 @@ void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
 
                 pos.x = pos.x / w;
                 pos.y = pos.y / h;
-                
+
                 auto ray = camera->GenerateRay(pos);
                 auto color = Evaluate(ray, scene, _sampler);
 

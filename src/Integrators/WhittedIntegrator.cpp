@@ -5,9 +5,14 @@
 #include <glm/gtx/transform.hpp>
 #include <Core/Prototype.h>
 #include <BSDFs/BSDF.h>
+#include <Samplers/DefaultSampler.h>
 
 static constexpr float pRR = 0.8f;
 static constexpr float EPS = 1e-5;
+
+WhittedIntegrator::WhittedIntegrator(const std::shared_ptr<Sampler>& sampler) : SamplerIntegrator(sampler) {
+    _indirectSampler = std::make_shared<DefaultSampler>(sampler->GetSamplesPerPixel(), 0);
+}
 
 glm::vec3 WhittedIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler) {
@@ -27,12 +32,13 @@ glm::vec3 WhittedIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scen
 
         glm::vec3 wIn;
         float pdf;
-        auto brdf = bsdf->SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL);
+        auto brdf = bsdf->SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL);
         if (std::abs(pdf) < EPS) return glm::vec3(0);
 
         bool specular = (bsdf->Flags() & BxDF_SPECULAR) != 0;
         auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
-        auto Li = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1) * brdf * cosine / pdf;
+
+        auto Li = eval_rec(info.SpawnRay(wIn), scene, _indirectSampler, level + 1) * brdf * cosine / pdf;
         return Li;
     }
     auto Lenvir = ray.dir.y * 0.5f + 0.5f;

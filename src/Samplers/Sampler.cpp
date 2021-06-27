@@ -13,6 +13,18 @@ std::shared_ptr<Sampler> Sampler::LoadSampler(const std::shared_ptr<SJson::SJson
         return std::make_shared<DefaultSampler>(configInfo.SamplesPerPixel, samplerSeed);
     }
     else if (samplerType == "Stratified") {
+        bool isSQR = false;
+        for (int i = 1; i <= configInfo.SamplesPerPixel; i++) {
+            if ((long long)i * i > configInfo.SamplesPerPixel) {
+                break;
+            }
+            if (i * i == configInfo.SamplesPerPixel) {
+                isSQR = true;
+            }
+        }
+        if (!isSQR) {
+            throw std::exception("Stratified sampler should have a square number of SamplesPerPixel");
+        }
         return std::make_shared<StratifiedSampler>(configInfo.SamplesPerPixel, samplerSeed);
     }
     else {

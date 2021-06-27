@@ -1,21 +1,31 @@
 ﻿#include "StratifiedSampler.h"
+#include <algorithm>
 
 StratifiedSampler::StratifiedSampler(int samplesPerPixel, int seed) : Sampler(samplesPerPixel), mt(seed) {
-    _sequence1D = new float[samplesPerPixel];
-    _sequence2D = new glm::vec2[samplesPerPixel];
+    for (int i = 0; i < 2; i++) {
+        _sequence1D[i] = new float[samplesPerPixel];
+        _sequence2D[i] = new glm::vec2[samplesPerPixel];
+    }
 }
 
 StratifiedSampler::~StratifiedSampler() {
-    delete[] _sequence1D;
-    delete[] _sequence2D;
+    for (int i = 0; i < 2; i++) {
+        delete[] _sequence1D[i];
+        delete[] _sequence2D[i];
+    }
 }
 
-float StratifiedSampler::Get1D() {
-    return _sequence1D[_currentSampleIndex];
+void StratifiedSampler::StartPixel(const glm::vec2& pt) {
+    Sampler::StartPixel(pt);
+    Preprocess();
 }
 
-glm::vec2 StratifiedSampler::Get2D() {
-    return _sequence2D[_currentSampleIndex];
+float StratifiedSampler::Get1D(int layer) {
+    return _sequence1D[layer][_currentSampleIndex];
+}
+
+glm::vec2 StratifiedSampler::Get2D(int layer) {
+    return _sequence2D[layer][_currentSampleIndex];
 }
 
 void StratifiedSampler::Preprocess() {
@@ -23,17 +33,18 @@ void StratifiedSampler::Preprocess() {
 
     float d1d = 1.f / _samplesPerPixel;
     float d2d = 1.f / len;
-    for (int i = 0; i < _samplesPerPixel; i++) {
-        _sequence1D[i] = i * d1d + unifromFloat() * d1d;
-    }
-
-    for (int i = 0; i < len; i++) {
-        for (int j = 0; j < len; j++) {
-            _sequence2D[i * len + j] = glm::vec2(i, j) * d2d + glm::vec2(unifromFloat(), unifromFloat()) * d2d;
+    for (int l = 0; l < 2; l++) {
+        for (int i = 0; i < _samplesPerPixel; i++) {
+            _sequence1D[l][i] = i * d1d + uniformRandomFloat(mt) * d1d;
         }
+        std::shuffle(_sequence1D[l], _sequence1D[l] + _samplesPerPixel, std::default_random_engine(mt()));
+
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++) {
+                _sequence2D[l][i * len + j] = glm::vec2(i, j) * d2d + glm::vec2(uniformRandomFloat(mt), uniformRandomFloat(mt)) * d2d;
+            }
+        }
+        std::shuffle(_sequence2D[l], _sequence2D[l] + _samplesPerPixel, std::default_random_engine(mt()));
     }
 }
 
-float StratifiedSampler::unifromFloat() {
-    return (double)mt() / ((long long)mt.max() + 1LL);
-}

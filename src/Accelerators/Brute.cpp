@@ -19,7 +19,7 @@ bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
         SurfaceInteraction tmp;
         if (obj->Intersect(ray, &tmp)) {
             if (tmp.GetDistance() < isec->GetDistance()) {
-                memcpy(isec, &tmp, sizeof(SurfaceInteraction));
+                *isec = std::move(tmp);
             }
             hit = true;
             if (isec->GetDistance() == std::numeric_limits<float>::infinity()) {

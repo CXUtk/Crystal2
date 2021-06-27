@@ -8,13 +8,12 @@ public:
     StratifiedSampler(int samplesPerPixel, int seed = 0);
     ~StratifiedSampler();
 
-    float Get1D() override;
-    glm::vec2 Get2D() override;
+    void StartPixel(const glm::vec2& pt) override;
+    float Get1D(int layer) override;
+    glm::vec2 Get2D(int layer) override;
     void Preprocess() override;
 private:
     std::mt19937 mt;
-    float* _sequence1D;
-    glm::vec2* _sequence2D;
-
-    float unifromFloat();
+    float* _sequence1D[2];
+    glm::vec2* _sequence2D[2];
 };
