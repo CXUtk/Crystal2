@@ -25,7 +25,6 @@ public:
 
 private:
     const Shape* _hitShape;
-    std::shared_ptr<Prototype> _prototype;
 
     float _distance;
     bool _frontFace;

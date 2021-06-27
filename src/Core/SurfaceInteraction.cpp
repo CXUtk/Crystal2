@@ -1,12 +1,12 @@
-#include "SurfaceInteraction.h"
+﻿#include "SurfaceInteraction.h"
 #include <Shapes/Shape.h>
 
 static constexpr float EPS = 1e-4f;
 
-SurfaceInteraction::SurfaceInteraction() :  _hitShape(nullptr),
-    _distance(std::numeric_limits<float>::infinity()),
-    _hitPos(0), _uv(0), _normal(0), _dpdu(0), _dpdv(0),
-    _frontFace(false) {
+SurfaceInteraction::SurfaceInteraction() : _hitShape(nullptr),
+_distance(std::numeric_limits<float>::infinity()),
+_hitPos(0), _uv(0), _normal(0), _dpdu(0), _dpdv(0),
+_frontFace(false) {
 
 }
 Ray SurfaceInteraction::SpawnRay(glm::vec3 dir, bool pass) const {
@@ -19,8 +19,6 @@ void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 normal,
     _hitPos = hitPos;
     _distance = t;
     _hitShape = shape;
-    _prototype = _hitShape->GetPrototype();
-
     _uv = uv;
     _normal = normal;
     _frontFace = frontFace;
