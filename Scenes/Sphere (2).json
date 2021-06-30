@@ -37,7 +37,7 @@
                     1.0,
                     1.0
                 ],
-                "IOR": 1.5
+                "IOR": 1.7
             },
             "Light": null
         },
@@ -56,8 +56,8 @@
                 "Type": "Diffuse",
                 "Color": [
                     1.0,
-                    0.0,
-                    0.0
+                    1.0,
+                    1.0
                 ]
             },
             "Light": null
@@ -86,8 +86,8 @@
             "Material": {
                 "Type": "Diffuse",
                 "Color": [
-                    0.0,
                     1.0,
+                    0.0,
                     0.0
                 ]
             },

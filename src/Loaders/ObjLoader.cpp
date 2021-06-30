@@ -103,16 +103,12 @@ void ObjLoader::process() {
     else if (!strcmp(start, "f")) {
         int index = 0;
         int c = 0;
-        int vd[3]{}, vn[3]{};
+        int vd[3]{}, vt[3]{}, vn[3]{};
         while (~(c = sscanf(lineBuffer + _ptr, "%s", faceV))) {
             int id = 0;
             bool b = readInt(faceV, id, vd[index]);
             id++;
-            if (faceV[id - 1] != '/')break;
-            // Jump to normals
-            while (faceV[id] != '/') {
-                id++;
-            }
+            readInt(faceV, id, vt[index]);
             id++;
             readInt(faceV, id, vn[index]);
             index++;
@@ -126,6 +122,11 @@ void ObjLoader::process() {
         if (vn[0] != 0) {
             for (int k = 0; k < 3; k++) {
                 V[k].Normal = Normals[vn[k] - 1];
+            }
+        }
+        if (vt[0] != 0) {
+            for (int k = 0; k < 3; k++) {
+                V[k].TexCoords = TexCoords[vt[k] - 1];
             }
         }
         int cur = Vertices.size();

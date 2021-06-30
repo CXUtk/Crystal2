@@ -12,7 +12,7 @@ std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared
 
     auto pos = loader::parse_vec3(shapeNode->GetMember("Translation"));
     auto scale = loader::parse_vec3(shapeNode->GetMember("Scale"));
-    auto rotation = loader::parse_vec3(shapeNode->GetMember("Rotation"));
+    auto rotation = glm::radians(loader::parse_vec3(shapeNode->GetMember("Rotation")));
 
     auto matrix = glm::identity<glm::mat4>();
     matrix = glm::translate(matrix, pos);

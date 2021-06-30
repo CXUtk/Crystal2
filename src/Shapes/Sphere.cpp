@@ -3,14 +3,14 @@
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
 
-std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode){
+std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
     auto pos = loader::parse_vec3(shapeNode->GetMember("Position"));
     auto r = shapeNode->GetMember("Radius")->GetFloat();
     return std::make_shared<Sphere>(prototype, pos, r, glm::vec3(0));
 }
 
 Sphere::Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, float radius, glm::vec3 rotation) : Shape(prototype),
-    _pos(pos), _radius(radius), _rot(rotation) {
+_pos(pos), _radius(radius), _rot(rotation) {
 
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
     rotMatrix = glm::rotate(rotMatrix, rotation.x, glm::vec3(1, 0, 0));
@@ -47,8 +47,8 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     // Calculate local hit info, normal, front face, etc..
     auto dummyHitPos = P + d * t;
     auto N = glm::normalize(dummyHitPos);
-    auto theta = std::atan2(-dummyHitPos.z, dummyHitPos.x) / glm::pi<float>() + 1.0f;
-    auto phi = std::acos(dummyHitPos.y / _radius);
+    auto theta = std::atan2(-dummyHitPos.z, dummyHitPos.x) / glm::pi<float>();
+    auto phi = std::acos(dummyHitPos.y / _radius) / glm::pi<float>() + 1.0f;
 
     auto front_face = glm::dot(d, N) < 0;
     N = front_face ? N : -N;
