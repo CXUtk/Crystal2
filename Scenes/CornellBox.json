@@ -105,9 +105,9 @@
             "Material": {
                 "Type": "Diffuse",
                 "Color": [
-                    0.0,
+                    0.1,
                     1.0,
-                    0.0
+                    0.1
                 ]
             },
             "Light": null
@@ -137,8 +137,8 @@
                 "Type": "Diffuse",
                 "Color": [
                     1.0,
-                    0.0,
-                    0.0
+                    0.1,
+                    0.1
                 ]
             },
             "Light": null

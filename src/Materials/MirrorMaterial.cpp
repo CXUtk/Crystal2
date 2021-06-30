@@ -1,9 +1,4 @@
-#include <Core/SurfaceInteraction.h>
-#include <BSDFs/SpecularReflection.h>
-#include "MirrorMaterial.h"
-
-
-MirrorMaterial::MirrorMaterial(glm::vec3 color) : _color(color) {
+M
 }
 
 MirrorMaterial::~MirrorMaterial() {
