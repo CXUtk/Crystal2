@@ -31,15 +31,15 @@ static bool refract(glm::vec3 wo, glm::vec3 N, float etaA, float etaB, glm::vec3
     return true;
 }
 
-std::shared_ptr<BSDF> Glass::ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera) const {
+std::shared_ptr<BSDF> Glass::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const {
     auto N = glm::normalize(isec.GetNormal());
     float etaA = 1.0f, etaB = _eta;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     glm::vec3 tdir;
-    if (refract(-dir, N, etaA, etaB, tdir)) {
-        float f = Fresnel(N, -dir, tdir, etaA, etaB);
+    if (refract(-isec.GetHitDir(), N, etaA, etaB, tdir)) {
+        float f = Fresnel(N, -isec.GetHitDir(), tdir, etaA, etaB);
         bsdf->AddBxDF(std::make_shared<SpecularReflection>(_color, N), f);
         bsdf->AddBxDF(std::make_shared<SpecularTransmission>(_color, N, etaA, etaB), 1.f - f);
     }

@@ -72,7 +72,7 @@ bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* info) const {
         }
     }
 
-    info->SetHitInfo(res.z, ray.start + ray.dir * res.z, N, UV, front_face, this, dpdu, glm::cross(N, dpdu));
+    info->SetHitInfo(res.z, ray.start + ray.dir * res.z, ray.dir, N, UV, front_face, this, dpdu, glm::cross(N, dpdu));
     return true;
 }
 

@@ -11,12 +11,14 @@ public:
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
+    std::vector<std::shared_ptr<Light>> GetLights() const { return _lights; }
 
 private:
     Scene();
     std::vector<std::shared_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
     std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
+    std::vector<std::shared_ptr<Light>> _lights;
 
     std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode);
 };

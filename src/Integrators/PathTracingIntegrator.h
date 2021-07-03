@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include "SamplerIntegrator.h"
 
-class WhittedIntegrator : public SamplerIntegrator {
+class PathTracingIntegrator : public SamplerIntegrator {
 public:
-    WhittedIntegrator(const std::shared_ptr<Sampler>& sampler);
+    PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler);
 
     glm::vec3 Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene, const std::shared_ptr<Sampler>& sampler) override;
 

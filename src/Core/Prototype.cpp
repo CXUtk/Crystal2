@@ -1,4 +1,4 @@
-#include "Prototype.h"
+﻿#include "Prototype.h"
 #include <Materials/Material.h>
 #include <SJson/SJson.h>
 
@@ -9,7 +9,7 @@ std::shared_ptr<Prototype> Prototype::CreatePrototype(const std::shared_ptr<SJso
     if (node->HasMember("Material")) {
         material = Material::CreateMaterial(node->GetMember("Material"));
     }
-    
+
     return std::make_shared<Prototype>(nullptr, material);
 }
 
@@ -21,5 +21,5 @@ Prototype::~Prototype() {
 }
 
 std::shared_ptr<BSDF> Prototype::ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera) const {
-    return _material->ComputeScatteringFunctions(isec, dir, fromCamera);
+    return _material->ComputeScatteringFunctions(isec, fromCamera);
 }

@@ -23,7 +23,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Cameras/PerspCamera.h"
 "src/Integrators/Integrator.h"
 "src/Integrators/Integrator.cpp"
-"src/Integrators/WhittedIntegrator.h"
+"src/Integrators/PathTracingIntegrator.h"
 "src/Integrators/SamplerIntegrator.h"
 "src/Integrators/SamplerIntegrator.cpp"
 "src/Samplers/Sampler.h"
@@ -31,7 +31,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Samplers/DefaultSampler.cpp"
 "src/Core/Geometry.h"
 "src/Core/Geometry.cpp"
-"src/Integrators/WhittedIntegrator.cpp"
+"src/Integrators/PathTracingIntegrator.cpp"
 "src/Core/SurfaceInteraction.h"
 "src/Shapes/Sphere.h"
 "src/Shapes/Sphere.cpp"
@@ -75,7 +75,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/BSDFs/SpecularReflection.h"
 "src/BSDFs/SpecularReflection.cpp" 
 "src/BSDFs/SpecularTransmission.h" 
-"src/BSDFs/SpecularTransmission.cpp" "src/Materials/Glass.h" "src/Materials/Glass.cpp" "src/Materials/MicrofacetMaterial.cpp" "src/Lights/Light.h" "src/Lights/Light.cpp")
+"src/BSDFs/SpecularTransmission.cpp" "src/Materials/Glass.h" "src/Materials/Glass.cpp" "src/Materials/MicrofacetMaterial.cpp" "src/Lights/Light.h" "src/Lights/Light.cpp" "src/Lights/PointLight.h" "src/Lights/PointLight.cpp")
 
 set_target_properties (Crystal2 PROPERTIES
                       CXX_STANDARD 17

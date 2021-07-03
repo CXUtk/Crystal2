@@ -10,12 +10,12 @@
 #include <Shapes/Triangle.h>
 #include <Shapes/Sphere.h>
 #include <Shapes/TriangleMesh.h>
-
+#include <Lights/PointLight.h>
 
 std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
     assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
     auto scene = std::shared_ptr<Scene>(new Scene());
-
+    scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 2, 2), glm::vec3(10.f, 10.f, 10.f)));
     for (auto it = sceneNode->begin(); it != sceneNode->end(); it++) {
         auto& node = (*it);
         assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
@@ -25,6 +25,9 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode
             for (auto& s : scene->parse_shape(prototype, node->GetMember("Shape"))) {
                 scene->_sceneObjects.push_back(s);
             }
+        }
+        else if (typeString == "Light") {
+
         }
         else {
             throw std::invalid_argument("Invalid Object Type!");

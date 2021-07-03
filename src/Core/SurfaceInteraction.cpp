@@ -14,7 +14,7 @@ Ray SurfaceInteraction::SpawnRay(glm::vec3 dir, bool pass) const {
     return Ray(_hitPos + ((back ^ pass) ? -_normal : _normal) * EPS, dir);
 }
 
-void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 normal, glm::vec2 uv, bool frontFace,
+void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 hitDir, glm::vec3 normal, glm::vec2 uv, bool frontFace,
     const Shape* shape, glm::vec3 dpdu, glm::vec3 dpdv) {
     _hitPos = hitPos;
     _distance = t;

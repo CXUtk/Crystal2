@@ -9,7 +9,7 @@ public:
     SurfaceInteraction();
 
     Ray SpawnRay(glm::vec3 dir, bool pass = false) const;
-    void SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 normal, glm::vec2 uv,
+    void SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 hitDir, glm::vec3 normal, glm::vec2 uv,
         bool frontFace, const Shape* shape, glm::vec3 dpdu, glm::vec3 dpdv);
 
     bool IsFrontFace() const { return _frontFace; }
@@ -21,6 +21,7 @@ public:
     glm::vec2 GetUV() const { return _uv; }
     glm::vec3 GetDpDu() const { return _dpdu; }
     glm::vec3 GetDpDv() const { return _dpdv; }
+    glm::vec3 GetHitDir() const { return _dir; }
 
 
 private:
@@ -28,7 +29,7 @@ private:
 
     float _distance;
     bool _frontFace;
-    glm::vec3 _hitPos, _normal;
+    glm::vec3 _hitPos, _normal, _dir;
     glm::vec2 _uv;
     glm::vec3 _dpdu, _dpdv;
 };
