@@ -48,6 +48,10 @@ bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     return _accelStructure->Intersect(ray, info);
 }
 
+bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax) const {
+    return _accelStructure->IntersectTest(ray, tMin, tMax);
+}
+
 Scene::Scene() {
 }
 

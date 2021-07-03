@@ -11,6 +11,7 @@ public:
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
+    bool IntersectTest(const Ray& ray, float tMin, float tMax) const;
     std::vector<std::shared_ptr<Light>> GetLights() const { return _lights; }
 
 private:

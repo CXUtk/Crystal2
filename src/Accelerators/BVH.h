@@ -16,10 +16,15 @@ public:
 private:
     accel::BVHNode* _nodes;
     int _tot, _root;
+    std::vector<const Shape*> _shapes;
 
-    void _build(int& p, int l, int r, std::vector<const Shape*>& objs);
-    int newNode(const Shape* shape[], int cnt, BoundingBox box);
+    void _build(int& p, int l, int r);
+    int newNode(int startOffset, int cnt, int splitAxis, const BoundingBox& box);
 
     bool _intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const;
     bool _intersectP(int p, const Ray& ray, float tMin, float tMax) const;
+
+
+    int splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos);
+    int splitBySAH(int l, int r, const BoundingBox& box, int& splitPos);
 };

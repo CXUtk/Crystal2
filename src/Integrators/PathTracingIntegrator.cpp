@@ -50,7 +50,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
 
                 auto LVec = endpoint - hitPos;
                 auto LDir = glm::normalize(LVec);
-                if (!scene->Intersect(info.SpawnRay(LDir), &hit) || hit.GetDistance() > glm::length(LVec)) {
+                if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - EPS)) {
                     Lres += bsdf->DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
                 }
             }
