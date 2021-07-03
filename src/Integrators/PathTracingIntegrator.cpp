@@ -34,6 +34,12 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
         auto prototype = info.GetHitPrototype();
         auto bsdf = prototype->ComputeScatteringFunctions(info, ray.dir);
 
+        // 如果是自发光物体就把发光项加上
+        if (info.GetHitPrototype()->GetAreaLight() != nullptr) {
+            auto areaLight = info.GetHitPrototype()->GetAreaLight();
+            Lres += areaLight->EvalEmission(info);
+        }
+
         // 如果不是纯光滑表面就计算从光源采样的irradiance
         if (!(bsdf->Flags() & BxDF_SPECULAR)) {
             for (auto& light : scene->GetLights()) {

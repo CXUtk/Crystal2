@@ -1,4 +1,4 @@
-#include "RayTracer.h"
+﻿#include "RayTracer.h"
 #include <Integrators/Integrator.h>
 #include <Core/FrameBuffer.h>
 #include <Core/Scene.h>
@@ -19,7 +19,14 @@ RayTracer::RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr
 std::shared_ptr<FrameBuffer> RayTracer::Trace() {
     auto fb = std::make_shared<FrameBuffer>(_width, _height);
     fb->Clear();
+
+    clock_t startTime, endTime;
+    startTime = clock();
     _integrator->Render(_scene, _camera, fb);
+    //------------------------------------------------
+    endTime = clock();  //计时结束
+    printf("The running time is: %.4fs\n",
+        (double)(endTime - startTime) / CLOCKS_PER_SEC);
     return fb;
 }
 

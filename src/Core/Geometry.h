@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include <glm/glm.hpp>
+#include <algorithm>
 
 struct Ray {
 public:
@@ -37,3 +38,18 @@ public:
 private:
     glm::vec3 _minPos, _maxPos;
 };
+
+
+inline bool RayBoxTest(const Ray& ray, const BoundingBox& box, float& tMin, float& tMax) {
+    bool inv[3] = { ray.dir[0] < 0, ray.dir[1] < 0 , ray.dir[2] < 0 };
+    glm::vec3 invD = { 1.0f / ray.dir[0], 1.0f / ray.dir[1], 1.0f / ray.dir[2] };
+    auto minP = (box.GetMinPos() - ray.start) * invD;
+    auto maxP = (box.GetMaxPos() - ray.start) * invD;
+    for (int i = 0; i < 3; i++) {
+        if (inv[i]) std::swap(minP[i], maxP[i]);
+        tMin = std::max(tMin, minP[i]);
+        tMax = std::min(tMax, maxP[i]);
+        if (tMax < tMin) return false;
+    }
+    return true;
+}

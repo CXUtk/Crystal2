@@ -1,4 +1,4 @@
-#include "Brute.h"
+﻿#include "Brute.h"
 
 Brute::Brute() {
 }
@@ -12,24 +12,22 @@ void Brute::Build(const std::vector<std::shared_ptr<Shape>>& objects) {
     }
 }
 
-bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
+bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec, float tMin, float tMax) const {
     bool hit = false;
     int cnt = 0;
     for (auto& obj : _objects) {
         SurfaceInteraction tmp;
         if (obj->Intersect(ray, &tmp)) {
-            if (tmp.GetDistance() < isec->GetDistance()) {
+            auto dist = tmp.GetDistance();
+            if (dist < isec->GetDistance()) {
                 *isec = std::move(tmp);
             }
             hit = true;
-            if (isec->GetDistance() == std::numeric_limits<float>::infinity()) {
-                hit = false;
-            }
         }
     }
-
     return hit;
 }
+
 
 bool Brute::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     for (auto& obj : _objects) {
@@ -40,4 +38,3 @@ bool Brute::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     }
     return false;
 }
-

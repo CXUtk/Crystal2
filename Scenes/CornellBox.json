@@ -48,7 +48,7 @@
                     1.0
                 ]
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -79,7 +79,7 @@
                     1.0
                 ]
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -110,7 +110,7 @@
                     0.1
                 ]
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -141,7 +141,7 @@
                     0.1
                 ]
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -172,7 +172,7 @@
                     1.0
                 ]
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -194,7 +194,7 @@
                 ],
                 "IOR": 1.5
             },
-            "Light": null
+            "AreaLight": null
         },
         {
             "Type": "Geometry",
@@ -215,7 +215,7 @@
                     1.0
                 ]
             },
-            "Light": null
+            "AreaLight": null
         }
     ]
 }
