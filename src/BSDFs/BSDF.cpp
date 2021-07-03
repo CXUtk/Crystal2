@@ -42,7 +42,7 @@ glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wO
     // 按照概率分布均匀采样
     for (int i = 0; i < sz; i++) {
         auto& bxdf = _bxdfs[i];
-        if (bxdf->Contains(sampleType)) {
+        if (bxdf->Contains(sampleType) && _weights[i] > 0.f) {
             idMap[tot] = i;
             ++tot;
         }
