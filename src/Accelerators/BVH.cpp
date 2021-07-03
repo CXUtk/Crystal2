@@ -50,15 +50,7 @@ bool BVH::IntersectTest(const Ray& ray, float tMin, float tMax) const {
 
 void BVH::_build(int& p, int l, int r) {
     if (r - l + 1 <= accel::MAX_OBJ_IN_NODE) {
-        const Shape* shapes[accel::MAX_OBJ_IN_NODE];
-        shapes[0] = _shapes[l];
-        BoundingBox box = _shapes[l]->GetBoundingBox();
-        // 获取[l, r]的碰撞箱，并且把纯指针放进shapes里
-        for (int i = l + 1; i <= r; i++) {
-            shapes[i - l] = _shapes[i];
-            box = box.Union(_shapes[i]->GetBoundingBox());
-        }
-        p = newNode(l, r - l + 1, -1, box);
+        createLeaf(p, l, r);
         return;
     }
     // 获取[l, r]的碰撞箱
@@ -72,7 +64,10 @@ void BVH::_build(int& p, int l, int r) {
         splitAxis = splitByEqualCount(l, r, box, splitPos);
     }
     else {
-        splitAxis = splitBySAH(l, r, box, splitPos);
+        if (!splitBySAH(l, r, box, splitAxis, splitPos)) {
+            createLeaf(p, l, r);
+            return;
+        }
     }
 
     // 按照排序结果从中间分割物体们
@@ -160,8 +155,8 @@ int BVH::splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos) 
     return splitAxis;
 }
 
-int BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitPos) {
-    int splitAxis = 0;
+bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& splitPos) {
+    splitAxis = 0, splitPos = l;
     float minCost = std::numeric_limits<float>::infinity();
     const Shape* const* startP = &_shapes[l];
     float totArea = box.SurfaceArea();
@@ -193,5 +188,17 @@ int BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitPos) {
         }
     }
     delete[] sufArea;
-    return splitAxis;
+    return minCost < (r - l + 1)* accel::INTERSECT_COST * 2.f;
+}
+
+void BVH::createLeaf(int& p, int l, int r) {
+    const Shape* shapes[accel::MAX_OBJ_IN_NODE];
+    shapes[0] = _shapes[l];
+    BoundingBox box = _shapes[l]->GetBoundingBox();
+    // 获取[l, r]的碰撞箱，并且把纯指针放进shapes里
+    for (int i = l + 1; i <= r; i++) {
+        shapes[i - l] = _shapes[i];
+        box = box.Union(_shapes[i]->GetBoundingBox());
+    }
+    p = newNode(l, r - l + 1, -1, box);
 }

@@ -1,4 +1,4 @@
-#include "BSDF.h"
+ï»¿#include "BSDF.h"
 #include <glm/glm.hpp>
 #include <Core/SurfaceInteraction.h>
 
@@ -39,7 +39,7 @@ glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wO
     static int mapper[10];
     int sz = _bxdfs.size();
     int id = 0;
-    // °´ÕÕ¸ÅÂÊ·Ö²¼¾ùÔÈ²ÉÑù
+    // æŒ‰ç…§æ¦‚ç‡åˆ†å¸ƒå‡åŒ€é‡‡æ ·
     for (int i = 0; i < sz; i++) {
         auto& bxdf = _bxdfs[i];
         if (bxdf->Contains(sampleType)) {
@@ -48,7 +48,7 @@ glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wO
             W[id] = W[id - 1] + _weights[i];
         }
     }
-    float v = sampleBSDF * W[id];
+    float v = std::min(0.99999994f, sampleBSDF) * W[id];
     std::shared_ptr<BxDF> bxdf = nullptr;
     for (int i = 0; i < id; i++) {
         if (W[i + 1] > v) {

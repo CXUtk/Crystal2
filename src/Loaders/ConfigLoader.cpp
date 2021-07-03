@@ -1,4 +1,4 @@
-#include "ConfigLoader.h"
+﻿#include "ConfigLoader.h"
 #include <SJson/SJson.h>
 #include <iostream>
 #include <fstream>
@@ -13,6 +13,7 @@ namespace config {
         info.Height = nodes->GetMember("Height")->GetInt();
         info.SamplesPerPixel = nodes->GetMember("SamplesPerPixel")->GetInt();
         info.AccelType = nodes->GetMember("Acceleration")->GetString();
+        info.NumOfThreads = nodes->GetMember("Threads")->GetInt();
         return info;
     }
 }

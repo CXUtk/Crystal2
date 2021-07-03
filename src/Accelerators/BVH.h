@@ -26,5 +26,7 @@ private:
 
 
     int splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos);
-    int splitBySAH(int l, int r, const BoundingBox& box, int& splitPos);
+    bool splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& splitPos);
+
+    void createLeaf(int& p, int l, int r);
 };
