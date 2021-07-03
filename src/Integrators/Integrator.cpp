@@ -1,5 +1,5 @@
 ﻿#include "Integrator.h"
-#include "WhittedIntegrator.h"
+#include "PathTracingIntegrator.h"
 #include <Samplers/DefaultSampler.h>
 #include <SJson/SJson.h>
 
@@ -16,8 +16,8 @@ std::shared_ptr<Integrator> Integrator::LoadIntegrator(const std::shared_ptr<SJs
         auto& samplerNode = integratorNode->GetMember("Sampler");
         auto sampler = Sampler::LoadSampler(samplerNode, configInfo);
 
-        if (type == "WhittedStyle") {
-            return std::make_shared<WhittedIntegrator>(sampler);
+        if (type == "PathTracer") {
+            return std::make_shared<PathTracingIntegrator>(sampler);
         }
         else {
             throw std::invalid_argument("Invalid Integrator Type!");

@@ -173,6 +173,49 @@
                 ]
             },
             "Light": null
+        },
+        {
+            "Type": "Geometry",
+            "Shape": {
+                "Type": "Sphere",
+                "Position": [
+                    -1.5,
+                    0,
+                    0
+                ],
+                "Radius": 1.0
+            },
+            "Material": {
+                "Type": "Glass",
+                "Color": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "IOR": 1.5
+            },
+            "Light": null
+        },
+        {
+            "Type": "Geometry",
+            "Shape": {
+                "Type": "Sphere",
+                "Position": [
+                    1.5,
+                    0,
+                    0
+                ],
+                "Radius": 1.0
+            },
+            "Material": {
+                "Type": "Diffuse",
+                "Color": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "Light": null
         }
     ]
 }
