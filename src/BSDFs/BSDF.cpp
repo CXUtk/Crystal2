@@ -35,26 +35,22 @@ glm::vec3 BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const {
 }
 
 glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType sampleType) const {
-    static float W[10];
-    static int mapper[10];
     int sz = _bxdfs.size();
-    int id = 0;
+    int tot = 0;
+    int idMap[10];
+
     // 按照概率分布均匀采样
     for (int i = 0; i < sz; i++) {
         auto& bxdf = _bxdfs[i];
         if (bxdf->Contains(sampleType)) {
-            ++id;
-            mapper[id] = i;
-            W[id] = W[id - 1] + _weights[i];
+            idMap[tot] = i;
+            ++tot;
         }
     }
-    float v = std::min(0.99999994f, sampleBSDF) * W[id];
-    std::shared_ptr<BxDF> bxdf = nullptr;
-    for (int i = 0; i < id; i++) {
-        if (W[i + 1] > v) {
-            bxdf = _bxdfs[mapper[i + 1]];
-            break;
-        }
-    }
-    return bxdf->SampleDirection(sample, wOut, wIn, pdf);
+    int v = (int)(std::min(0.99999994f, sampleBSDF) * tot);
+    std::shared_ptr<BxDF> bxdf = _bxdfs[idMap[v]];
+    auto L = bxdf->SampleDirection(sample, wOut, wIn, pdf);
+    *pdf /= tot;
+
+    return L;
 }
