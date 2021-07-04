@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <glm/glm.hpp>
 #include <Crystal2.h>
 #include <memory>
@@ -17,7 +17,7 @@ class BSDF {
 public:
     BSDF(const SurfaceInteraction* si);
     int NumBxDFs() const { return _bxdfs.size(); }
-    void AddBxDF(const std::shared_ptr<BxDF>& bxdf, float w);
+    void AddBxDF(const std::shared_ptr<BxDF>& bxdf);
     BxDFType Flags() const;
 
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const;
@@ -25,13 +25,12 @@ public:
 
 private:
     const SurfaceInteraction* _hit;
-    std::vector<float> _weights;
     std::vector<std::shared_ptr<BxDF>> _bxdfs;
 };
 
 class BxDF {
 public:
-    BxDF(BxDFType type) : _bxdfType(type){}
+    BxDF(BxDFType type) : _bxdfType(type) {}
     virtual ~BxDF() = 0 {}
 
     virtual glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const = 0;

@@ -2,6 +2,7 @@
 #include <BSDFs/SpecularReflection.h>
 #include <BSDFs/SpecularTransmission.h>
 #include "Glass.h"
+#include <BSDFs/Models/Fresnel.h>
 
 Glass::Glass(glm::vec3 color, float eta) : _color(color), _eta(eta) {
 }
@@ -35,16 +36,10 @@ std::shared_ptr<BSDF> Glass::ComputeScatteringFunctions(SurfaceInteraction& isec
     auto N = glm::normalize(isec.GetNormal());
     float etaA = 1.0f, etaB = _eta;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
+    auto F = std::make_shared<FresnelDielectric>(etaA, etaB);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    glm::vec3 tdir;
-    if (refract(-isec.GetHitDir(), N, etaA, etaB, tdir)) {
-        float f = Fresnel(N, -isec.GetHitDir(), tdir, etaA, etaB);
-        bsdf->AddBxDF(std::make_shared<SpecularReflection>(_color, N), f);
-        bsdf->AddBxDF(std::make_shared<SpecularTransmission>(_color, N, etaA, etaB), 1.f - f);
-    }
-    else {
-        bsdf->AddBxDF(std::make_shared<SpecularReflection>(_color, N), 1.f);
-    }
+    bsdf->AddBxDF(std::make_shared<SpecularReflection>(_color, N, F));
+    bsdf->AddBxDF(std::make_shared<SpecularTransmission>(_color, N, F, etaA, etaB));
     return bsdf;
 }

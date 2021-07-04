@@ -26,6 +26,6 @@ std::shared_ptr<BSDF> DiffuseMaterial::ComputeScatteringFunctions(SurfaceInterac
     //}
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    bsdf->AddBxDF(std::make_shared<Lambertain>(color, glm::mat3(T, N, B)), 1.0f);
+    bsdf->AddBxDF(std::make_shared<Lambertain>(color, glm::mat3(T, N, B)));
     return bsdf;
 }

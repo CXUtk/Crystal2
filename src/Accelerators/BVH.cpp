@@ -96,10 +96,14 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
             const Shape* const* startP = &_shapes[_nodes[p].shapeStartOffset];
             if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
             if (!startP[i]->Intersect(ray, &isec)) continue;
-            if (isec.GetDistance() < info->GetDistance()) {
+            auto dis = isec.GetDistance();
+            if (dis < std::numeric_limits<float>::infinity()) {
+                hit = true;
+            }
+            if (dis < info->GetDistance()) {
                 *info = std::move(isec);
             }
-            hit = true;
+
         }
         return hit;
     }
