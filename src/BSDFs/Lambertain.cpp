@@ -13,7 +13,8 @@ glm::vec3 Lambertain::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const 
     return _albedo / glm::pi<float>();
 }
 
-glm::vec3 Lambertain::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf) const {
+glm::vec3 Lambertain::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const {
+    *sampledType = GetType();
     auto dir = NextCosineUnitHemiSphere(sample, *pdf);
     *wIn = _TNB * dir;
     return DistributionFunction(wOut, *wIn);

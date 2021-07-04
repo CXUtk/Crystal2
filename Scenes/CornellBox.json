@@ -216,6 +216,38 @@
                 ]
             },
             "AreaLight": null
+        },
+        {
+            "Type": "Geometry",
+            "Shape": {
+                "Type": "TriangleMesh",
+                "ObjFile": "../../../Models/gd32.obj",
+                "Translation": [
+                    -2,
+                    0,
+                    -2
+                ],
+                "Scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "Rotation": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "Material": {
+                "Type": "Glass",
+                "Color": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "IOR": 1.5
+            },
+            "AreaLight": null
         }
     ]
 }

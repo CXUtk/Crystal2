@@ -21,7 +21,7 @@ public:
     BxDFType Flags() const;
 
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const;
-    glm::vec3 SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType sampleType) const;
+    glm::vec3 SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType flags, BxDFType* sampledType) const;
 
 private:
     const SurfaceInteraction* _hit;
@@ -34,7 +34,7 @@ public:
     virtual ~BxDF() = 0 {}
 
     virtual glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const = 0;
-    virtual glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf) const = 0;
+    virtual glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const = 0;
 
     bool Contains(BxDFType type) const { return (_bxdfType & type); }
 

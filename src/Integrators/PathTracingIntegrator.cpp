@@ -40,31 +40,30 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
             Lres += areaLight->EvalEmission(info);
         }
 
-        // 如果不是纯光滑表面就计算从光源采样的irradiance
-        if (!(bsdf->Flags() & BxDF_SPECULAR)) {
-            for (auto& light : scene->GetLights()) {
-                glm::vec3 endpoint;
-                float pdf;
-                auto Li = light->Sample_Li(info, sampler->Get2D(1), &endpoint, &pdf);
-                SurfaceInteraction hit;
+        // 计算从光源采样的radiance
+        for (auto& light : scene->GetLights()) {
+            glm::vec3 endpoint;
+            float pdf;
+            auto Li = light->Sample_Li(info, sampler->Get2D(1), &endpoint, &pdf);
+            SurfaceInteraction hit;
 
-                auto LVec = endpoint - hitPos;
-                auto LDir = glm::normalize(LVec);
-                if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - EPS)) {
-                    Lres += bsdf->DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
-                }
+            auto LVec = endpoint - hitPos;
+            auto LDir = glm::normalize(LVec);
+            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - EPS)) {
+                Lres += bsdf->DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
             }
         }
+        
 
         // 进行一次路径追踪采样
         glm::vec3 wIn;
         float pdf;
-        auto brdf = bsdf->SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL);
-        if (std::abs(pdf) < EPS) return glm::vec3(0);
+        BxDFType type;
+        auto brdf = bsdf->SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
+        if (std::abs(pdf) < EPS) return Lres;
+        bool specular = (type & BxDF_SPECULAR) != 0;
 
-        bool specular = (bsdf->Flags() & BxDF_SPECULAR) != 0;
         auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
-
         auto Lindir = eval_rec(info.SpawnRay(wIn), scene, _indirectSampler, level + 1) * brdf * cosine / pdf;
         Lres += Lindir;
         return Lres;

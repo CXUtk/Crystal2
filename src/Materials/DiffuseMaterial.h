@@ -7,7 +7,7 @@ public:
     DiffuseMaterial(glm::vec3 color);
     ~DiffuseMaterial() override;
 
-    std::shared_ptr<BSDF> ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera = true) const override;
+    std::shared_ptr<BSDF> ComputeScatteringFunctions(const SurfaceInteraction& isec, bool fromCamera = true) const override;
 
 private:
     glm::vec3 _color;

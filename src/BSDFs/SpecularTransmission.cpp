@@ -27,7 +27,11 @@ static bool refract(glm::vec3 wo, glm::vec3 N, float etaA, float etaB, glm::vec3
 }
 
 
-glm::vec3 SpecularTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf) const {
+
+
+
+glm::vec3 SpecularTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const {
+    *sampledType = GetType();
     glm::vec3 transDir;
     *pdf = 1.0f;
     if (refract(wOut, _normal, _etaA, _etaB, transDir)) {

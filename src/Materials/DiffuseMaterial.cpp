@@ -10,7 +10,7 @@ DiffuseMaterial::DiffuseMaterial(glm::vec3 color) : _color(color) {
 DiffuseMaterial::~DiffuseMaterial() {
 }
 
-std::shared_ptr<BSDF> DiffuseMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const {
+std::shared_ptr<BSDF> DiffuseMaterial::ComputeScatteringFunctions(const SurfaceInteraction& isec, bool fromCamera) const {
     auto N = glm::normalize(isec.GetNormal());
     auto T = glm::normalize(isec.GetDpDu());
     auto B = glm::normalize(glm::cross(T, N));

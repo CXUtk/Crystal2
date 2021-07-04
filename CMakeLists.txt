@@ -75,7 +75,22 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/BSDFs/SpecularReflection.h"
 "src/BSDFs/SpecularReflection.cpp" 
 "src/BSDFs/SpecularTransmission.h" 
-"src/BSDFs/SpecularTransmission.cpp" "src/Materials/Glass.h" "src/Materials/Glass.cpp" "src/Materials/MicrofacetMaterial.cpp" "src/Lights/Light.h" "src/Lights/Light.cpp" "src/Lights/PointLight.h" "src/Lights/PointLight.cpp" "src/Lights/AreaLight.h" "src/Lights/AreaLight.cpp" "src/BSDFs/Models/Fresnel.h" "src/BSDFs/Models/Fresnel.cpp")
+"src/BSDFs/SpecularTransmission.cpp"
+"src/Materials/Glass.h"
+"src/Materials/Glass.cpp"
+"src/Materials/MicrofacetMaterial.cpp"
+"src/Lights/Light.h"
+"src/Lights/Light.cpp"
+"src/Lights/PointLight.h"
+"src/Lights/PointLight.cpp"
+"src/Lights/AreaLight.h"
+"src/Lights/AreaLight.cpp"
+"src/BSDFs/Models/Fresnel.h"
+"src/BSDFs/Models/Fresnel.cpp"
+"src/BSDFs/Models/MicrofacetDistribution.h"
+"src/BSDFs/Models/MicrofacetDistribution.cpp"
+"src/BSDFs/SpecularFresnel.h"
+"src/BSDFs/SpecularFresnel.cpp")
 
 set_target_properties (Crystal2 PROPERTIES
                       CXX_STANDARD 17

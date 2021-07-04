@@ -108,14 +108,17 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
         return hit;
     }
 
+
+    int initDir = ray.dir[_nodes[p].splitAxis] > 0 ? 0 : 1;
+
     float t1 = tMin, t2 = std::min(tMax, info->GetDistance());
-    if (RayBoxTest(ray, _nodes[_nodes[p].ch[0]].bound, t1, t2)) {
-        hit |= _intersect(_nodes[p].ch[0], ray, info, t1, t2);
+    if (RayBoxTest(ray, _nodes[_nodes[p].ch[initDir]].bound, t1, t2)) {
+        hit |= _intersect(_nodes[p].ch[initDir], ray, info, t1, t2);
     }
 
     t1 = tMin, t2 = std::min(tMax, info->GetDistance());
-    if (RayBoxTest(ray, _nodes[_nodes[p].ch[1]].bound, t1, t2)) {
-        hit |= _intersect(_nodes[p].ch[1], ray, info, t1, t2);
+    if (RayBoxTest(ray, _nodes[_nodes[p].ch[!initDir]].bound, t1, t2)) {
+        hit |= _intersect(_nodes[p].ch[!initDir], ray, info, t1, t2);
     }
 
     return hit;

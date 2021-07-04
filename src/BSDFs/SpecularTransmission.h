@@ -12,7 +12,7 @@ public:
     ~SpecularTransmission() override;
 
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
-    glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf) const override;
+    glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
 
 private:
     glm::vec3 _albedo, _normal;
