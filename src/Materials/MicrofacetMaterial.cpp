@@ -18,7 +18,7 @@ std::shared_ptr<BSDF> MicrofacetMaterial::ComputeScatteringFunctions(const Surfa
     float etaA = _ior, etaB = 1.0f;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
     auto F = std::make_shared<FresnelDielectric>(etaA, etaB);
-    auto d = std::make_shared<GGXDistribution>(TNB, _roughness, _roughness);
+    auto d = std::make_shared<GGXDistribution>(TNB, _roughness, _roughness );
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     bsdf->AddBxDF(std::make_shared<MicrofacetReflection>(_color, TNB, F, d));

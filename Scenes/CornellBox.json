@@ -239,7 +239,7 @@
                 ]
             },
             "Material": {
-                "Type": "Glass",
+                "Type": "Mirror",
                 "Color": [
                     1.0,
                     1.0,
