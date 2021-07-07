@@ -208,7 +208,7 @@
                 "Radius": 1.0
             },
             "Material": {
-                "Type": "Diffuse",
+                "Type": "Micro",
                 "Color": [
                     1.0,
                     1.0,

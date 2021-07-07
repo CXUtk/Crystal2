@@ -41,7 +41,5 @@ std::shared_ptr<BSDF> Glass::ComputeScatteringFunctions(const SurfaceInteraction
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     bsdf->AddBxDF(std::make_shared<SpecularFresnel>(_color, _color, N, etaA, etaB, F));
-    //bsdf->AddBxDF(std::make_shared<SpecularReflection>(_color, N, F));
-    //bsdf->AddBxDF(std::make_shared<SpecularTransmission>(_color, N, F, etaA, etaB));
     return bsdf;
 }
