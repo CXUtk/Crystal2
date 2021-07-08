@@ -24,14 +24,14 @@
             "Shape": {
                 "Type": "Sphere",
                 "Position": [
-                    -1.5,
+                    1.5,
                     0,
                     0
                 ],
                 "Radius": 1.0
             },
             "Material": {
-                "Type": "Glass",
+                "Type": "Micro",
                 "Color": [
                     1.0,
                     1.0,
@@ -46,7 +46,7 @@
             "Shape": {
                 "Type": "Sphere",
                 "Position": [
-                    1.5,
+                    -1.5,
                     0,
                     0
                 ],
@@ -58,37 +58,6 @@
                     1.0,
                     1.0,
                     1.0
-                ]
-            },
-            "Light": null
-        },
-        {
-            "Type": "Geometry",
-            "Shape": {
-                "Type": "TriangleMesh",
-                "ObjFile": "../../../Models/Floor.obj",
-                "Translation": [
-                    0,
-                    -1,
-                    0
-                ],
-                "Scale": [
-                    3,
-                    1,
-                    3
-                ],
-                "Rotation": [
-                    0,
-                    0,
-                    0
-                ]
-            },
-            "Material": {
-                "Type": "Diffuse",
-                "Color": [
-                    1.0,
-                    0.0,
-                    0.0
                 ]
             },
             "Light": null

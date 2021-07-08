@@ -54,8 +54,9 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     N = front_face ? N : -N;
 
     auto realHitPos = _local2World * dummyHitPos + _pos;
-    auto dpdu = _local2World * glm::vec3(-dummyHitPos.z, 0, dummyHitPos.x);
-    info->SetHitInfo(t, realHitPos, ray.dir, _local2World * N, glm::vec2(theta, phi), front_face, this,
+    auto dpdu = glm::normalize(_local2World * glm::vec3(-N.z, 0, N.x));
+    N = _local2World * N;
+    info->SetHitInfo(t, realHitPos, ray.dir, N, glm::vec2(theta, phi), front_face, this,
         dpdu,
         glm::cross(N, dpdu));
     return true;

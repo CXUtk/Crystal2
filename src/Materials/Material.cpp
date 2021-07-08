@@ -23,7 +23,7 @@ std::shared_ptr<Material> Material::CreateMaterial(const std::shared_ptr<SJson::
     }
     else if (type == "Micro") {
         auto color = loader::parse_vec3(node->GetMember("Color"));
-        return std::make_shared<MicrofacetMaterial>(color, 1.5f, 0.1f);
+        return std::make_shared<MicrofacetMaterial>(color, 1.5f, .5f);
     }
     else {
         throw std::exception("Invalid material name");

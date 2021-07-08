@@ -20,6 +20,6 @@ private:
     glm::vec3 eyePos, lookAt, up;
     float fov, aspect, zNear, zFar;
 
-    glm::vec3 _up, _left, _look;
+    glm::vec3 _up, _right, _look;
     float H, W;
 };

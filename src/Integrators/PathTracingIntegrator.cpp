@@ -68,6 +68,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
         Lres += Lindir;
         return Lres;
     }
+    return glm::vec3(0.5f);
     auto Lenvir = ray.dir.y * 0.5f + 0.5f;
     return glm::vec3(glm::smoothstep(0.f, 1.f, Lenvir));
 }
