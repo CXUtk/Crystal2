@@ -3,7 +3,7 @@
         "Type": "Normal",
         "Position": [
             0,
-            2,
+            4,
             -6
         ],
         "FOV": 90,
@@ -210,42 +210,11 @@
             "Material": {
                 "Type": "Micro",
                 "Color": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "AreaLight": null
-        },
-        {
-            "Type": "Geometry",
-            "Shape": {
-                "Type": "TriangleMesh",
-                "ObjFile": "../../../Models/gd32.obj",
-                "Translation": [
-                    -2,
-                    0,
-                    -2
-                ],
-                "Scale": [
-                    1,
-                    1,
-                    1
-                ],
-                "Rotation": [
-                    0,
-                    0,
-                    0
-                ]
-            },
-            "Material": {
-                "Type": "Mirror",
-                "Color": [
-                    1.0,
-                    1.0,
+                    0.0,
+                    0.0,
                     1.0
                 ],
-                "IOR": 1.5
+                "Roughness": 0.1
             },
             "AreaLight": null
         }

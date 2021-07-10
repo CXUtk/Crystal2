@@ -1,5 +1,6 @@
 ﻿#include "MicrofacetDistribution.h"
 #include <glm/gtx/transform.hpp>
+#include <algorithm>
 
 GGXDistribution::GGXDistribution(const glm::mat3& TNB, float alphaX, float alphaY) : _TNB(TNB), _alphaX(alphaX), _alphaY(alphaY) {
     _invTNB = glm::inverse(TNB);
@@ -11,7 +12,7 @@ GGXDistribution::~GGXDistribution() {
 float GGXDistribution::D(glm::vec3 wh) const {
     auto Wh = _invTNB * wh;
 
-    float cosTheta = Wh.y;
+    float cosTheta = std::max(0.f, Wh.y);
     float cos2Theta = cosTheta * cosTheta;
     float sin2Theta = 1.f - cos2Theta;
     float tan2Theta = sin2Theta / cos2Theta;
@@ -30,7 +31,7 @@ float GGXDistribution::D(glm::vec3 wh) const {
 float GGXDistribution::Lambda(glm::vec3 w) const {
     auto Wh = _invTNB * w;
 
-    float cosTheta = Wh.y;
+    float cosTheta = std::max(0.f, Wh.y);
     float cos2Theta = cosTheta * cosTheta;
     float sin2Theta = 1.f - cos2Theta;
     float tan2Theta = sin2Theta / cos2Theta;

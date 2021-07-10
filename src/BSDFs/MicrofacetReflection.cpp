@@ -13,14 +13,14 @@ MicrofacetReflection::~MicrofacetReflection() {
 }
 
 glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const {
-    auto cosThetaO = glm::dot(wOut, _TNB[1]);
-    auto cosThetaI = glm::dot(wIn, _TNB[1]);
+    auto cosThetaO = std::max(0.f, glm::dot(wOut, _TNB[1]));
+    auto cosThetaI = std::max(0.f, glm::dot(wIn, _TNB[1]));
     if (cosThetaI == 0 || cosThetaO == 0) return glm::vec3(0);
     auto wh = glm::normalize(wOut + wIn);
     auto F = _fresnel->Eval(glm::dot(wOut, wh));
     auto G = _microDistribution->G(wOut, wIn);
     auto D = _microDistribution->D(wh);
-    return _R * (D * G * F / (4 * cosThetaI * cosThetaO));
+    return glm::vec3(1.f) * (D * G * F / (4 * cosThetaI * cosThetaO));
 }
 
 

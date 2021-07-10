@@ -37,7 +37,7 @@
                     1.0,
                     1.0
                 ],
-                "IOR": 1.7
+                "Roughness": 0.1
             },
             "Light": null
         },
