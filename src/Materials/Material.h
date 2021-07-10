@@ -5,7 +5,7 @@
 
 class Material {
 public:
-    static std::shared_ptr<Material> CreateMaterial(const std::shared_ptr<SJson::SJsonNode>& node);
+    static std::shared_ptr<Material> CreateMaterial(const std::shared_ptr<SJson::SJsonNode>& node, const Scene* scene);
 
     Material() {}
     virtual ~Material() = 0 {};

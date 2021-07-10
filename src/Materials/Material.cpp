@@ -1,16 +1,19 @@
-#include "Material.h"
+﻿#include "Material.h"
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
+#include <Core/Scene.h>
+
+
 #include "DiffuseMaterial.h"
 #include "MirrorMaterial.h"
 #include "Glass.h"
 #include "MicrofacetMaterial.h"
 
-std::shared_ptr<Material> Material::CreateMaterial(const std::shared_ptr<SJson::SJsonNode>& node) {
+std::shared_ptr<Material> Material::CreateMaterial(const std::shared_ptr<SJson::SJsonNode>& node, const Scene* scene) {
     auto type = node->GetMember("Type")->GetString();
     if (type == "Diffuse") {
-        auto color = loader::parse_vec3(node->GetMember("Color"));
-        return std::make_shared<DiffuseMaterial>(color);
+        auto kdTexture = node->GetMember("Kd")->GetString();
+        return std::make_shared<DiffuseMaterial>(scene->GetTextureByName(kdTexture));
     }
     else if (type == "Mirror") {
         auto color = loader::parse_vec3(node->GetMember("Color"));

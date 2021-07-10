@@ -195,11 +195,11 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
         }
     }
     delete[] sufArea;
-    return minCost < (r - l + 1)* accel::INTERSECT_COST * 2.f;
+    return minCost < (r - l + 1)* accel::INTERSECT_COST * 3.f;
 }
 
 void BVH::createLeaf(int& p, int l, int r) {
-    const Shape* shapes[accel::MAX_OBJ_IN_NODE];
+    const Shape* shapes[20];
     shapes[0] = _shapes[l];
     BoundingBox box = _shapes[l]->GetBoundingBox();
     // 获取[l, r]的碰撞箱，并且把纯指针放进shapes里

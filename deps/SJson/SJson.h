@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include <iostream>
 #include <exception>
@@ -11,15 +11,15 @@ using ll = long long int;
 
 namespace SJson {
 
-    // ∏˜¿‡“Ï≥££¨√∂æŸ¿‡
+    // ÂêÑÁ±ªÂºÇÂ∏∏ÔºåÊûö‰∏æÁ±ª
     enum class SJsonNodeType { JSON_NULL, JSON_BOOL, JSON_INT, JSON_FLOAT, JSON_STRING, JSON_ARRAY, JSON_OBJECT };
 
     std::string SJsonGetNodeTypeName(SJsonNodeType type);
 
     class ParseError : public std::exception {
     public:
-        explicit ParseError(const char* name, int line, int col) : std::exception(name), _line(line), _col(col)
-        {}
+        explicit ParseError(const char* name, int line, int col) : std::exception(name), _line(line), _col(col) {
+        }
         int GetLine() const { return _line; }
         int GetCol() const { return _col; }
     private:
@@ -55,13 +55,14 @@ namespace SJson {
 
     class OperationError : public std::exception {
     public:
-        explicit OperationError(const char* name) : std::exception(name) { }
+        explicit OperationError(const char* name) : std::exception(name) {}
     };
 
     class ConversionError : public OperationError {
     public:
-        explicit ConversionError( const std::string& fr, const std::string& to) : OperationError("Conversion Error"),
-            from(fr), to(to) {}
+        explicit ConversionError(const std::string& fr, const std::string& to) : OperationError("Conversion Error"),
+            from(fr), to(to) {
+        }
         std::string from, to;
     };
 
@@ -75,48 +76,55 @@ namespace SJson {
 
 
     /// <summary>
-    /// SJsonNode  «JsonΩ⁄µ„µƒª˘¿‡£¨∞¸∫¨∏˜÷÷»°÷µ≈–∂œ≤Ÿ◊˜
+    /// SJsonNode ÊòØJsonËäÇÁÇπÁöÑÂü∫Á±ªÔºåÂåÖÂê´ÂêÑÁßçÂèñÂÄºÂà§Êñ≠Êìç‰Ωú
     /// </summary>
     class SJsonNode {
     public:
         SJsonNode() = default;
         virtual ~SJsonNode() = 0 {}
-        
+
         virtual SJsonNodeType GetType() const = 0;
 
-        virtual ll GetInt() const { 
+        virtual ll GetInt() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_INT));
         }
         virtual double GetFloat() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_FLOAT));
         }
-        virtual bool GetBool() const { 
+        virtual bool GetBool() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_BOOL));
         }
         virtual std::string GetString() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_STRING));
         }
 
-        // Array ≤Ÿ◊˜
-        virtual std::vector<std::shared_ptr<SJsonNode>>::const_iterator begin() const { 
+        // Array Êìç‰Ωú
+        virtual std::vector<std::shared_ptr<SJsonNode>>::const_iterator begin() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
         virtual std::vector<std::shared_ptr<SJsonNode>>::const_iterator end() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
-        virtual std::size_t arraySize() const { 
+        virtual std::size_t arraySize() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
         virtual std::shared_ptr<SJsonNode> ElementAt(int index) const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
 
-        // Object ≤Ÿ◊˜
+        // Object Êìç‰Ωú
         virtual const std::shared_ptr<SJsonNode>& GetMember(const std::string& name) const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
         }
 
         virtual bool HasMember(const std::string& name) const {
+            throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
+        }
+
+        virtual std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator beginProperties() const {
+            throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
+        }
+        virtual std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator endProperties() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
         }
     };
@@ -135,6 +143,12 @@ namespace SJson {
         }
         bool HasMember(const std::string& name) const override {
             return _value.find(name) != _value.end();
+        }
+        std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator beginProperties() const {
+            return _value.cbegin();
+        }
+        std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator endProperties() const {
+            return _value.cend();
         }
     private:
         std::map<std::string, std::shared_ptr<SJsonNode>> _value;
@@ -224,7 +238,7 @@ namespace SJson {
 
 
 
-    // ƒ£∞Â±„Ω›≤Ÿ◊˜
+    // Ê®°Êùø‰æøÊç∑Êìç‰Ωú
     template<typename T>
     T TryGetMemberValue(const std::shared_ptr<SJsonNode>& node, const std::string& name, T defValue);
 

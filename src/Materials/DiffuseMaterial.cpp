@@ -3,8 +3,10 @@
 #include <BSDFs/Lambertain.h>
 #include <algorithm>
 #include <cmath>
+#include <Textures/Texture.h>
 
-DiffuseMaterial::DiffuseMaterial(glm::vec3 color) : _color(color) {
+
+DiffuseMaterial::DiffuseMaterial(const std::shared_ptr<Texture<glm::vec3>>& Kd) : _Kd(Kd) {
 }
 
 DiffuseMaterial::~DiffuseMaterial() {
@@ -15,15 +17,7 @@ std::shared_ptr<BSDF> DiffuseMaterial::ComputeScatteringFunctions(const SurfaceI
     auto T = glm::normalize(isec.GetDpDu());
     auto B = glm::normalize(glm::cross(T, N));
 
-    auto uv = isec.GetUV();
-    uv *= 5.f;
-    bool f1 = glm::mod(uv.x, 1.0f) < 0.5;
-    bool f2 = glm::mod(uv.y, 1.0f) < 0.5;
-
-    auto color = _color;
-    //if (f1 ^ f2) {
-    //    color = glm::vec3(1);
-    //}
+    auto color = _Kd->Evaluate(isec);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     bsdf->AddBxDF(std::make_shared<Lambertain>(color, glm::mat3(T, N, B)));

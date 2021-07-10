@@ -9,7 +9,7 @@ RayTracer::RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr
     _width = configInfo.Width;
     _height = configInfo.Height;
 
-    _scene = Scene::CreateScene(sceneNode->GetMember("Objects"), configInfo);
+    _scene = Scene::CreateScene(sceneNode->GetMember("Scene"), configInfo);
     _camera = Camera::CreateCamera(sceneNode->GetMember("Camera"), configInfo);
     _integrator = Integrator::LoadIntegrator(configNode, configInfo);
 

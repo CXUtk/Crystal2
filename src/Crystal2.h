@@ -19,6 +19,8 @@ class Material;
 class BSDF;
 class BxDF;
 class Prototype;
+template<typename T>
+class Texture;
 
 
 // Shapes
