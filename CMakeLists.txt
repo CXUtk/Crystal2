@@ -90,7 +90,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/BSDFs/Models/MicrofacetDistribution.h"
 "src/BSDFs/Models/MicrofacetDistribution.cpp"
 "src/BSDFs/SpecularFresnel.h"
-"src/BSDFs/SpecularFresnel.cpp" "src/BSDFs/MicrofacetReflection.h" "src/BSDFs/MicrofacetReflection.cpp" "src/Textures/Texture.h" "src/Textures/UVTexture.h"  "src/Textures/Texel.h" "src/Textures/Texel.cpp")
+"src/BSDFs/SpecularFresnel.cpp" "src/BSDFs/MicrofacetReflection.h" "src/BSDFs/MicrofacetReflection.cpp" "src/Textures/Texture.h" "src/Textures/UVTexture.h"  "src/Textures/Texel.h" "src/Textures/Texel.cpp" "src/Textures/CubemapTexture.h" "src/Textures/CubemapTexture.cpp")
 
 set_target_properties (Crystal2 PROPERTIES
                       CXX_STANDARD 17

@@ -21,7 +21,7 @@ class BxDF;
 class Prototype;
 template<typename T>
 class Texture;
-
+class CubemapTexture;
 
 // Shapes
 class TriangleMesh;

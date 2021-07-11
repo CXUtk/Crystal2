@@ -15,7 +15,7 @@ std::shared_ptr<ImageTexels> ImageTexels::CreateImageTexels(const std::string& f
 
 glm::vec3 ImageTexels::GetTexel(glm::vec2 uv) const {
     uv = glm::clamp(uv, glm::vec2(0.f, 0.f), glm::vec2(.99999f, .99999f));
-    glm::ivec2 xy = glm::ivec2((int)(uv.x * _width), (int)(uv.y * _height));
+    glm::ivec2 xy = glm::ivec2((int)(uv.x * _width), _height - (int)(uv.y * _height) - 1);
     return _data[xy.y * _width + xy.x];
 }
 

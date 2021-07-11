@@ -1,12 +1,16 @@
 ﻿#include "PathTracingIntegrator.h"
+
 #include <Core/Scene.h>
 #include <Core/Geometry.h>
 #include <Core/SurfaceInteraction.h>
-#include <glm/gtx/transform.hpp>
 #include <Core/Prototype.h>
+
+#include <glm/gtx/transform.hpp>
 #include <BSDFs/BSDF.h>
 #include <Samplers/DefaultSampler.h>
 #include <Lights/Light.h>
+
+#include <Textures/CubemapTexture.h>
 
 static constexpr float pRR = 0.8f;
 static constexpr float EPS = 1e-5;
@@ -19,12 +23,12 @@ PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sam
 // 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
 glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler) {
-    return eval_rec(ray, scene, sampler, 0);
+    return eval_rec(ray, scene, sampler, 0, true);
 }
 
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scene>& scene,
-    const std::shared_ptr<Sampler>& sampler, int level) {
+    const std::shared_ptr<Sampler>& sampler, int level, bool specular) {
     if (level == 5) return glm::vec3(0);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
@@ -35,7 +39,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
         auto bsdf = prototype->ComputeScatteringFunctions(info, ray.dir);
 
         // 如果是自发光物体就把发光项加上
-        if (info.GetHitPrototype()->GetAreaLight() != nullptr) {
+        if (info.GetHitPrototype()->GetAreaLight() != nullptr && specular) {
             auto areaLight = info.GetHitPrototype()->GetAreaLight();
             Lres += areaLight->EvalEmission(info);
         }
@@ -54,20 +58,19 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
             }
         }
 
-
         // 进行一次路径追踪采样
         glm::vec3 wIn;
         float pdf;
         BxDFType type;
         auto brdf = bsdf->SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
-        if (std::abs(pdf) < EPS) return Lres;
+        if (std::abs(pdf) < EPS || brdf == glm::vec3(0)) return Lres;
         bool specular = (type & BxDF_SPECULAR) != 0;
 
         auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
-        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, _indirectSampler, level + 1) * brdf * cosine / pdf;
+        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, _indirectSampler, level + 1, specular) * brdf * cosine / pdf;
         Lres += Lindir;
         return Lres;
     }
-    auto Lenvir = ray.dir.y * 0.5f + 0.5f;
-    return glm::vec3(glm::smoothstep(0.f, 1.f, Lenvir));
+    if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
+    return scene->GetSkybox()->Evaluate(ray.dir);
 }

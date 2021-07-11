@@ -15,6 +15,7 @@
 #include <Textures/Texture.h>
 #include <Textures/Texel.h>
 #include <Textures/UVTexture.h>
+#include <Textures/CubemapTexture.h>
 
 std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
     assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
@@ -24,6 +25,9 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode
 
     scene->loadTextures(sceneNode->GetMember("Textures"), configInfo);
     scene->loadObjects(sceneNode->GetMember("Objects"), configInfo);
+    if (sceneNode->HasMember("Skybox")) {
+        scene->loadSkybox(sceneNode->GetMember("Skybox"), configInfo);
+    }
 
     scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType);
     scene->_accelStructure->Build(scene->_sceneObjects);
@@ -50,6 +54,7 @@ std::shared_ptr<Texture<glm::vec3>> Scene::GetTextureByName(const std::string& n
 }
 
 Scene::Scene() {
+    _skybox = nullptr;
 }
 
 void Scene::loadTextures(const std::shared_ptr<SJson::SJsonNode>& texturesNode, const config::ConfigInfo& configInfo) {
@@ -81,6 +86,18 @@ void Scene::loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, co
             throw std::invalid_argument("Invalid Object Type!");
         }
     }
+}
+
+void Scene::loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo) {
+    if (skyboxNode->IsNull()) return;
+    auto path = skyboxNode->GetMember("Path")->GetString();
+
+    std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
+    std::string paths[6];
+    for (int i = 0; i < 6; i++) {
+        paths[i] = path + "/" + suffix[i];
+    }
+    _skybox = CubemapTexture::CreateCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
 }
 
 std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {

@@ -85,6 +85,8 @@ namespace SJson {
 
         virtual SJsonNodeType GetType() const = 0;
 
+        virtual bool IsNull() const { return false; }
+
         virtual ll GetInt() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_INT));
         }
@@ -182,6 +184,7 @@ namespace SJson {
         ~SJsonNullNode() override {}
 
         SJsonNodeType GetType() const override { return SJsonNodeType::JSON_NULL; };
+        bool IsNull() const override { return true; }
     };
 
     class SJsonBoolNode : public SJsonNode {

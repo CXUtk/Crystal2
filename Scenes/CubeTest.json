@@ -19,9 +19,12 @@
         ]
     },
     "Scene": {
+        "Skybox": {
+            "Path": "../../../Images/Skyboxes/Grace"
+        },
         "Textures": {
             "Test": {
-                "Path": "../../../Images/test.jpg"
+                "Path": "../../../Images/White.jpg"
             }
         },
         "Objects": [
@@ -31,8 +34,8 @@
                     "Type": "TriangleMesh",
                     "ObjFile": "../../../Models/cube.obj",
                     "Translation": [
-                        0,
-                        0,
+                        -1.5,
+                        1,
                         0
                     ],
                     "Scale": [
@@ -47,8 +50,29 @@
                     ]
                 },
                 "Material": {
-                    "Type": "Diffuse",
-                    "Kd": "Test"
+                    "Type": "Mirror",
+                    "Kd": "Test",
+                    "Color": [ 1, 1, 1 ],
+                    "Roughness": 0.2
+                },
+                "AreaLight": null
+            },
+            {
+                "Type": "Geometry",
+                "Shape": {
+                    "Type": "Sphere",
+                    "Position": [
+                        1.5,
+                        1,
+                        0
+                    ],
+                    "Radius": 1.0
+                },
+                "Material": {
+                    "Type": "Mirror",
+                    "Kd": "Test",
+                    "Color": [ 1, 1, 1 ],
+                    "Roughness": 0.02
                 },
                 "AreaLight": null
             }

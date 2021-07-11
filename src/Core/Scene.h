@@ -17,6 +17,7 @@ public:
     std::vector<std::shared_ptr<Light>> GetLights() const { return _lights; }
 
     std::shared_ptr<Texture<glm::vec3>> GetTextureByName(const std::string& name) const;
+    std::shared_ptr<CubemapTexture> GetSkybox() const { return _skybox; }
 
 private:
     Scene();
@@ -26,11 +27,13 @@ private:
     std::vector<std::shared_ptr<Light>> _lights;
 
     std::map<std::string, std::shared_ptr<Texture<glm::vec3>>> _defaultTextures;
+    std::shared_ptr<CubemapTexture> _skybox;
 
 
     // Load from scene file
     void loadTextures(const std::shared_ptr<SJson::SJsonNode>& texturesNode, const config::ConfigInfo& configInfo);
     void loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, const config::ConfigInfo& configInfo);
+    void loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo);
     std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<Prototype>& prototype,
         const std::shared_ptr<SJson::SJsonNode>& shapeNode);
 };
