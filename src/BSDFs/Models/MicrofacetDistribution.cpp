@@ -79,7 +79,7 @@ float GGXRTDistribution::D(glm::vec3 wh) const {
     auto denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
     denom = glm::pi<float>() * denom * denom;
 
-    return nom / std::max(denom, 0.0001f);
+    return nom / denom;
 }
 
 float GGXRTDistribution::G(glm::vec3 wo, glm::vec3 wi) const {
