@@ -8,8 +8,8 @@ namespace accel {
         EQUAL_COUNTS,
         SAH
     };
-    constexpr int MAX_OBJ_IN_NODE = 2;
-    constexpr SplitMethod SLILT_METHOD = SplitMethod::SAH;
+    constexpr int MAX_OBJ_IN_NODE = 4;
+    constexpr SplitMethod SLILT_METHOD = SplitMethod::EQUAL_COUNTS;
     constexpr float TRAV_COST = 0.5f;
     constexpr float INTERSECT_COST = 1.0f;
 
@@ -175,36 +175,37 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
         };
         std::sort(_shapes.begin() + l, _shapes.begin() + r + 1, cmp);
 
+        BoundingBox currentBox;
         // 求后缀包围盒表面积和
         sufArea[r - l + 1] = 0.f;
         for (int j = r - l; j >= 0; j--) {
-            sufArea[j] = sufArea[j + 1] + startP[j]->GetBoundingBox().SurfaceArea();
+            currentBox = currentBox.Union(startP[j]->GetBoundingBox());
+            sufArea[j] = currentBox.SurfaceArea();
         }
 
+
         // 扫描线，动态求出最小cost
-        float prefArea = startP[0]->GetBoundingBox().SurfaceArea();
+        currentBox = startP[0]->GetBoundingBox();
         for (int j = 1; j <= r - l; j++) {
-            float cost = accel::TRAV_COST + (prefArea * j + sufArea[j] * (r - l + 1 - j)) / totArea * accel::INTERSECT_COST;
+            float cost = accel::TRAV_COST + (currentBox.SurfaceArea() * j + sufArea[j] * (r - l + 1 - j)) / totArea * accel::INTERSECT_COST;
             if (cost < minCost) {
                 splitAxis = i;
                 splitPos = l + j - 1;
                 minCost = cost;
             }
-            if (j != r - l)
-                prefArea += startP[j]->GetBoundingBox().SurfaceArea();
+            if (j != r - l) {
+                currentBox = currentBox.Union(startP[j]->GetBoundingBox());
+            }
         }
     }
     delete[] sufArea;
-    return minCost < (r - l + 1)* accel::INTERSECT_COST * 3.f;
+    return minCost < (r - l + 1)* accel::INTERSECT_COST;
 }
 
 void BVH::createLeaf(int& p, int l, int r) {
-    const Shape* shapes[20];
-    shapes[0] = _shapes[l];
     BoundingBox box = _shapes[l]->GetBoundingBox();
     // 获取[l, r]的碰撞箱，并且把纯指针放进shapes里
     for (int i = l + 1; i <= r; i++) {
-        shapes[i - l] = _shapes[i];
         box = box.Union(_shapes[i]->GetBoundingBox());
     }
     p = newNode(l, r - l + 1, -1, box);

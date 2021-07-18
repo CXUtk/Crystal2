@@ -12,6 +12,6 @@ std::shared_ptr<BSDF> MirrorMaterial::ComputeScatteringFunctions(const SurfaceIn
     auto N = glm::normalize(isec.GetNormal());
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    bsdf->AddBxDF(std::make_shared<SpecularReflection>(_R, N, std::make_shared<FresnelNoOp>()));
+    bsdf->AddBxDF(std::make_shared<SpecularReflection>(_R, N, 1.f, 1.f, std::make_shared<FresnelNoOp>()));
     return bsdf;
 }

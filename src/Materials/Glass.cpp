@@ -37,7 +37,7 @@ std::shared_ptr<BSDF> Glass::ComputeScatteringFunctions(const SurfaceInteraction
     auto N = glm::normalize(isec.GetNormal());
     float etaA = 1.0f, etaB = _eta;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
-    auto F = std::make_shared<FresnelDielectric>(etaA, etaB);
+    auto F = std::make_shared<FresnelDielectric>();
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     bsdf->AddBxDF(std::make_shared<SpecularFresnel>(_color, _color, N, etaA, etaB, F));

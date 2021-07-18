@@ -3,7 +3,7 @@
 #include <Core/Scene.h>
 #include <Core/Utils.h>
 
-constexpr bool FLAT_SHADING = true;
+constexpr bool FLAT_SHADING = false;
 
 
 glm::vec3 bary_interp(glm::vec3 bary, glm::vec3 A, glm::vec3 B, glm::vec3 C) {
@@ -23,17 +23,7 @@ Triangle::~Triangle() {
 }
 
 BoundingBox Triangle::GetBoundingBox() const {
-    glm::vec3 minn = _vertices[0]->Position, maxx = _vertices[0]->Position;
-    for (int i = 1; i < 3; i++) {
-        minn.x = std::min(minn.x, _vertices[i]->Position.x);
-        minn.y = std::min(minn.y, _vertices[i]->Position.y);
-        minn.z = std::min(minn.z, _vertices[i]->Position.z);
-
-        maxx.x = std::max(maxx.x, _vertices[i]->Position.x);
-        maxx.y = std::max(maxx.y, _vertices[i]->Position.y);
-        maxx.z = std::max(maxx.z, _vertices[i]->Position.z);
-    }
-    return BoundingBox(minn, maxx);
+    return _bbox;
 }
 
 bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* info) const {
@@ -107,4 +97,16 @@ void Triangle::calculateDerivative() {
         _dpdu = glm::vec3(res[0][0], res[1][0], res[2][0]);
         _dpdv = glm::vec3(res[0][1], res[1][1], res[2][1]);
     }
+
+    glm::vec3 minn = _vertices[0]->Position, maxx = _vertices[0]->Position;
+    for (int i = 1; i < 3; i++) {
+        minn.x = std::min(minn.x, _vertices[i]->Position.x);
+        minn.y = std::min(minn.y, _vertices[i]->Position.y);
+        minn.z = std::min(minn.z, _vertices[i]->Position.z);
+
+        maxx.x = std::max(maxx.x, _vertices[i]->Position.x);
+        maxx.y = std::max(maxx.y, _vertices[i]->Position.y);
+        maxx.z = std::max(maxx.z, _vertices[i]->Position.z);
+    }
+    _bbox = BoundingBox(minn, maxx);
 }

@@ -29,7 +29,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scene>& scene,
     const std::shared_ptr<Sampler>& sampler, int level, bool specular) {
-    if (level == 5) return glm::vec3(0);
+    if (level == 7) return glm::vec3(0);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {

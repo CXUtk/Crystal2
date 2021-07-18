@@ -90,14 +90,15 @@ void Scene::loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, co
 
 void Scene::loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo) {
     if (skyboxNode->IsNull()) return;
-    auto path = skyboxNode->GetMember("Path")->GetString();
+    _skybox = CubemapTexture::CreateCubemapTexture()
+        //auto path = skyboxNode->GetMember("Path")->GetString();
 
-    std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
-    std::string paths[6];
-    for (int i = 0; i < 6; i++) {
-        paths[i] = path + "/" + suffix[i];
-    }
-    _skybox = CubemapTexture::CreateCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
+        //std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
+        //std::string paths[6];
+        //for (int i = 0; i < 6; i++) {
+        //    paths[i] = path + "/" + suffix[i];
+        //}
+        //_skybox = CubemapTexture::CreateCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
 }
 
 std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {

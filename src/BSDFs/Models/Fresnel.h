@@ -5,23 +5,31 @@
 class Fresnel {
 public:
     virtual ~Fresnel() = 0 {};
-    virtual float Eval(float cosThetaI) const = 0;
+    virtual glm::vec3 Eval(float etaA, float etaB, float cosThetaI) const = 0;
 };
 
-class FresnelNoOp: public Fresnel {
+class FresnelNoOp : public Fresnel {
 public:
     FresnelNoOp() {}
     ~FresnelNoOp() override {}
-    float Eval(float cosThetaI) const override { return 1.f; }
+    glm::vec3 Eval(float etaA, float etaB, float cosThetaI) const override { return glm::vec3(1.f); }
 };
 
 
 class FresnelDielectric : public Fresnel {
 public:
-    FresnelDielectric(float etaA, float etaB) : _etaA(etaA), _etaB(etaB) {}
+    FresnelDielectric() {}
     ~FresnelDielectric() override {}
-    float Eval(float cosThetaI) const override;
+    glm::vec3 Eval(float etaA, float etaB, float cosThetaI) const override;
+};
+
+
+class FresnelSchlick : public Fresnel {
+public:
+    FresnelSchlick(glm::vec3 R0) :_r0(R0) {}
+    ~FresnelSchlick() override {}
+    glm::vec3 Eval(float etaA, float etaB, float cosThetaI) const override;
 
 private:
-    float _etaA, _etaB;
+    glm::vec3 _r0;
 };

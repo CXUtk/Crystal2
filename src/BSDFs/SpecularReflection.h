@@ -6,7 +6,7 @@
 
 class SpecularReflection : public BxDF {
 public:
-    SpecularReflection(glm::vec3 color, glm::vec3 N, const std::shared_ptr<Fresnel>& fresnel);
+    SpecularReflection(glm::vec3 color, glm::vec3 N, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel);
     ~SpecularReflection() override;
 
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
@@ -14,5 +14,6 @@ public:
 
 private:
     glm::vec3 _albedo, _normal;
+    float _etaA, _etaB;
     std::shared_ptr<Fresnel> _fresnel;
 };

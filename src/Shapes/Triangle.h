@@ -15,6 +15,7 @@ public:
 private:
     const VertexData* _vertices[3];
     glm::vec3 _dpdu, _dpdv;
+    BoundingBox _bbox;
 
     void calculateDerivative();
 };

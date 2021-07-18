@@ -1,10 +1,10 @@
-﻿{
+{
     "Camera": {
         "Type": "Normal",
         "Position": [
             0,
             10,
-            -20
+            -40
         ],
         "FOV": 90,
         "LookAt": [
@@ -32,16 +32,16 @@
                 "Type": "Geometry",
                 "Shape": {
                     "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/cube.obj",
+                    "ObjFile": "../../../Models/ball.obj",
                     "Translation": [
-                        -1.5,
-                        1,
+                        0,
+                        0,
                         0
                     ],
                     "Scale": [
-                        1,
-                        1,
-                        1
+                        0.5,
+                        0.5,
+                        0.5
                     ],
                     "Rotation": [
                         0,
@@ -53,7 +53,7 @@
                     "Type": "Mirror",
                     "Kd": "Test",
                     "Color": [ 1, 1, 1 ],
-                    "Roughness": 0.2
+                    "Roughness": 0.1
                 },
                 "AreaLight": null
             },
@@ -61,18 +61,14 @@
                 "Type": "Geometry",
                 "Shape": {
                     "Type": "Sphere",
-                    "Position": [
-                        1.5,
-                        1,
-                        0
-                    ],
-                    "Radius": 1.0
+                    "Position": [ 20, 0, 0 ],
+                    "Radius": 5.0
                 },
                 "Material": {
                     "Type": "Micro",
                     "Kd": "Test",
                     "Color": [ 1, 1, 1 ],
-                    "Roughness": 1.0
+                    "Roughness": 0.1
                 },
                 "AreaLight": null
             },
@@ -80,18 +76,14 @@
                 "Type": "Geometry",
                 "Shape": {
                     "Type": "Sphere",
-                    "Position": [
-                        4,
-                        1,
-                        0
-                    ],
-                    "Radius": 1.0
+                    "Position": [ -20, 0, 0 ],
+                    "Radius": 5.0
                 },
                 "Material": {
-                    "Type": "Diffuse",
+                    "Type": "Mirror",
                     "Kd": "Test",
                     "Color": [ 1, 1, 1 ],
-                    "Roughness": 1.0
+                    "Roughness": 0.1
                 },
                 "AreaLight": null
             }

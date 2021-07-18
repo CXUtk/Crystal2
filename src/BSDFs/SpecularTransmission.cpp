@@ -34,11 +34,9 @@ glm::vec3 SpecularTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOut
     *sampledType = GetType();
     glm::vec3 transDir;
     *pdf = 1.0f;
-    if (refract(wOut, _normal, _etaA, _etaB, transDir)) {
+    if (refract(wOut, _normal, _etaA, _etaB, transDir)) 
         *wIn = transDir;
-    }
-    else {
+    else 
         return glm::vec3(0);
-    }
-    return _albedo * (1.f - _fresnel->Eval(glm::dot(wOut, _normal)));
+    return _albedo * (1.f - _fresnel->Eval(_etaA, _etaB, glm::dot(wOut, _normal)));
 }
