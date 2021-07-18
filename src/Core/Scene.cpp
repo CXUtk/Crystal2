@@ -21,7 +21,7 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode
     assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
     auto scene = std::shared_ptr<Scene>(new Scene());
 
-    //scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 4, 0), glm::vec3(100.f)));
+    scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 20, 0), glm::vec3(10000.f)));
 
     scene->loadTextures(sceneNode->GetMember("Textures"), configInfo);
     scene->loadObjects(sceneNode->GetMember("Objects"), configInfo);

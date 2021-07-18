@@ -15,7 +15,7 @@
 static constexpr float pRR = 0.8f;
 static constexpr float EPS = 1e-5;
 
-PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler) : SamplerIntegrator(sampler) {
+PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads) : SamplerIntegrator(sampler, threads) {
     _indirectSampler = std::make_shared<DefaultSampler>(sampler->GetSamplesPerPixel(), 0);
 }
 

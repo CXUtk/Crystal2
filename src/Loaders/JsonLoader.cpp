@@ -17,7 +17,7 @@ std::shared_ptr<SJson::SJsonNode> loader::JsonLoader::LoadJsonFile(const std::st
         sceneFile.close();
     }
     catch (std::ifstream::failure e) {
-        std::cerr << "Failed to load scene!" << std::endl;
+        fprintf(stderr, "Failed to load %s\n", filePath.c_str());
         throw std::exception(e.what());
     }
 

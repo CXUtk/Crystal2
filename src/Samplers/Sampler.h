@@ -30,6 +30,8 @@ public:
         return ++_currentSampleIndex < _samplesPerPixel;
     }
 
+    virtual std::shared_ptr<Sampler> Clone(int seed) const = 0;
+
 protected:
     int _samplesPerPixel, _currentSampleIndex;
     glm::vec2 _currentPixel;

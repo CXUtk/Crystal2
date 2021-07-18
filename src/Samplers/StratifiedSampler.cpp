@@ -48,3 +48,7 @@ void StratifiedSampler::Preprocess() {
     }
 }
 
+std::shared_ptr<Sampler> StratifiedSampler::Clone(int seed) const {
+    return std::make_shared<StratifiedSampler>(_samplesPerPixel, seed);
+}
+

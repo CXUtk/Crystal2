@@ -9,6 +9,8 @@ public:
     float Get1D(int layer) override;
     glm::vec2 Get2D(int layer) override;
     void Preprocess() override;
+    std::shared_ptr<Sampler> Clone(int seed) const override;
+
 private:
     std::mt19937 mt;
 };

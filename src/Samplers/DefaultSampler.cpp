@@ -15,3 +15,7 @@ glm::vec2 DefaultSampler::Get2D(int layer) {
 void DefaultSampler::Preprocess() {
 }
 
+std::shared_ptr<Sampler> DefaultSampler::Clone(int seed) const {
+    return std::make_shared<DefaultSampler>(_samplesPerPixel, seed);
+}
+
