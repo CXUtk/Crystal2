@@ -51,3 +51,8 @@ $ ./Crystal2 <config file> <scene file>
 7. Lights
 - [x] Point Light
 - [ ] Area Light  
+
+## Demos
+### Physically Based Rendering
+![](Images/PBR1.png)
+![](Images/PBR2.png)
