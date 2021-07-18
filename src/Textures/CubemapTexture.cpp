@@ -1,6 +1,6 @@
 ﻿#include "CubemapTexture.h"
 
-std::shared_ptr<CubemapTexture> CubemapTexture::CreateCubemapTexture(const std::string& posx, const std::string& negx,
+std::shared_ptr<CubemapTexture> ImageCubemapTexture::CreateImageCubemapTexture(const std::string& posx, const std::string& negx,
     const std::string& posy, const std::string& negy,
     const std::string& posz, const std::string& negz) {
     auto tposx = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(posx));
@@ -9,7 +9,7 @@ std::shared_ptr<CubemapTexture> CubemapTexture::CreateCubemapTexture(const std::
     auto tnegy = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(negy));
     auto tposz = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(posz));
     auto tnegz = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(negz));
-    return std::shared_ptr<CubemapTexture>(new CubemapTexture(tposx, tnegx, tposy, tnegy, tposz, tnegz));
+    return std::shared_ptr<CubemapTexture>(new ImageCubemapTexture(tposx, tnegx, tposy, tnegy, tposz, tnegz));
 }
 
 
@@ -45,13 +45,13 @@ inline CubeUV XYZ2CubeUV(const glm::vec3& p) {
 }
 
 
-glm::vec3 CubemapTexture::Evaluate(glm::vec3 dir) const {
+glm::vec3 ImageCubemapTexture::Evaluate(glm::vec3 dir) const {
 
     auto cube = XYZ2CubeUV(dir);
     return _faces[cube.id]->Evaluate(cube.uv);
 }
 
-CubemapTexture::CubemapTexture(texture2dRef posx, texture2dRef negx,
+ImageCubemapTexture::ImageCubemapTexture(texture2dRef posx, texture2dRef negx,
     texture2dRef posy, texture2dRef negy,
     texture2dRef posz, texture2dRef negz) {
     _faces[0] = posx;

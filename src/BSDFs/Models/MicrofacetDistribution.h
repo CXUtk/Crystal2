@@ -8,7 +8,7 @@ public:
     virtual float D(glm::vec3 wh) const = 0;
     virtual float G(glm::vec3 wo, glm::vec3 wi) const = 0;
     virtual glm::vec3 Sample_wh(glm::vec3 wo, glm::vec2 sample) const = 0;
-    virtual float Pdf(glm::vec3 wo, glm::vec3 wh) const = 0;
+    virtual float Pdf(glm::vec3 wi, glm::vec3 wh) const = 0;
 };
 
 
@@ -20,7 +20,7 @@ public:
     float D(glm::vec3 wh) const override;
     float G(glm::vec3 wo, glm::vec3 wi) const override;
     glm::vec3 Sample_wh(glm::vec3 wo, glm::vec2 sample) const override;
-    float Pdf(glm::vec3 wo, glm::vec3 wh) const override;
+    float Pdf(glm::vec3 wi, glm::vec3 wh) const override;
 
 private:
     float _alphaX, _alphaY;
@@ -39,7 +39,7 @@ public:
     float D(glm::vec3 wh) const override;
     float G(glm::vec3 wo, glm::vec3 wi) const override;
     glm::vec3 Sample_wh(glm::vec3 wo, glm::vec2 sample) const override;
-    float Pdf(glm::vec3 wo, glm::vec3 wh) const override;
+    float Pdf(glm::vec3 wi, glm::vec3 wh) const override;
 
 private:
     float _roughness;

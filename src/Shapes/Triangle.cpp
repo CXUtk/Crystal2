@@ -87,16 +87,17 @@ void Triangle::calculateDerivative() {
         glm::vec2(_vertices[1]->TexCoords.x - _vertices[2]->TexCoords.x, _vertices[1]->TexCoords.y - _vertices[2]->TexCoords.y)
     );
     A = glm::inverse(A);
-    if (glm::isinf(A[0]) != glm::bvec2(false) || glm::isnan(A[0]) != glm::bvec2(false) || glm::isnan(A[1]) != glm::bvec2(false)) {
-        _dpdu = _dpdv = glm::vec3(0);
-    }
-    else {
-        auto a = _vertices[0]->Position - _vertices[2]->Position;
-        auto b = _vertices[1]->Position - _vertices[2]->Position;
-        auto res = A * glm::mat3x2(glm::vec2(a.x, b.x), glm::vec2(a.y, b.y), glm::vec2(a.z, b.z));
-        _dpdu = glm::vec3(res[0][0], res[1][0], res[2][0]);
-        _dpdv = glm::vec3(res[0][1], res[1][1], res[2][1]);
-    }
+    _dpdu = _dpdv = glm::vec3(0);
+    //if (glm::isinf(A[0]) != glm::bvec2(false) || glm::isnan(A[0]) != glm::bvec2(false) || glm::isnan(A[1]) != glm::bvec2(false)) {
+    //    _dpdu = _dpdv = glm::vec3(0);
+    //}
+    //else {
+    //    auto a = _vertices[0]->Position - _vertices[2]->Position;
+    //    auto b = _vertices[1]->Position - _vertices[2]->Position;
+    //    auto res = A * glm::mat3x2(glm::vec2(a.x, b.x), glm::vec2(a.y, b.y), glm::vec2(a.z, b.z));
+    //    _dpdu = glm::normalize(glm::vec3(res[0][0], res[1][0], res[2][0]));
+    //    _dpdv = glm::normalize(glm::vec3(res[0][1], res[1][1], res[2][1]));
+    //}
 
     glm::vec3 minn = _vertices[0]->Position, maxx = _vertices[0]->Position;
     for (int i = 1; i < 3; i++) {

@@ -34,8 +34,9 @@ TriangleMesh::TriangleMesh(const std::shared_ptr<Prototype>& prototype,
     for (int i = 0; i < _numVertices; i++) {
         auto& v = _vertices[i];
         v.Position = glm::vec3(_transform * glm::vec4(v.Position, 1.0f));
-        v.Normal = glm::vec3(normalTrans * glm::vec4(v.Normal, 0.0f));
+        v.Normal = glm::normalize(glm::vec3(normalTrans * glm::vec4(v.Normal, 0.0f)));
     }
+    printf("\n");
 }
 
 TriangleMesh::~TriangleMesh() {

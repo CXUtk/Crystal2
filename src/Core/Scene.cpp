@@ -21,7 +21,7 @@ std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode
     assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
     auto scene = std::shared_ptr<Scene>(new Scene());
 
-    scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 4, 0), glm::vec3(100.f)));
+    //scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 4, 0), glm::vec3(100.f)));
 
     scene->loadTextures(sceneNode->GetMember("Textures"), configInfo);
     scene->loadObjects(sceneNode->GetMember("Objects"), configInfo);
@@ -90,15 +90,15 @@ void Scene::loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, co
 
 void Scene::loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo) {
     if (skyboxNode->IsNull()) return;
-    _skybox = CubemapTexture::CreateCubemapTexture()
-        //auto path = skyboxNode->GetMember("Path")->GetString();
+    //_skybox = std::make_shared<PureCubemapTexture>(glm::vec3(.5f));
+    auto path = skyboxNode->GetMember("Path")->GetString();
 
-        //std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
-        //std::string paths[6];
-        //for (int i = 0; i < 6; i++) {
-        //    paths[i] = path + "/" + suffix[i];
-        //}
-        //_skybox = CubemapTexture::CreateCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
+    std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
+    std::string paths[6];
+    for (int i = 0; i < 6; i++) {
+        paths[i] = path + "/" + suffix[i];
+    }
+    _skybox = ImageCubemapTexture::CreateImageCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
 }
 
 std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {

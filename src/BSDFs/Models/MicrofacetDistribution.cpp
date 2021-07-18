@@ -2,7 +2,7 @@
 #include <glm/gtx/transform.hpp>
 #include <algorithm>
 
-float MicrofacetDistribution::Pdf(glm::vec3 wo, glm::vec3 wh) const {
+float MicrofacetDistribution::Pdf(glm::vec3 wi, glm::vec3 wh) const {
     return 0.f;
 }
 
@@ -37,7 +37,7 @@ glm::vec3 GGXDistribution::Sample_wh(glm::vec3 wo, glm::vec2 sample) const {
     return glm::vec3();
 }
 
-float GGXDistribution::Pdf(glm::vec3 wo, glm::vec3 wh) const {
+float GGXDistribution::Pdf(glm::vec3 wi, glm::vec3 wh) const {
     return 0.0f;
 }
 
@@ -106,9 +106,9 @@ glm::vec3 GGXRTDistribution::Sample_wh(glm::vec3 wo, glm::vec2 sample) const {
     return dir;
 }
 
-float GGXRTDistribution::Pdf(glm::vec3 wo, glm::vec3 wh) const {
+float GGXRTDistribution::Pdf(glm::vec3 wi, glm::vec3 wh) const {
     auto NdotH = std::max(wh.y, 0.f);
-    auto IdotH = std::max(glm::dot(wo, wh), 0.f);
+    auto IdotH = std::max(glm::dot(wi, wh), 0.f);
     return D(wh) * NdotH / (4.f * IdotH);
 }
 
