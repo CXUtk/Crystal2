@@ -5,14 +5,15 @@
 #include <Loaders/JsonLoader.h>
 #include <Loaders/ObjLoader.h>
 
-std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
-    auto filePath = shapeNode->GetMember("ObjFile")->GetString();
+std::unique_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(Prototype* prototype,
+       JsonNode_CPTR pShapeNode) {
+    auto filePath = pShapeNode->GetMember("ObjFile")->GetString();
     ObjLoader loader;
     loader.load(filePath);
 
-    auto pos = loader::parse_vec3(shapeNode->GetMember("Translation"));
-    auto scale = loader::parse_vec3(shapeNode->GetMember("Scale"));
-    auto rotation = glm::radians(loader::parse_vec3(shapeNode->GetMember("Rotation")));
+    auto pos = loader::parse_vec3(pShapeNode->GetMember("Translation"));
+    auto scale = loader::parse_vec3(pShapeNode->GetMember("Scale"));
+    auto rotation = glm::radians(loader::parse_vec3(pShapeNode->GetMember("Rotation")));
 
     auto matrix = glm::identity<glm::mat4>();
     matrix = glm::translate(matrix, pos);

@@ -3,13 +3,14 @@
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
 
-std::shared_ptr<Shape> Sphere::CreateSphere(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
-    auto pos = loader::parse_vec3(shapeNode->GetMember("Position"));
-    auto r = shapeNode->GetMember("Radius")->GetFloat();
+std::shared_ptr<Shape> Sphere::CreateSphere(Prototype* prototype, JsonNode_CPTR pShapeNode) {
+    auto pos = loader::parse_vec3(pShapeNode->GetMember("Position"));
+    auto r = pShapeNode->GetMember("Radius")->GetFloat();
     return std::make_shared<Sphere>(prototype, pos, r, glm::vec3(0));
 }
 
-Sphere::Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, float radius, glm::vec3 rotation) : Shape(prototype),
+Sphere::Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, 
+    float radius, glm::vec3 rotation) : Shape(prototype),
 _pos(pos), _radius(radius), _rot(rotation) {
 
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();

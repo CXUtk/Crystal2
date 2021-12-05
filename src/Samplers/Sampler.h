@@ -6,7 +6,7 @@
 #include <random>
 #include <algorithm>
 
-constexpr float OneMinusEpsilon = 0.99999994;
+constexpr float OneMinusEpsilon = 0.9999999404f;
 
 inline float uniformRandomFloat(std::mt19937& mt) {
     return std::min(OneMinusEpsilon,
@@ -15,7 +15,8 @@ inline float uniformRandomFloat(std::mt19937& mt) {
 
 class Sampler {
 public:
-    static std::shared_ptr<Sampler> LoadSampler(const std::shared_ptr<SJson::SJsonNode>& samplerNode, const config::ConfigInfo& configInfo);
+    static std::shared_ptr<Sampler> LoadSampler(JsonNode_CPTR pSamplerNode,
+        const config::ConfigInfo& configInfo);
 
     Sampler(int samplesPerPixel) : _samplesPerPixel(samplesPerPixel), _currentSampleIndex(0), _currentPixel(glm::vec2(0)){ }
     int GetSamplesPerPixel() const { return _samplesPerPixel; }

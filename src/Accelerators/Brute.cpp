@@ -6,7 +6,7 @@ Brute::Brute() {
 Brute::~Brute() {
 }
 
-void Brute::Build(const std::vector<std::shared_ptr<Shape>>& objects) {
+void Brute::Build(const std::vector<const Shape*>& objects) {
     for (auto& ptr : objects) {
         _objects.push_back(ptr);
     }

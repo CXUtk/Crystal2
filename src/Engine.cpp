@@ -30,7 +30,9 @@ Engine::~Engine() {
 void Engine::Run() {
     fprintf(stdout, "All resources loaded, started ray tracing...\n");
 
-    auto fb = _rayTracer->Trace();
+    _rayTracer->TraceAsync();
+
+    auto fb = _rayTracer->GetFrameBuffer();
     stbi_write_png("result.png", fb->Width(), fb->Height(), 3, fb->GetImageData().get(), fb->Width() * 3);
     fprintf(stdout, "Finished!\n");
 }

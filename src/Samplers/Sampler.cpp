@@ -3,11 +3,11 @@
 #include "DefaultSampler.h"
 #include "StratifiedSampler.h"
 
-std::shared_ptr<Sampler> Sampler::LoadSampler(const std::shared_ptr<SJson::SJsonNode>& samplerNode, const config::ConfigInfo& configInfo) {
-    assert(samplerNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+std::shared_ptr<Sampler> Sampler::LoadSampler(JsonNode_CPTR pSamplerNode, const config::ConfigInfo& configInfo) {
+    assert(pSamplerNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 
-    auto samplerType = samplerNode->GetMember("Type")->GetString();
-    auto samplerSeed = samplerNode->GetMember("Seed")->GetInt();
+    auto samplerType = pSamplerNode->GetMember("Type")->GetString();
+    auto samplerSeed = pSamplerNode->GetMember("Seed")->GetInt();
 
     if (samplerType == "Default") {
         return std::make_shared<DefaultSampler>(configInfo.SamplesPerPixel, samplerSeed);

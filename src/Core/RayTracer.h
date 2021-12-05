@@ -5,15 +5,21 @@
 
 class RayTracer {
 public:
-    RayTracer(const config::ConfigInfo& configInfo, const std::shared_ptr<SJson::SJsonNode>& configNode, const std::shared_ptr<SJson::SJsonNode>& sceneNode);
+    RayTracer(const config::ConfigInfo& configInfo, JsonNode_CPTR pConfigNode,
+        JsonNode_CPTR pSceneNode);
     ~RayTracer();
 
-    std::shared_ptr<FrameBuffer> Trace();
+    void TraceAsync();
+    const FrameBuffer* GetFrameBuffer() const { return ptr(_frameBuffer); }
+    bool IsFinished() const { return _finished; }
 
 private:
-    std::shared_ptr<Scene> _scene;
-    std::shared_ptr<Integrator> _integrator;
-    std::shared_ptr<Camera> _camera;
+    std::unique_ptr<Scene> _scene;
+    std::unique_ptr<Integrator> _integrator;
+    std::unique_ptr<Camera> _camera;
+
+    std::unique_ptr<FrameBuffer> _frameBuffer;
 
     int _width, _height;
+    bool _finished;
 };

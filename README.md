@@ -22,7 +22,8 @@ $ ./Crystal2 <config file> <scene file>
 - [x] Diffuse Material
 - [x] Mirror Material
 - [x] Glass Material
-- [ ] Microfacet Material
+- [x] Microfacet Material
+- [ ] Microfacet Material (Anisotrophic)
 
 3. Samplers
 - [x] Random Sampler
@@ -30,8 +31,8 @@ $ ./Crystal2 <config file> <scene file>
 - [ ] Halton Sampler
 
 4. Textures
-- [ ] 2D Texture
-- [ ] Skybox Texture
+- [x] 2D Texture
+- [x] Skybox Texture
 - [ ] 3D Texture
 - [ ] Binlinear Interpolation
 - [ ] Mipmap
@@ -45,12 +46,14 @@ $ ./Crystal2 <config file> <scene file>
 6. Acceleators
 - [x] Brute force
 - [x] BVH with SAH
-- [x] K-D Tree
+- [] K-D Tree
 - [ ] ?
 
 7. Lights
 - [x] Point Light
 - [ ] Area Light  
+
+8. Volume Scattering
 
 ## Demos
 ### Physically Based Rendering

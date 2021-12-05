@@ -1,6 +1,6 @@
 ﻿#include "CubemapTexture.h"
 
-std::shared_ptr<CubemapTexture> ImageCubemapTexture::CreateImageCubemapTexture(const std::string& posx, const std::string& negx,
+std::unique_ptr<CubemapTexture> ImageCubemapTexture::CreateImageCubemapTexture(const std::string& posx, const std::string& negx,
     const std::string& posy, const std::string& negy,
     const std::string& posz, const std::string& negz) {
     auto tposx = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(posx));
@@ -9,7 +9,7 @@ std::shared_ptr<CubemapTexture> ImageCubemapTexture::CreateImageCubemapTexture(c
     auto tnegy = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(negy));
     auto tposz = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(posz));
     auto tnegz = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(negz));
-    return std::shared_ptr<CubemapTexture>(new ImageCubemapTexture(tposx, tnegx, tposy, tnegy, tposz, tnegz));
+    return std::unique_ptr<CubemapTexture>(new ImageCubemapTexture(tposx, tnegx, tposy, tnegy, tposz, tnegz));
 }
 
 

@@ -15,20 +15,20 @@
 static constexpr float pRR = 0.8f;
 static constexpr float EPS = 1e-5;
 
-PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads) : SamplerIntegrator(sampler, threads) {
-    _indirectSampler = std::make_shared<DefaultSampler>(sampler->GetSamplesPerPixel(), 0);
+PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads)
+    : SamplerIntegrator(sampler, threads) {
 }
 
 
 // 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
-glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, const std::shared_ptr<Scene>& scene,
-    const std::shared_ptr<Sampler>& sampler) {
+glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
+    Sampler* sampler) {
     return eval_rec(ray, scene, sampler, 0, true);
 }
 
 
-glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<Scene>& scene,
-    const std::shared_ptr<Sampler>& sampler, int level, bool specular) {
+glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
+    Sampler* sampler, int level, bool specular) {
     if (level == 16) return glm::vec3(0);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
@@ -67,7 +67,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, const std::shared_ptr<
         bool specular = (type & BxDF_SPECULAR) != 0;
 
         auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
-        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, _indirectSampler, level + 1, specular) * brdf * cosine / pdf;
+        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1, specular) * brdf * cosine / pdf;
         Lres += Lindir;
         return Lres;
     }

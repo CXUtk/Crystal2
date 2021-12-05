@@ -6,10 +6,48 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <functional>
 
 using ll = long long int;
 
 namespace SJson {
+
+    /**
+ * @brief Converts a shared pointer to a pointer of the object
+ * @tparam T Object Type
+ * @param ptr Target shared ponter
+ * @return const reference to the object
+*/
+    template<typename T>
+    inline T* ptr(const std::shared_ptr<T>& ptr) { return static_cast<T*>(ptr.get()); }
+
+    /**
+     * @brief Converts a shared pointer to a pointer of the object
+     * @tparam T Object Type
+     * @param ptr Target shared ponter
+     * @return const reference to the object
+    */
+    template<typename T>
+    inline const T* cptr(const std::shared_ptr<T>& ptr) { return static_cast<const T*>(ptr.get()); }
+
+    /**
+     * @brief Converts a unique pointer to a pointer of the object
+     * @tparam T Object Type
+     * @param ptr Target shared ponter
+     * @return const reference to the object
+    */
+    template<typename T>
+    inline T* ptr(const std::unique_ptr<T>& ptr) { return static_cast<T*>(ptr.get()); }
+
+
+    /**
+     * @brief Converts a unique pointer to a const pointer of object
+     * @tparam T Object Type
+     * @param ptr Target shared ponter
+     * @return const reference to the object
+    */
+    template<typename T>
+    inline const T* cptr(const std::unique_ptr<T>& ptr) { return static_cast<const T*>(ptr.get()); }
 
     // 各类异常，枚举类
     enum class SJsonNodeType { JSON_NULL, JSON_BOOL, JSON_INT, JSON_FLOAT, JSON_STRING, JSON_ARRAY, JSON_OBJECT };
@@ -101,21 +139,19 @@ namespace SJson {
         }
 
         // Array 操作
-        virtual std::vector<std::shared_ptr<SJsonNode>>::const_iterator begin() const {
-            throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
-        }
-        virtual std::vector<std::shared_ptr<SJsonNode>>::const_iterator end() const {
+        virtual void ForEachElements(std::function<void(const SJsonNode*)> func) const
+        {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
         virtual std::size_t arraySize() const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
-        virtual std::shared_ptr<SJsonNode> ElementAt(int index) const {
+        virtual const SJsonNode* ElementAt(int index) const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_ARRAY));
         }
 
         // Object 操作
-        virtual const std::shared_ptr<SJsonNode>& GetMember(const std::string& name) const {
+        virtual const SJsonNode* GetMember(const std::string& name) const {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
         }
 
@@ -123,10 +159,9 @@ namespace SJson {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
         }
 
-        virtual std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator beginProperties() const {
-            throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
-        }
-        virtual std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator endProperties() const {
+
+        virtual void ForEachProperties(std::function<void(const std::string&, const SJsonNode*)> func) const
+        {
             throw ConversionError(SJsonGetNodeTypeName(GetType()), SJsonGetNodeTypeName(SJsonNodeType::JSON_OBJECT));
         }
     };
@@ -138,19 +173,20 @@ namespace SJson {
         ~SJsonObjectNode() override {}
 
         SJsonNodeType GetType() const override { return SJsonNodeType::JSON_OBJECT; };
-        const std::shared_ptr<SJsonNode>& GetMember(const std::string& name) const override {
+        const SJsonNode* GetMember(const std::string& name) const override {
             auto v = _value.find(name);
             if (v == _value.end()) throw MissingMemberError(name);
-            return v->second;
+            return ptr(v->second);
         }
         bool HasMember(const std::string& name) const override {
             return _value.find(name) != _value.end();
         }
-        std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator beginProperties() const {
-            return _value.cbegin();
-        }
-        std::map<std::string, std::shared_ptr<SJsonNode>>::const_iterator endProperties() const {
-            return _value.cend();
+
+        void ForEachProperties(std::function<void(const std::string&, const SJsonNode*)> func) const override
+        {
+            for (auto& node : _value) {
+                func(node.first, cptr(node.second));
+            }
         }
     private:
         std::map<std::string, std::shared_ptr<SJsonNode>> _value;
@@ -159,23 +195,23 @@ namespace SJson {
 
     class SJsonArrayNode : public SJsonNode {
     public:
-        SJsonArrayNode(const std::vector<std::shared_ptr<SJsonNode>>& items) : _value(items) {}
+        SJsonArrayNode(const std::vector<std::shared_ptr<SJsonNode>>& items) : _values(items) {}
         ~SJsonArrayNode() override {}
 
         SJsonNodeType GetType() const override { return SJsonNodeType::JSON_ARRAY; };
 
-        std::size_t arraySize() const override { return _value.size(); }
-        std::vector<std::shared_ptr<SJsonNode>>::const_iterator begin() const override {
-            return _value.cbegin();
+        std::size_t arraySize() const override { return _values.size(); }
+        void ForEachElements(std::function<void(const SJsonNode*)> func) const override
+        {
+            for (auto& v : _values) {
+                func(cptr(v));
+            }
         }
-        std::vector<std::shared_ptr<SJsonNode>>::const_iterator end() const override {
-            return _value.cend();
-        }
-        std::shared_ptr<SJsonNode> ElementAt(int index) const override {
-            return _value[index];
+        const SJsonNode* ElementAt(int index) const override {
+            return cptr(_values[index]);
         }
     private:
-        std::vector<std::shared_ptr<SJsonNode>> _value;
+        std::vector<std::shared_ptr<SJsonNode>> _values;
     };
 
     class SJsonNullNode : public SJsonNode {

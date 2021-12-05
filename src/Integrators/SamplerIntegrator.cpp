@@ -6,22 +6,28 @@
 #include <mutex>
 
 
-SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler>& sampler, int threads) : Integrator(), _numThreads(threads) {
+SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler>& sampler, int threads)
+    : Integrator(), _numThreads(threads)
+{
     assert(threads <= 16);
-    for (int i = 0; i < threads; i++) {
+    for (int i = 0; i < threads; i++)
+    {
         _samplers[i] = sampler->Clone(i * 5 + 1);
     }
 }
 
-void SamplerIntegrator::Preprocess(const std::shared_ptr<Scene>& scene) {
-    for (int i = 0; i < _numThreads; i++) {
+void SamplerIntegrator::Preprocess(Scene* scene)
+{
+    for (int i = 0; i < _numThreads; i++)
+    {
         _samplers[i]->Preprocess();
     }
 }
 
-void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
-    const std::shared_ptr<Camera>& camera,
-    const std::shared_ptr<FrameBuffer>& frameBuffer) {
+void SamplerIntegrator::Render(Scene* scene,
+    Camera* camera,
+    FrameBuffer* frameBuffer)
+{
     int w = frameBuffer->Width(), h = frameBuffer->Height();
 
     size_t total = (size_t)w * h * _samplers[0]->GetSamplesPerPixel();
@@ -30,19 +36,24 @@ void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
     std::thread* threads[16]{};
     std::mutex mutexLock;
 
-    for (int k = 0; k < _numThreads; k++) {
-        threads[k] = new std::thread([&, k]() {
-            for (int i = k; i < h; i += _numThreads) {
-                for (int j = 0; j < w; j++) {
+    for (int k = 0; k < _numThreads; k++)
+    {
+        threads[k] = new std::thread([&, k]()
+        {
+            for (int i = k; i < h; i += _numThreads)
+            {
+                for (int j = 0; j < w; j++)
+                {
                     _samplers[k]->StartPixel(glm::vec2(j, i));
-                    do {
+                    do
+                    {
                         glm::vec2 pos = glm::vec2(j, i) + _samplers[k]->Get2D();
 
                         pos.x = pos.x / w;
                         pos.y = pos.y / h;
 
                         auto ray = camera->GenerateRay(pos);
-                        auto color = Evaluate(ray, scene, _samplers[k]);
+                        auto color = Evaluate(ray, scene, ptr(_samplers[k]));
 
                         frameBuffer->AddSample(j, i, color);
 
@@ -56,7 +67,8 @@ void SamplerIntegrator::Render(const std::shared_ptr<Scene>& scene,
             });
 
     }
-    for (int k = 0; k < _numThreads; k++) {
+    for (int k = 0; k < _numThreads; k++)
+    {
         threads[k]->join();
     }
 }

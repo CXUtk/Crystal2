@@ -1,6 +1,6 @@
 ﻿#include "Scene.h"
-#include <SJson/SJson.h>
 #include <cassert>
+#include <SJson/SJson.h>
 #include <Shapes/Shape.h>
 #include <Loaders/JsonLoader.h>
 #include <Accelerators/Accelerator.h>
@@ -17,20 +17,21 @@
 #include <Textures/UVTexture.h>
 #include <Textures/CubemapTexture.h>
 
-std::shared_ptr<Scene> Scene::CreateScene(const std::shared_ptr<SJson::SJsonNode>& sceneNode, const config::ConfigInfo& configInfo) {
-    assert(sceneNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
-    auto scene = std::shared_ptr<Scene>(new Scene());
+std::unique_ptr<Scene> Scene::CreateScene(JsonNode_CPTR pSceneNode,
+    const config::ConfigInfo& configInfo) {
+    assert(pSceneNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+    auto scene = std::make_unique<Scene>();
 
-    scene->_lights.push_back(std::make_shared< PointLight>(glm::vec3(0, 20, 0), glm::vec3(10000.f)));
+    // scene->_lights.push_back(std::make_shared<PointLight>(glm::vec3(0, 20, 0), glm::vec3(10000.f)));
 
-    scene->loadTextures(sceneNode->GetMember("Textures"), configInfo);
-    scene->loadObjects(sceneNode->GetMember("Objects"), configInfo);
-    if (sceneNode->HasMember("Skybox")) {
-        scene->loadSkybox(sceneNode->GetMember("Skybox"), configInfo);
+    scene->loadTextures(pSceneNode->GetMember("Texture"), configInfo);
+    scene->loadObjects(pSceneNode->GetMember("Objects"), configInfo);
+    if (pSceneNode->HasMember("Skybox")) {
+        scene->loadSkybox(pSceneNode->GetMember("Skybox"), configInfo);
     }
 
     scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType);
-    scene->_accelStructure->Build(scene->_sceneObjects);
+    scene->_accelStructure->Build(scene->GetObjects());
     return scene;
 }
 
@@ -57,20 +58,20 @@ Scene::Scene() {
     _skybox = nullptr;
 }
 
-void Scene::loadTextures(const std::shared_ptr<SJson::SJsonNode>& texturesNode, const config::ConfigInfo& configInfo) {
-    assert(texturesNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+void Scene::loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& configInfo)
+{
+    assert(pTexturesNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 
-    for (auto it = texturesNode->beginProperties(); it != texturesNode->endProperties(); it++) {
-        auto& node = it->second;
+    pTexturesNode->ForEachProperties([&](const std::string& name, const SJson::SJsonNode* node) {
         auto path = node->GetMember("Path")->GetString();
-        _defaultTextures[it->first] = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(path));
-    }
+        _defaultTextures[name] = std::make_shared<UVTexture<glm::vec3>>(ImageTexels::CreateImageTexels(path));
+    });
 }
 
-void Scene::loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, const config::ConfigInfo& configInfo) {
-    assert(objectsNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
-    for (auto it = objectsNode->begin(); it != objectsNode->end(); it++) {
-        auto& node = (*it);
+void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo)
+{
+    assert(pObjectsNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
+    pObjectsNode->ForEachProperties([&](const std::string& name, const SJson::SJsonNode* node) {
         assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
         if (typeString == "Geometry") {
@@ -85,35 +86,43 @@ void Scene::loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, co
         else {
             throw std::invalid_argument("Invalid Object Type!");
         }
-    }
+        });
 }
 
-void Scene::loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo) {
-    if (skyboxNode->IsNull()) return;
+void Scene::loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& configInfo)
+{
+    if (pSkyboxNode->IsNull()) return;
     //_skybox = std::make_shared<PureCubemapTexture>(glm::vec3(.5f));
-    auto path = skyboxNode->GetMember("Path")->GetString();
+    // Path to skybox folder
+    auto path = pSkyboxNode->GetMember("Path")->GetString();
 
     std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
     std::string paths[6];
     for (int i = 0; i < 6; i++) {
         paths[i] = path + "/" + suffix[i];
     }
-    _skybox = ImageCubemapTexture::CreateImageCubemapTexture(paths[0], paths[1], paths[2], paths[3], paths[4], paths[5]);
+    _skybox = ImageCubemapTexture::CreateImageCubemapTexture(paths[0], paths[1], paths[2], 
+        paths[3], paths[4], paths[5]);
 }
 
-std::vector<std::shared_ptr<Shape>> Scene::parse_shape(const std::shared_ptr<Prototype>& prototype, const std::shared_ptr<SJson::SJsonNode>& shapeNode) {
-    assert(shapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
-    auto shapeType = shapeNode->GetMember("Type")->GetString();
+std::vector<std::unique_ptr<Shape>> Scene::parse_shape(Prototype* prototype,
+    JsonNode_CPTR pShapeNode)
+{
+    assert(pShapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+    auto shapeType = pShapeNode->GetMember("Type")->GetString();
     std::vector<std::shared_ptr<Shape>> shapes;
-    if (shapeType == "Sphere") {
-        shapes.push_back(Sphere::CreateSphere(prototype, shapeNode));
+    if (shapeType == "Sphere")
+    {
+        shapes.push_back(Sphere::CreateSphere(prototype, pShapeNode));
     }
-    else if (shapeType == "TriangleMesh") {
-        auto mesh = TriangleMesh::CreateTriangleMesh(prototype, shapeNode);
+    else if (shapeType == "TriangleMesh")
+    {
+        auto mesh = TriangleMesh::CreateTriangleMesh(prototype, pShapeNode);
         this->_triangleMeshes.push_back(mesh);
         shapes = mesh->GetTriangles();
     }
-    else {
+    else
+    {
         throw std::invalid_argument("Invalid Shape Type!");
     }
     return shapes;

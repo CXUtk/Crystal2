@@ -7,17 +7,18 @@ bool isSamplerIntegrator(const std::string& type) {
     return type == "WhittedStyle" || type == "PathTracer";
 }
 
-std::shared_ptr<Integrator> Integrator::LoadIntegrator(const std::shared_ptr<SJson::SJsonNode>& configNode, const config::ConfigInfo& configInfo) {
-    assert(configNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+std::unique_ptr<Integrator> Integrator::LoadIntegrator(JsonNode_CPTR pConfigNode,
+    const config::ConfigInfo& configInfo) {
+    assert(pConfigNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 
-    auto integratorNode = configNode->GetMember("Integrator");
+    auto integratorNode = pConfigNode->GetMember("Integrator");
     auto type = integratorNode->GetMember("Type")->GetString();
     if (isSamplerIntegrator(type)) {
-        auto& samplerNode = integratorNode->GetMember("Sampler");
+        auto samplerNode = integratorNode->GetMember("Sampler");
         auto sampler = Sampler::LoadSampler(samplerNode, configInfo);
 
         if (type == "PathTracer") {
-            return std::make_shared<PathTracingIntegrator>(sampler, configInfo.NumOfThreads);
+            return std::make_unique<PathTracingIntegrator>(sampler, configInfo.NumOfThreads);
         }
         else {
             throw std::invalid_argument("Invalid Integrator Type!");

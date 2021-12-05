@@ -6,34 +6,53 @@
 #include <Core/ConfigInfo.h>
 #include <Core/Geometry.h>
 
-class Scene {
+class Scene
+{
 public:
-    static std::shared_ptr<Scene> CreateScene(const std::shared_ptr<SJson::SJsonNode>& sceneNode,
+    static std::unique_ptr<Scene> CreateScene(JsonNode_CPTR pSceneNode,
         const config::ConfigInfo& configInfo);
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
     bool IntersectTest(const Ray& ray, float tMin, float tMax) const;
-    std::vector<std::shared_ptr<Light>> GetLights() const { return _lights; }
+    std::vector<const Light*> GetLights() const
+    {
+        std::vector<const Light*> lights;
+        for (auto& light : _lights)
+        {
+            lights.push_back(cptr(light));
+        }
+        return lights;
+    }
 
-    std::shared_ptr<Texture<glm::vec3>> GetTextureByName(const std::string& name) const;
-    std::shared_ptr<CubemapTexture> GetSkybox() const { return _skybox; }
+    std::vector<const Shape*> GetObjects() const
+    {
+        std::vector<const Shape*> shapes;
+        for (auto& shape : _sceneObjects)
+        {
+            shapes.push_back(cptr(shape));
+        }
+        return shapes;
+    }
+
+    const Texture<glm::vec3>* GetTextureByName(const std::string& name) const;
+    const CubemapTexture* GetSkybox() const { return cptr(_skybox); }
 
 private:
     Scene();
-    std::vector<std::shared_ptr<Shape>> _sceneObjects;
+    std::vector<std::unique_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
-    std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
-    std::vector<std::shared_ptr<Light>> _lights;
+    std::vector<std::unique_ptr<TriangleMesh>> _triangleMeshes;
+    std::vector<std::unique_ptr<Light>> _lights;
 
     std::map<std::string, std::shared_ptr<Texture<glm::vec3>>> _defaultTextures;
-    std::shared_ptr<CubemapTexture> _skybox;
+    std::unique_ptr<CubemapTexture> _skybox;
 
 
     // Load from scene file
-    void loadTextures(const std::shared_ptr<SJson::SJsonNode>& texturesNode, const config::ConfigInfo& configInfo);
-    void loadObjects(const std::shared_ptr<SJson::SJsonNode>& objectsNode, const config::ConfigInfo& configInfo);
-    void loadSkybox(const std::shared_ptr<SJson::SJsonNode>& skyboxNode, const config::ConfigInfo& configInfo);
-    std::vector<std::shared_ptr<Shape>> parse_shape(const std::shared_ptr<Prototype>& prototype,
-        const std::shared_ptr<SJson::SJsonNode>& shapeNode);
+    void loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& configInfo);
+    void loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo);
+    void loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& configInfo);
+    std::vector<std::unique_ptr<Shape>> parse_shape(Prototype* prototype,
+        JsonNode_CPTR pShapeNode);
 };

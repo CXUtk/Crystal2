@@ -9,24 +9,24 @@
 #include "Glass.h"
 #include "MicrofacetMaterial.h"
 
-std::shared_ptr<Material> Material::CreateMaterial(const std::shared_ptr<SJson::SJsonNode>& node, const Scene* scene) {
-    auto type = node->GetMember("Type")->GetString();
+std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Scene* scene) {
+    auto type = pNode->GetMember("Type")->GetString();
     if (type == "Diffuse") {
-        auto kdTexture = node->GetMember("Kd")->GetString();
+        auto kdTexture = pNode->GetMember("Kd")->GetString();
         return std::make_shared<DiffuseMaterial>(scene->GetTextureByName(kdTexture));
     }
     else if (type == "Mirror") {
-        auto color = loader::parse_vec3(node->GetMember("Color"));
+        auto color = loader::parse_vec3(pNode->GetMember("Color"));
         return std::make_shared<MirrorMaterial>(color);
     }
     else if (type == "Glass") {
-        auto color = loader::parse_vec3(node->GetMember("Color"));
-        auto eta = node->GetMember("IOR")->GetFloat();
+        auto color = loader::parse_vec3(pNode->GetMember("Color"));
+        auto eta = pNode->GetMember("IOR")->GetFloat();
         return std::make_shared<Glass>(color, eta);
     }
     else if (type == "Micro") {
-        auto color = loader::parse_vec3(node->GetMember("Color"));
-        auto roughness = node->GetMember("Roughness")->GetFloat();
+        auto color = loader::parse_vec3(pNode->GetMember("Color"));
+        auto roughness = pNode->GetMember("Roughness")->GetFloat();
         return std::make_shared<MicrofacetMaterial>(color, 1.5f, roughness);
     }
     else {

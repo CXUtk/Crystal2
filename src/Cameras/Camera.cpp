@@ -4,14 +4,14 @@
 #include <Loaders/JsonLoader.h>
 
 
-std::shared_ptr<Camera> Camera::CreateCamera(const std::shared_ptr<SJson::SJsonNode>& cameraNode, const config::ConfigInfo& configInfo) {
-	auto cameraType = cameraNode->GetMember("Type")->GetString();
+std::unique_ptr<Camera> Camera::CreateCamera(JsonNode_CPTR pCameraNode, const config::ConfigInfo& configInfo) {
+	auto cameraType = pCameraNode->GetMember("Type")->GetString();
 	if (cameraType == "Normal") {
-		auto lookAt = loader::parse_vec3(cameraNode->GetMember("LookAt"));
-		auto up = loader::parse_vec3(cameraNode->GetMember("Up"));
-		auto FOV = cameraNode->GetMember("FOV")->GetFloat() / 180.f * glm::pi<float>();
-		auto pos = loader::parse_vec3(cameraNode->GetMember("Position"));
-		return std::make_shared<PerspCamera>(pos, lookAt,
+		auto lookAt = loader::parse_vec3(pCameraNode->GetMember("LookAt"));
+		auto up = loader::parse_vec3(pCameraNode->GetMember("Up"));
+		auto FOV = pCameraNode->GetMember("FOV")->GetFloat() / 180.f * glm::pi<float>();
+		auto pos = loader::parse_vec3(pCameraNode->GetMember("Position"));
+		return std::make_unique<PerspCamera>(pos, lookAt,
 			up, FOV, (float)configInfo.Width / configInfo.Height, 1.0f, 100.0f);
 	}
 	else {

@@ -17,7 +17,7 @@ class ImageCubemapTexture :public CubemapTexture {
     using texture2dRef = const std::shared_ptr<UVTexture<glm::vec3>>&;
     using texture2dPtr = std::shared_ptr<UVTexture<glm::vec3>>;
 public:
-    static std::shared_ptr<CubemapTexture> CreateImageCubemapTexture(const std::string& posx, const std::string& negx,
+    static std::unique_ptr<CubemapTexture> CreateImageCubemapTexture(const std::string& posx, const std::string& negx,
         const std::string& posy, const std::string& negy,
         const std::string& posz, const std::string& negz);
 

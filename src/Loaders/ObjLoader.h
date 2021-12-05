@@ -42,7 +42,7 @@ public:
     std::vector<glm::ivec3> Triangles;
     std::vector<VertexData> Vertices;
 
-    std::shared_ptr<TriangleMesh> GetMesh(const std::shared_ptr<Prototype>& prototype, const glm::mat4& transform);
+    std::shared_ptr<TriangleMesh> GetMesh(Prototype* prototype, const glm::mat4& transform);
     //std::vector<DrawTriangle> GetDrawTriangles() const;
 private:
     static constexpr int MAX_BUFFER = 100005;
