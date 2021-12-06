@@ -35,24 +35,24 @@ public:
         return shapes;
     }
 
-    const Texture<glm::vec3>* GetTextureByName(const std::string& name) const;
+    const Texture_RGB* GetTextureByName(const std::string& name) const;
     const CubemapTexture* GetSkybox() const { return cptr(_skybox); }
 
 private:
     Scene();
-    std::vector<std::unique_ptr<Shape>> _sceneObjects;
+    std::vector<std::shared_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
     std::vector<std::unique_ptr<TriangleMesh>> _triangleMeshes;
     std::vector<std::unique_ptr<Light>> _lights;
+    std::vector<std::unique_ptr<Prototype>> _prototypes;
 
-    std::map<std::string, std::shared_ptr<Texture<glm::vec3>>> _defaultTextures;
+    std::map<std::string, std::shared_ptr<Texture_RGB>> _defaultTextures;
     std::unique_ptr<CubemapTexture> _skybox;
-
 
     // Load from scene file
     void loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& configInfo);
     void loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo);
     void loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& configInfo);
-    std::vector<std::unique_ptr<Shape>> parse_shape(Prototype* prototype,
+    std::vector<std::shared_ptr<Shape>> parse_shape(Prototype* prototype,
         JsonNode_CPTR pShapeNode);
 };

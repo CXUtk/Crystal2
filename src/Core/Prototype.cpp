@@ -3,7 +3,7 @@
 #include <SJson/SJson.h>
 
 
-std::shared_ptr<Prototype> Prototype::CreatePrototype(JsonNode_CPTR pNode,
+std::unique_ptr<Prototype> Prototype::CreatePrototype(JsonNode_CPTR pNode,
     const Scene* scene)
 {
     std::shared_ptr<AreaLight> light = nullptr;
@@ -12,7 +12,7 @@ std::shared_ptr<Prototype> Prototype::CreatePrototype(JsonNode_CPTR pNode,
     {
         material = Material::CreateMaterial(pNode->GetMember("Material"), scene);
     }
-    return std::make_shared<Prototype>(nullptr, material);
+    return std::make_unique<Prototype>(nullptr, material);
 }
 
 Prototype::Prototype(const std::shared_ptr<AreaLight>& light, const std::shared_ptr<Material>& material)

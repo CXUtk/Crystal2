@@ -7,12 +7,12 @@
 
 class Prototype {
 public:
-    static std::shared_ptr<Prototype> CreatePrototype(JsonNode_CPTR pNode, const Scene* scene);
+    static std::unique_ptr<Prototype> CreatePrototype(JsonNode_CPTR pNode, const Scene* scene);
     Prototype(const std::shared_ptr<AreaLight>& light, const std::shared_ptr<Material>& _material);
     ~Prototype();
 
-    std::shared_ptr<AreaLight> GetAreaLight() const { return _light; }
-    std::shared_ptr<Material> GetMaterial() const { return _material; }
+    const AreaLight* GetAreaLight() const { return cptr(_light); }
+    const Material* GetMaterial() const { return cptr(_material); }
 
     std::shared_ptr<BSDF> ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera = true) const;
 

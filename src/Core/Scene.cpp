@@ -46,10 +46,10 @@ bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     return _accelStructure->IntersectTest(ray, tMin, tMax);
 }
 
-std::shared_ptr<Texture<glm::vec3>> Scene::GetTextureByName(const std::string& name) const {
+const Texture_RGB* Scene::GetTextureByName(const std::string& name) const {
     auto it = _defaultTextures.find(name);
     if (it != _defaultTextures.end()) {
-        return it->second;
+        return cptr(it->second);
     }
     throw std::exception("Texture name doesn't exist");
 }
@@ -74,16 +74,20 @@ void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& co
     pObjectsNode->ForEachProperties([&](const std::string& name, const SJson::SJsonNode* node) {
         assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
-        if (typeString == "Geometry") {
+        if (typeString == "Geometry")
+        {
             auto prototype = Prototype::CreatePrototype(node, this);
-            for (auto& s : parse_shape(prototype, node->GetMember("Shape"))) {
+            for (auto& s : parse_shape(ptr(prototype), node->GetMember("Shape")))
+            {
                 _sceneObjects.push_back(s);
             }
         }
-        else if (typeString == "Light") {
+        else if (typeString == "Light")
+        {
 
         }
-        else {
+        else
+        {
             throw std::invalid_argument("Invalid Object Type!");
         }
         });
@@ -98,14 +102,15 @@ void Scene::loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& conf
 
     std::string suffix[6] = { "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg" };
     std::string paths[6];
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
         paths[i] = path + "/" + suffix[i];
     }
-    _skybox = ImageCubemapTexture::CreateImageCubemapTexture(paths[0], paths[1], paths[2], 
+    _skybox = ImageCubemapTexture::CreateImageCubemapTexture(paths[0], paths[1], paths[2],
         paths[3], paths[4], paths[5]);
 }
 
-std::vector<std::unique_ptr<Shape>> Scene::parse_shape(Prototype* prototype,
+std::vector<std::shared_ptr<Shape>> Scene::parse_shape(Prototype* prototype,
     JsonNode_CPTR pShapeNode)
 {
     assert(pShapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);

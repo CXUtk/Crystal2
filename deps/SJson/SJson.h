@@ -13,11 +13,11 @@ using ll = long long int;
 namespace SJson {
 
     /**
- * @brief Converts a shared pointer to a pointer of the object
- * @tparam T Object Type
- * @param ptr Target shared ponter
- * @return const reference to the object
-*/
+     * @brief Converts a shared pointer to a pointer of the object
+     * @tparam T Object Type
+     * @param ptr Target shared ponter
+     * @return const reference to the object
+    */
     template<typename T>
     inline T* ptr(const std::shared_ptr<T>& ptr) { return static_cast<T*>(ptr.get()); }
 

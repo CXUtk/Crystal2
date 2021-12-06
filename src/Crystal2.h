@@ -1,12 +1,12 @@
 ﻿#pragma once
 #include <memory>
+#include <glm/glm.hpp>
 
 namespace SJson {
     // Loaders
     class SJsonNode;
 }
 
-using JsonNode_CPTR = const SJson::SJsonNode*;
 
 // Core
 class Engine;
@@ -30,6 +30,8 @@ class CubemapTexture;
 // Shapes
 class TriangleMesh;
 
+using JsonNode_CPTR = const SJson::SJsonNode*;
+using Texture_RGB = Texture<glm::vec3>;
 
 /**
  * @brief Converts a shared pointer to a pointer of the object

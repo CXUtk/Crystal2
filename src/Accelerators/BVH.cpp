@@ -29,9 +29,9 @@ BVH::~BVH() {
         delete[] _nodes;
 }
 
-void BVH::Build(const std::vector<std::shared_ptr<Shape>>& objects) {
+void BVH::Build(const std::vector<const Shape*>& objects) {
     for (auto& obj : objects) {
-        _shapes.push_back(obj.get());
+        _shapes.push_back(obj);
     }
     _nodes = new accel::BVHNode[objects.size() * 5];
     _tot = 0;

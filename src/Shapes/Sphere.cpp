@@ -9,9 +9,9 @@ std::shared_ptr<Shape> Sphere::CreateSphere(Prototype* prototype, JsonNode_CPTR 
     return std::make_shared<Sphere>(prototype, pos, r, glm::vec3(0));
 }
 
-Sphere::Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, 
+Sphere::Sphere(Prototype* prototype, glm::vec3 pos, 
     float radius, glm::vec3 rotation) : Shape(prototype),
-_pos(pos), _radius(radius), _rot(rotation) {
+        _pos(pos), _radius(radius), _rot(rotation) {
 
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
     rotMatrix = glm::rotate(rotMatrix, rotation.x, glm::vec3(1, 0, 0));

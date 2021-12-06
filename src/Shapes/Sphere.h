@@ -8,7 +8,7 @@ class Sphere : public Shape {
 public:
     static std::shared_ptr<Shape> CreateSphere(Prototype* prototype,
        JsonNode_CPTR pShapeNode);
-    Sphere(const std::shared_ptr<Prototype>& prototype, glm::vec3 pos, float radius, glm::vec3 rotation);
+    Sphere(Prototype* prototype, glm::vec3 pos, float radius, glm::vec3 rotation);
     ~Sphere() override;
     BoundingBox GetBoundingBox() const override;
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const override;

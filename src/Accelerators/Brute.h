@@ -12,5 +12,5 @@ public:
         float tMax = std::numeric_limits<float>::infinity()) const override;
 
 private:
-    std::vector<std::shared_ptr<Shape>> _objects;
+    std::vector<const Shape*> _objects;
 };

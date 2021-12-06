@@ -39,7 +39,7 @@ void ObjLoader::load(const std::string& path) {
 }
 
 std::shared_ptr<TriangleMesh> ObjLoader::GetMesh(Prototype* prototype, const glm::mat4& transform) {
-    return std::make_unique<TriangleMesh>(prototype, Vertices, Triangles, transform);
+    return std::make_shared<TriangleMesh>(prototype, Vertices, Triangles, transform);
 }
 
 int fix(int id, int maxsz) {

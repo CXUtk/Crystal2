@@ -9,7 +9,7 @@
 Engine::Engine(const std::shared_ptr<SJson::SJsonNode>& configNode, const std::shared_ptr<SJson::SJsonNode>& sceneInfo) {
     try {
         _config = config::ConfigLoader::LoadConfigInfo(configNode);
-        _rayTracer = std::make_shared<RayTracer>(_config, configNode, sceneInfo);
+        _rayTracer = std::make_shared<RayTracer>(_config, ::ptr(configNode), ::ptr(sceneInfo));
     }
     catch (const SJson::ConversionError& e) {
         fprintf(stderr, "%s: Cannot convert from %s to %s\n", e.what(), e.from.c_str(), e.to.c_str());
