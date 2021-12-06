@@ -6,7 +6,7 @@
 
 class Shape {
 public:
-    Shape(Prototype* prototype) : _prototype(prototype) {}
+    Shape(const Prototype* prototype) : _prototype(prototype) {}
     virtual ~Shape() = 0 {}
     virtual BoundingBox GetBoundingBox() const = 0;
     virtual bool Intersect(const Ray& ray, SurfaceInteraction* info) const = 0;
@@ -15,5 +15,5 @@ public:
     const Prototype* GetPrototype() const { return _prototype; }
 
 private:
-    Prototype* _prototype;
+    const Prototype* _prototype;
 };

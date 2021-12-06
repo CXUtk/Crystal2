@@ -1,7 +1,6 @@
 #pragma once
 #include <Crystal2.h>
 #include <Core/Geometry.h>
-#include <glm/glm.hpp>
 #include <memory>
 
 class SurfaceInteraction {
@@ -15,7 +14,7 @@ public:
     bool IsFrontFace() const { return _frontFace; }
     float GetDistance() const { return _distance; }
     const Shape* GetHitShape() const { return _hitShape; }
-    std::shared_ptr<Prototype> GetHitPrototype() const;
+    const Prototype* GetHitPrototype() const;
     glm::vec3 GetHitPos() const { return _hitPos; }
     glm::vec3 GetNormal() const { return _normal; }
     glm::vec2 GetUV() const { return _uv; }

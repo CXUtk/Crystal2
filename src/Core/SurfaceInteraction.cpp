@@ -27,6 +27,8 @@ void SurfaceInteraction::SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 hitDir,
     _dpdv = dpdv;
 }
 
-std::shared_ptr<Prototype> SurfaceInteraction::GetHitPrototype() const {
+const Prototype* SurfaceInteraction::GetHitPrototype() const
+{
     return _hitShape->GetPrototype();
 }
+

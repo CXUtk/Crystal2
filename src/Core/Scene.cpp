@@ -24,7 +24,7 @@ std::unique_ptr<Scene> Scene::CreateScene(JsonNode_CPTR pSceneNode,
 
     // scene->_lights.push_back(std::make_shared<PointLight>(glm::vec3(0, 20, 0), glm::vec3(10000.f)));
 
-    scene->loadTextures(pSceneNode->GetMember("Texture"), configInfo);
+    scene->loadTextures(pSceneNode->GetMember("Textures"), configInfo);
     scene->loadObjects(pSceneNode->GetMember("Objects"), configInfo);
     if (pSceneNode->HasMember("Skybox")) {
         scene->loadSkybox(pSceneNode->GetMember("Skybox"), configInfo);
@@ -71,7 +71,7 @@ void Scene::loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& 
 void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo)
 {
     assert(pObjectsNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
-    pObjectsNode->ForEachProperties([&](const std::string& name, const SJson::SJsonNode* node) {
+    pObjectsNode->ForEachElements([&](const SJson::SJsonNode* node) {
         assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
         auto typeString = node->GetMember("Type")->GetString();
         if (typeString == "Geometry")

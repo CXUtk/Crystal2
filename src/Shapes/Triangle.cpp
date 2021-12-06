@@ -13,7 +13,7 @@ glm::vec2 bary_interp(glm::vec3 bary, glm::vec2 A, glm::vec2 B, glm::vec2 C) {
     return bary.x * A + bary.y * B + bary.z * C;
 }
 
-Triangle::Triangle(std::shared_ptr<Prototype> prototype, const VertexData* a, const VertexData* b, const VertexData* c)
+Triangle::Triangle(const Prototype* prototype, const VertexData* a, const VertexData* b, const VertexData* c)
     : Shape(prototype) {
     _vertices[0] = a, _vertices[1] = b, _vertices[2] = c;
     calculateDerivative();

@@ -4,11 +4,11 @@
 
 class DiffuseMaterial : public Material {
 public:
-    DiffuseMaterial(const std::shared_ptr<Texture<glm::vec3>>& Kd);
+    DiffuseMaterial(const Texture_RGB* Kd);
     ~DiffuseMaterial() override;
 
     std::shared_ptr<BSDF> ComputeScatteringFunctions(const SurfaceInteraction& isec, bool fromCamera = true) const override;
 
 private:
-    std::shared_ptr<Texture<glm::vec3>> _Kd;
+    const Texture_RGB* _Kd;
 };

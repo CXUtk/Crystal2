@@ -11,6 +11,7 @@ class Scene
 public:
     static std::unique_ptr<Scene> CreateScene(JsonNode_CPTR pSceneNode,
         const config::ConfigInfo& configInfo);
+    Scene();
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
@@ -39,10 +40,9 @@ public:
     const CubemapTexture* GetSkybox() const { return cptr(_skybox); }
 
 private:
-    Scene();
     std::vector<std::shared_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
-    std::vector<std::unique_ptr<TriangleMesh>> _triangleMeshes;
+    std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
     std::vector<std::unique_ptr<Light>> _lights;
     std::vector<std::unique_ptr<Prototype>> _prototypes;
 

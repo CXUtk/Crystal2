@@ -5,7 +5,7 @@
 #include <Loaders/JsonLoader.h>
 #include <Loaders/ObjLoader.h>
 
-std::unique_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(Prototype* prototype,
+std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(Prototype* prototype,
        JsonNode_CPTR pShapeNode) {
     auto filePath = pShapeNode->GetMember("ObjFile")->GetString();
     ObjLoader loader;
@@ -25,7 +25,8 @@ std::unique_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(Prototype* protot
     return loader.GetMesh(prototype, matrix);
 }
 
-TriangleMesh::TriangleMesh(const std::shared_ptr<Prototype>& prototype,
+
+TriangleMesh::TriangleMesh(const Prototype* prototype,
     const std::vector<VertexData>& vertices,
     const std::vector<glm::ivec3> faceIndices,
     const glm::mat4& transform) : _prototype(prototype), _numVertices(vertices.size()), _faces(faceIndices), _transform(transform) {

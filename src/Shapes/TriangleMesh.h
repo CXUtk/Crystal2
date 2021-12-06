@@ -6,9 +6,9 @@
 
 class TriangleMesh {
 public:
-    static std::unique_ptr<TriangleMesh> CreateTriangleMesh(Prototype* prototype,
+    static std::shared_ptr<TriangleMesh> CreateTriangleMesh(Prototype* prototype,
        JsonNode_CPTR pShapeNode);
-    TriangleMesh(const std::shared_ptr<Prototype>& prototype, const std::vector<VertexData>& vertices,
+    TriangleMesh(const Prototype* prototype, const std::vector<VertexData>& vertices,
         const std::vector<glm::ivec3> faceIndices, const glm::mat4& transform);
     ~TriangleMesh();
 
@@ -18,6 +18,6 @@ private:
     int _numVertices;
     std::unique_ptr<VertexData[]> _vertices;
     std::vector<glm::ivec3> _faces;
-    std::shared_ptr<Prototype> _prototype;
+    const Prototype* _prototype;
     glm::mat4 _transform;
 };

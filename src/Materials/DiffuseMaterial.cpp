@@ -6,7 +6,7 @@
 #include <Textures/Texture.h>
 
 
-DiffuseMaterial::DiffuseMaterial(const std::shared_ptr<Texture<glm::vec3>>& Kd) : _Kd(Kd) {
+DiffuseMaterial::DiffuseMaterial(const Texture_RGB* Kd) : _Kd(Kd) {
 }
 
 DiffuseMaterial::~DiffuseMaterial() {
