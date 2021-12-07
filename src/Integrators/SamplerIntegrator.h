@@ -3,7 +3,7 @@
 #include "Integrator.h"
 #include <Samplers/Sampler.h>
 #include <Core/Geometry.h>
-#include <Core/Threads/FixedThreadPool.h>
+#include <Core/Utils/Threads/FixedThreadPool.h>
 
 class SamplerIntegrator : public Integrator {
 public:

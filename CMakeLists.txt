@@ -95,10 +95,6 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Textures/Texel.cpp"
 "src/Textures/CubemapTexture.h" 
 "src/Textures/CubemapTexture.cpp"
-"src/Core/Threads/FixedThreadPool.cpp"
-"src/Core/Threads/FixedThreadPool.h"
-"src/Core/Threads/LockQueue.h"
-
 )
 
 # 编译选项
@@ -109,11 +105,7 @@ set_target_properties("Crystal2" PROPERTIES
 
 
 # 导入包含文件夹
-target_include_directories("Crystal2" PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_include_directories("Crystal2" PRIVATE "${PROJECT_SOURCE_DIR}/deps")
-target_include_directories("Crystal2" PRIVATE "${PROJECT_SOURCE_DIR}/deps/TREngine")
-target_include_directories("Crystal2" PRIVATE "${PROJECT_SOURCE_DIR}/deps/TREngine/deps")
-
+include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/src" "${PROJECT_SOURCE_DIR}/deps" "${PROJECT_SOURCE_DIR}/deps/TREngine" "${PROJECT_SOURCE_DIR}/deps/TREngine/deps")
 
 find_package(OpenGL REQUIRED)
 target_link_libraries("Crystal2" PRIVATE OpenGL::GL)

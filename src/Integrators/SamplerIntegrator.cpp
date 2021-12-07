@@ -35,7 +35,8 @@ void SamplerIntegrator::Render(Scene* scene,
     size_t current = 0;
 
     std::mutex mutexLock;
-    bool canExit = false;
+    std::atomic<bool> canExit = false;
+
     for (int k = 0; k < _numThreads; k++)
     {
         for (int i = k; i < h; i += _numThreads)
@@ -47,7 +48,6 @@ void SamplerIntegrator::Render(Scene* scene,
                     do
                     {
                         glm::vec2 pos = glm::vec2(j, i) + _samplers[k]->Get2D();
-
                         pos.x = pos.x / w;
                         pos.y = pos.y / h;
 
@@ -66,7 +66,7 @@ void SamplerIntegrator::Render(Scene* scene,
                 {
                     canExit = true;
                 }
-            });
+                });
         }
     }
     while (!canExit);
