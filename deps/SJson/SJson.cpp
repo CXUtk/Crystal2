@@ -367,6 +367,10 @@ namespace SJson {
     std::shared_ptr<SJsonNode> SJson::SJsonParse(const std::string& text) {
         lineNumber = 1;
         auto ptr = text.begin();
+
+        // Remove UTF-8 BOM
+        if (*ptr == (char)0xEF) ptr += 3;
+        
         lastLineStart = ptr;
         stringEnd = text.end();
         strip_white_space(ptr);

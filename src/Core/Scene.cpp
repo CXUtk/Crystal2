@@ -81,6 +81,7 @@ void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& co
             {
                 _sceneObjects.push_back(s);
             }
+            _prototypes.push_back(std::move(prototype));
         }
         else if (typeString == "Light")
         {
