@@ -5,6 +5,9 @@
 #include <SJson/SJson.h>
 #include <Cameras/Camera.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stbi/stb_image_write.h>
+
 RayTracer::RayTracer(const config::ConfigInfo& configInfo, JsonNode_CPTR pConfigNode,
     JsonNode_CPTR pSceneNode) {
     _width = configInfo.Width;
@@ -21,9 +24,24 @@ RayTracer::RayTracer(const config::ConfigInfo& configInfo, JsonNode_CPTR pConfig
 
 void RayTracer::TraceAsync() {
     _frameBuffer->Clear();
-    _integrator->Render(ptr(_scene), ptr(_camera), ptr(_frameBuffer));
+    _finished = false;
+    _renderThread = std::make_unique<std::thread>([&]() {
+
+        clock_t startTime, endTime;
+        startTime = clock();
+        _integrator->Render(ptr(_scene), ptr(_camera), ptr(_frameBuffer));
+        //------------------------------------------------
+        endTime = clock();  //计时结束
+        printf("The running time is: %.4fs\n",
+            (double)(endTime - startTime) / CLOCKS_PER_SEC);
+
+        _finished = true;
+        auto& fb = _frameBuffer;
+        stbi_write_png("result.png", fb->Width(), fb->Height(), 3, fb->GetImageData().get(), fb->Width() * 3);
+        fprintf(stdout, "Finished!\n");
+    });
 }
 
 RayTracer::~RayTracer() {
-
+    _renderThread->join();
 }

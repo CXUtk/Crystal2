@@ -2,6 +2,7 @@
 #include <Crystal2.h>
 #include <memory>
 #include <Loaders/ConfigLoader.h>
+#include <thread>
 
 class RayTracer {
 public:
@@ -19,6 +20,7 @@ private:
     std::unique_ptr<Camera> _camera;
 
     std::unique_ptr<FrameBuffer> _frameBuffer;
+    std::unique_ptr<std::thread> _renderThread;
 
     int _width, _height;
     bool _finished;

@@ -36,3 +36,5 @@ inline T UVTexture<T>::Evaluate(const glm::vec2& uv) const {
 template<typename T>
 inline UVTexture<T>::~UVTexture() {
 }
+
+using TextureUV_RGB = UVTexture<glm::vec3>;

@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <memory>
 
-#include <glm/glm.hpp>
 #include <Crystal2.h>
 #include <Core/Utils.h>
 

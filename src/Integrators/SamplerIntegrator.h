@@ -3,6 +3,7 @@
 #include "Integrator.h"
 #include <Samplers/Sampler.h>
 #include <Core/Geometry.h>
+#include <Core/Threads/FixedThreadPool.h>
 
 class SamplerIntegrator : public Integrator {
 public:
@@ -16,5 +17,6 @@ public:
 
 private:
     std::shared_ptr<Sampler> _samplers[16];
+    std::unique_ptr<FixedThreadPool> _threadPool;
     int _numThreads;
 };

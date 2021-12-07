@@ -14,6 +14,7 @@ SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler>& sampler, in
     {
         _samplers[i] = sampler->Clone(i * 5 + 1);
     }
+    _threadPool = std::make_unique<FixedThreadPool>(threads);
 }
 
 void SamplerIntegrator::Preprocess(Scene* scene)
@@ -33,15 +34,13 @@ void SamplerIntegrator::Render(Scene* scene,
     size_t total = (size_t)w * h * _samplers[0]->GetSamplesPerPixel();
     size_t current = 0;
 
-    std::thread* threads[16]{};
     std::mutex mutexLock;
-
+    bool canExit = false;
     for (int k = 0; k < _numThreads; k++)
     {
-        threads[k] = new std::thread([&, k]()
+        for (int i = k; i < h; i += _numThreads)
         {
-            for (int i = k; i < h; i += _numThreads)
-            {
+            _threadPool->RunAsync([&, i, k]() {
                 for (int j = 0; j < w; j++)
                 {
                     _samplers[k]->StartPixel(glm::vec2(j, i));
@@ -63,12 +62,12 @@ void SamplerIntegrator::Render(Scene* scene,
                 current += w * _samplers[k]->GetSamplesPerPixel();
                 fprintf(stdout, "Tracing: %.2lf%%\n", (double)current / total * 100.0);
                 mutexLock.unlock();
-            }
+                if (current == total)
+                {
+                    canExit = true;
+                }
             });
-
+        }
     }
-    for (int k = 0; k < _numThreads; k++)
-    {
-        threads[k]->join();
-    }
+    while (!canExit);
 }

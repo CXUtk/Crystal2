@@ -1,5 +1,4 @@
 ﻿#include "Texel.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include <stbi/stb_image.h>
 
 std::shared_ptr<ImageTexels> ImageTexels::CreateImageTexels(const std::string& fileName) {

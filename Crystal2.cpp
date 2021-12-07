@@ -1,4 +1,5 @@
-﻿#include "Engine.h"
+﻿#include "CrystalEngine.h"
+#include <TREngine/Engine.h>
 #include <Loaders/JsonLoader.h>
 #include <cstdio>
 #include <string>
@@ -16,8 +17,15 @@ int main(int argc, char** argv) {
 			auto sceneNode = loader::JsonLoader::LoadJsonFile(std::string(argv[2]));
 			fprintf(stdout, "Scene Config File Loaded!\n");
 
-			auto engine = Engine(configNode, sceneNode);
-			engine.Run();
+			try
+			{
+				trv2::Engine engine(argc, argv, std::make_shared<crystal::CrystalEngine>(configNode, sceneNode));
+				engine.Run();
+			}
+			catch (std::exception ex)
+			{
+				fprintf(stderr, "Error encountered, game terminated!\n");
+			}
 		}
 		catch (std::exception& e) {
 			fprintf(stderr, "Terminated with error: %s\n", e.what());
