@@ -30,7 +30,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
     Sampler* sampler, int level, bool specular) {
-    if (level == _maxDepth) return glm::vec3(0.5f);
+    if (level == _maxDepth) return glm::vec3(0.f);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {
@@ -72,7 +72,6 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         Lres += Lindir;
         return Lres;
     }
-    return glm::vec3(0.5f);
     if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
     return scene->GetSkybox()->Evaluate(ray.dir);
 }

@@ -42,7 +42,7 @@ void SamplerIntegrator::Render(Scene* scene,
             size_t current = 0;
             size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (block + 1) : (block));
 
-            //_threadPool->RunAsync([&, mod]() {
+            _threadPool->RunAsync([&, mod]() {
                 for (int i = mod; i < h; i += _numThreads)
                 {
                     for (int j = 0; j < w; j++)
@@ -68,10 +68,10 @@ void SamplerIntegrator::Render(Scene* scene,
                 {
                     canExit = true;
                 }
-        //    });
+            });
         }
-        //// Wait until finish a frame
-        //while (!canExit) {}
+        // Wait until finish a frame
+        while (!canExit) {}
     }
 
 }
