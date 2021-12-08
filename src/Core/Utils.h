@@ -59,6 +59,18 @@ inline glm::mat3 adjoint(const glm::mat3& m, float invDet) {
     return Inverse;
 }
 
+inline glm::vec3 GetUnitVectorUsingCos(float cosTheta, float phi)
+{
+    float r = std::sqrt(1 - cosTheta * cosTheta);
+    return glm::vec3(r * std::cos(phi), cosTheta, -r * std::sin(phi));
+}
+
+inline glm::vec3 GetUnitVector(float theta, float phi)
+{
+    float r = sin(theta);
+    return glm::vec3(r * std::cos(phi), 1.0f - r * r, -r * std::sin(phi));
+}
+
 inline glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float& pdf) {
     auto r = std::sqrt(sample.x);
     auto phi = sample.y * glm::two_pi<float>();

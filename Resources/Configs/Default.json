@@ -1,7 +1,7 @@
 {
   "Width": 800,
   "Height": 600,
-  "SamplesPerPixel": 16,
+  "SamplesPerPixel": 168,
   "Threads": 8,
   "Acceleration": "BVH",
   "Integrator": {

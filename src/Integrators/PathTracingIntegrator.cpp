@@ -71,6 +71,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         Lres += Lindir;
         return Lres;
     }
+    //return glm::vec3(0.5f);
     if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
     return scene->GetSkybox()->Evaluate(ray.dir);
 }

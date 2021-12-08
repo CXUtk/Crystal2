@@ -59,10 +59,10 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Glass",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "Roughness": 1.0
+          "IOR": 1.44
         },
         "AreaLight": null
       },

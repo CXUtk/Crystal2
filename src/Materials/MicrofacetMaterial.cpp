@@ -18,7 +18,7 @@ std::shared_ptr<BSDF> MicrofacetMaterial::ComputeScatteringFunctions(const Surfa
     auto TNB = glm::mat3(isec.GetDpDu(), isec.GetNormal(), isec.GetDpDv());
     float etaA = 1.f, etaB = _ior;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
-    auto F = std::make_shared<FresnelSchlick>(glm::vec3(.05f));
+    auto F = std::make_shared<FresnelSchlick>(glm::vec3(.98f));
     auto d = std::make_shared<GGXRTDistribution>(TNB, _roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
