@@ -16,14 +16,17 @@ $ ./Crystal2 <config file> <scene file>
 
 ## Features
 1. Integrators
-- [x] Path tracer
+- [x] Path Tracing
+- [x] Photon Mapping
+- [ ] Bidirectional Path Tracing
 
 2. Materials
 - [x] Diffuse Material
 - [x] Mirror Material
 - [x] Glass Material
-- [x] Microfacet Material
+- [x] Microfacet Material (GGX)
 - [ ] Microfacet Material (Anisotrophic)
+- [ ] Phong Material
 
 3. Samplers
 - [x] Random Sampler
@@ -46,7 +49,7 @@ $ ./Crystal2 <config file> <scene file>
 6. Acceleators
 - [x] Brute force
 - [x] BVH with SAH
-- [] K-D Tree
+- [ ] K-D Tree
 - [ ] ?
 
 7. Lights
@@ -54,6 +57,8 @@ $ ./Crystal2 <config file> <scene file>
 - [ ] Area Light  
 
 8. Volume Scattering
+
+9. 
 
 ## Demos
 ### Physically Based Rendering
