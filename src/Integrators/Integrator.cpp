@@ -18,7 +18,8 @@ std::unique_ptr<Integrator> Integrator::LoadIntegrator(JsonNode_CPTR pConfigNode
         auto sampler = Sampler::LoadSampler(samplerNode, configInfo);
 
         if (type == "PathTracer") {
-            return std::make_unique<PathTracingIntegrator>(sampler, configInfo.NumOfThreads);
+            auto maxDepth = integratorNode->GetMember("Depth")->GetInt();
+            return std::make_unique<PathTracingIntegrator>(sampler, configInfo.NumOfThreads, maxDepth);
         }
         else {
             throw std::invalid_argument("Invalid Integrator Type!");

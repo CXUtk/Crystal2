@@ -59,7 +59,7 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Glass",
+          "Type": "Diffuse",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
           "IOR": 1.44

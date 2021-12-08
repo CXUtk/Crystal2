@@ -6,6 +6,7 @@
   "Acceleration": "BVH",
   "Integrator": {
     "Type": "PathTracer",
+    "Depth": 16,
     "Sampler": {
       "Type": "Default",
       "Seed": 0

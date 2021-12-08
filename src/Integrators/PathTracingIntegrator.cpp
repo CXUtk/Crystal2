@@ -15,8 +15,9 @@
 static constexpr float pRR = 0.8f;
 static constexpr float EPS = 1e-5;
 
-PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads)
-    : SamplerIntegrator(sampler, threads) {
+PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads, int maxDepth)
+    : SamplerIntegrator(sampler, threads), _maxDepth(maxDepth) {
+
 }
 
 
@@ -29,7 +30,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
     Sampler* sampler, int level, bool specular) {
-    if (level == 16) return glm::vec3(0);
+    if (level == _maxDepth) return glm::vec3(0.5f);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {
@@ -71,7 +72,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         Lres += Lindir;
         return Lres;
     }
-    //return glm::vec3(0.5f);
+    return glm::vec3(0.5f);
     if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
     return scene->GetSkybox()->Evaluate(ray.dir);
 }
