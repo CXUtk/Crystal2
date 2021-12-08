@@ -30,7 +30,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
     Sampler* sampler, int level, bool specular) {
-    if (level == _maxDepth) return glm::vec3(0.0f);
+    if (level == _maxDepth) return glm::vec3(0.5f);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
     if (scene->Intersect(ray, &info)) {
