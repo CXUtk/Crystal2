@@ -14,6 +14,10 @@ public:
     void Preprocess() override;
     std::shared_ptr<Sampler> Clone(int seed) const override;
 
+    void GenerateNextFrame(int sampleNum) override;
+    float GetFrame1D(glm::ivec2 coord) override;
+    glm::vec2 GetFrame2D(glm::ivec2 coord) override;
+
 private:
     std::mt19937 mt;
     float* _sequence1D[2];

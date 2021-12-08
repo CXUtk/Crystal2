@@ -16,7 +16,7 @@ public:
         Sampler* sampler) = 0;
 
 private:
-    std::shared_ptr<Sampler> _samplers[16];
+    std::shared_ptr<Sampler> _sampler;
     std::unique_ptr<FixedThreadPool> _threadPool;
     int _numThreads;
 };

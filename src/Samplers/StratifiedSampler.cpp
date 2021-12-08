@@ -52,3 +52,16 @@ std::shared_ptr<Sampler> StratifiedSampler::Clone(int seed) const {
     return std::make_shared<StratifiedSampler>(_samplesPerPixel, seed);
 }
 
+void StratifiedSampler::GenerateNextFrame(int sampleNum)
+{}
+
+float StratifiedSampler::GetFrame1D(glm::ivec2 coord)
+{
+    return 0.0f;
+}
+
+glm::vec2 StratifiedSampler::GetFrame2D(glm::ivec2 coord)
+{
+    return glm::vec2();
+}
+
