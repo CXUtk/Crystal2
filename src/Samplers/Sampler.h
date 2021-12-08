@@ -13,6 +13,12 @@ inline float uniformRandomFloat(std::mt19937& mt)
 	return std::min(OneMinusEpsilon, mt() * 2.3283064365386963e-10f);
 }
 
+inline float uniformRandomFloat()
+{
+	return std::min(OneMinusEpsilon, (float)rand() / RAND_MAX );
+}
+
+
 class Sampler
 {
 public:
