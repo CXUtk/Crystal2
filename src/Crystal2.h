@@ -32,6 +32,8 @@ class TriangleMesh;
 
 using JsonNode_CPTR = const SJson::SJsonNode*;
 using Texture_RGB = Texture<glm::vec3>;
+using Texture_Float = Texture<float>;
+using Texture_Int = Texture<int>;
 
 /**
  * @brief Converts a shared pointer to a pointer of the object

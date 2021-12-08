@@ -8,6 +8,7 @@
 #include "MirrorMaterial.h"
 #include "Glass.h"
 #include "MicrofacetMaterial.h"
+#include "PhongMaterial.h"
 
 std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Scene* scene) {
     auto type = pNode->GetMember("Type")->GetString();
@@ -28,6 +29,12 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
         auto color = loader::parse_vec3(pNode->GetMember("Color"));
         auto roughness = pNode->GetMember("Roughness")->GetFloat();
         return std::make_shared<MicrofacetMaterial>(color, 1.5f, roughness);
+    }
+    else if (type == "Phong")
+    {
+        auto kdTexture = pNode->GetMember("Kd")->GetString();
+        auto k = pNode->GetMember("K")->GetInt();
+        return std::make_shared<crystal::PhongMaterial>(scene->GetTextureByName(kdTexture), k);
     }
     else {
         throw std::exception("Invalid material name");
