@@ -21,7 +21,7 @@
   },
   "Scene": {
     "Skybox": {
-      "Path": "Resources/Images/Skyboxes/Sky"
+      "Path": "Resources/Images/Skyboxes/Grace"
     },
     "Textures": {
       "Test": {
@@ -29,6 +29,25 @@
       }
     },
     "Objects": [
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "Sphere",
+          "Position": [
+            0,
+            4,
+            3
+          ],
+          "Radius": 1.0
+        },
+        "Material": {
+          "Type": "Mirror",
+          "Kd": "Test",
+          "Color": [ 1, 1, 1 ],
+          "K": 1024
+        },
+        "AreaLight": null
+      },
       {
         "Type": "Geometry",
         "Shape": {

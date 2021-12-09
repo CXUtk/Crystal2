@@ -57,8 +57,10 @@ $ ./Crystal2 <config file> <scene file>
 - [ ] Area Light  
 
 8. Volume Scattering
+- [ ] Volume Aware Tracer
 
-9. 
+9. Scene Loader
+- [x] JSON Loader
 
 ## Demos
 ### Physically Based Rendering
