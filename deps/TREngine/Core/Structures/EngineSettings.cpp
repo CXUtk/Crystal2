@@ -7,7 +7,7 @@
 TRV2_NAMESPACE_BEGIN
 EngineSettings::EngineSettings()
 {
-	_windowWidth = 800, _windowHeight = 600;
+	_windowWidth = 700, _windowHeight = 600;
 
 	_fpsCap = 60;
 

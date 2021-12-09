@@ -41,10 +41,10 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Mirror",
+          "Type": "Phong",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "K": 1024
+          "K": 32767
         },
         "AreaLight": null
       },
@@ -63,7 +63,7 @@
           "Type": "Phong",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "K": 1024
+          "K": 256
         },
         "AreaLight": null
       },
@@ -82,7 +82,7 @@
           "Type": "Phong",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "K": 256
+          "K": 64
         },
         "AreaLight": null
       },
@@ -101,7 +101,7 @@
           "Type": "Phong",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "K": 64
+          "K": 32
         },
         "AreaLight": null
       },
@@ -139,7 +139,7 @@
           "Type": "Phong",
           "Kd": "Test",
           "Color": [ 1, 1, 1 ],
-          "K": 4
+          "K": 8
         },
         "AreaLight": null
       },

@@ -3,8 +3,8 @@
 project ("Crystal2")
 
 add_executable (Crystal2 "Crystal2.cpp"
-"src/Loaders/SceneLoader.h" 
-"src/Loaders/SceneLoader.cpp" 
+ 
+ 
 "src/CrystalEngine.cpp" 
 "src/CrystalEngine.h"
 "src/Core/RayTracer.h"
@@ -95,7 +95,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Textures/Texel.cpp"
 "src/Textures/CubemapTexture.h" 
 "src/Textures/CubemapTexture.cpp"
- "src/BSDFs/PhongReflection.h" "src/BSDFs/PhongReflection.cpp" "src/Materials/PhongMaterial.h" "src/Materials/PhongMaterial.cpp")
+ "src/BSDFs/BlinnPhongReflection.h" "src/BSDFs/BlinnPhongReflection.cpp" "src/Materials/PhongMaterial.h" "src/Materials/PhongMaterial.cpp")
 
 # 编译选项
 set_target_properties("Crystal2" PROPERTIES

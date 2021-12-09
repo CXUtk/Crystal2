@@ -34,15 +34,15 @@ void SamplerIntegrator::Render(Scene* scene,
     {
         _sampler->GenerateNextFrame(k);
         int split = h % _numThreads;
-        int block = h / _numThreads;
+        int blockLower = h / _numThreads;
+        int blockUpper = (h + _numThreads - 1) / _numThreads;
 
         std::atomic<bool> canExit = false;
+        size_t current = 0;
         for (int mod = 0; mod < _numThreads; mod++)
         {
-            size_t current = 0;
-            size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (block + 1) : (block));
-
-            _threadPool->RunAsync([&, mod]() {
+            size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (blockUpper) : (blockLower));
+            _threadPool->RunAsync([&, mod, totalSamplesThisTask, w, h]() {
                 for (int i = mod; i < h; i += _numThreads)
                 {
                     for (int j = 0; j < w; j++)
@@ -64,7 +64,7 @@ void SamplerIntegrator::Render(Scene* scene,
                 fprintf(stdout, "Tracing: %.2lf%%\n", (double)totalSampled / total * 100.0);
                 mutexLock.unlock();
 
-                if (current == w * h)
+                if (current == (size_t)w * h)
                 {
                     canExit = true;
                 }

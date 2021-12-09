@@ -1,7 +1,8 @@
 #include "PhongMaterial.h"
 #include <Core/SurfaceInteraction.h>
 #include <Textures/Texture.h>
-#include <BSDFs/PhongReflection.h>
+#include <BSDFs/BlinnPhongReflection.h>
+#include <BSDFs/Lambertain.h>
 
 crystal::PhongMaterial::PhongMaterial(const Texture_RGB* Kd, int K) : _Kd(Kd), _K(K)
 {}
@@ -9,7 +10,7 @@ crystal::PhongMaterial::PhongMaterial(const Texture_RGB* Kd, int K) : _Kd(Kd), _
 crystal::PhongMaterial::~PhongMaterial()
 {}
 
-std::shared_ptr<BSDF> crystal::PhongMaterial::ComputeScatteringFunctions(const SurfaceInteraction & isec, 
+std::shared_ptr<BSDF> crystal::PhongMaterial::ComputeScatteringFunctions(const SurfaceInteraction& isec,
     bool fromCamera) const
 {
     auto N = glm::normalize(isec.GetNormal());
@@ -20,6 +21,7 @@ std::shared_ptr<BSDF> crystal::PhongMaterial::ComputeScatteringFunctions(const S
 
     auto color = _Kd->Evaluate(isec);
 
-    bsdf->AddBxDF(std::make_shared<PhongReflection>(color, glm::mat3(T, N, B), _K));
+    //bsdf->AddBxDF(std::make_shared<Lambertain>(glm::vec3(0.5), glm::mat3(T, N, B)));
+    bsdf->AddBxDF(std::make_shared<BlinnPhongReflection>(color, glm::mat3(T, N, B), _K));
     return bsdf;
 }

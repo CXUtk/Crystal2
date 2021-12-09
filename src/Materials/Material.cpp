@@ -9,12 +9,24 @@
 #include "Glass.h"
 #include "MicrofacetMaterial.h"
 #include "PhongMaterial.h"
+#include <Textures/Texture.h>
+
+static std::vector<std::shared_ptr<PureTexture>> textures;
 
 std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Scene* scene) {
     auto type = pNode->GetMember("Type")->GetString();
     if (type == "Diffuse") {
-        auto kdTexture = pNode->GetMember("Kd")->GetString();
-        return std::make_shared<DiffuseMaterial>(scene->GetTextureByName(kdTexture));
+        if (pNode->HasMember("Kd"))
+        {
+            auto kdTexture = pNode->GetMember("Kd")->GetString();
+            return std::make_shared<DiffuseMaterial>(scene->GetTextureByName(kdTexture));
+        }
+        else
+        {
+            auto color = loader::parse_vec3(pNode->GetMember("Color"));
+            textures.push_back(std::make_shared<PureTexture>(color));
+            return std::make_shared<DiffuseMaterial>(ptr(textures.back()));
+        }
     }
     else if (type == "Mirror") {
         auto color = loader::parse_vec3(pNode->GetMember("Color"));
@@ -32,9 +44,18 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
     }
     else if (type == "Phong")
     {
-        auto kdTexture = pNode->GetMember("Kd")->GetString();
         auto k = pNode->GetMember("K")->GetInt();
-        return std::make_shared<crystal::PhongMaterial>(scene->GetTextureByName(kdTexture), k);
+        if (pNode->HasMember("Kd"))
+        {
+            auto kdTexture = pNode->GetMember("Kd")->GetString();
+            return std::make_shared<crystal::PhongMaterial>(scene->GetTextureByName(kdTexture), k);
+        }
+        else
+        {
+            auto color = loader::parse_vec3(pNode->GetMember("Color"));
+            textures.push_back(std::make_shared<PureTexture>(color));
+            return std::make_shared<crystal::PhongMaterial>(ptr(textures.back()), k);
+        }
     }
     else {
         throw std::exception("Invalid material name");
