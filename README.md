@@ -64,5 +64,6 @@ $ ./Crystal2 <config file> <scene file>
 
 ## Demos
 ### Physically Based Rendering
-![](Images/PBR1.png)
-![](Images/PBR2.png)
+![](Resources/Images/PBR1.png)
+![](Resources/Images/PBR2.png)
+![](Resources/Images/result.png)
