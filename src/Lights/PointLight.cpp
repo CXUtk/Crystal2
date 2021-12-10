@@ -1,18 +1,28 @@
 ﻿#include "PointLight.h"
+#include <Core/SurfaceInteraction.h>
+#include <Core/Utils.h>
 #include <glm/gtx/transform.hpp>
 
-PointLight::PointLight(glm::vec3 pos, glm::vec3 power) : _pos(pos), _power(power) {
+crystal::PointLight::PointLight(glm::vec3 pos, glm::vec3 power) 
+    : Light(crystal::LightFlags::DeltaPosition, 1), _pos(pos), _flux(power) {
 }
 
-PointLight::~PointLight() {
+crystal::PointLight::~PointLight() {
 }
 
-glm::vec3 PointLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const {
+glm::vec3 crystal::PointLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const {
     *endpoint = _pos;
     *pdf = 1.0f;
-    return Flux() / (4 * glm::pi<float>());
+    auto hitPos = hit.GetHitPos();
+    auto distSqr = sqr(*endpoint - hitPos);
+    return Flux() / (4 * glm::pi<float>()) / distSqr;
 }
 
-glm::vec3 PointLight::Flux() const {
-    return _power;
+glm::vec3 crystal::PointLight::Sample_Le(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
+{
+    return glm::vec3(0);
+}
+
+glm::vec3 crystal::PointLight::Flux() const {
+    return _flux;
 }

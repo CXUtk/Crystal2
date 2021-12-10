@@ -37,7 +37,10 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         glm::vec3 N = info.GetNormal();
         glm::vec3 hitPos = info.GetHitPos();
         auto prototype = info.GetHitPrototype();
-        auto bsdf = prototype->ComputeScatteringFunctions(info, ray.dir);
+
+        BSDF bsdf(&info);
+        info.SetBSDF(&bsdf);
+        prototype->ComputeScatteringFunctions(info, ray.dir);
 
         // 如果是自发光物体就把发光项加上
         if (info.GetHitPrototype()->GetAreaLight() != nullptr && specular) {
@@ -55,7 +58,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
             auto LVec = endpoint - hitPos;
             auto LDir = glm::normalize(LVec);
             if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - EPS)) {
-                Lres += bsdf->DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
+                Lres += bsdf.DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
             }
         }
 
@@ -63,7 +66,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         glm::vec3 wIn;
         float pdf;
         BxDFType type;
-        auto brdf = bsdf->SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
+        auto brdf = bsdf.SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
         if (std::abs(pdf) < EPS || brdf == glm::vec3(0)) return Lres;
         bool specular = (type & BxDF_SPECULAR) != 0;
 

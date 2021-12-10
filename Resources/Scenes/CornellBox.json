@@ -19,15 +19,56 @@
     ]
   },
   "Scene": {
-    "Skybox": {
-      "Path": "Resources/Images/Skyboxes/Grace"
-    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
       }
     },
     "Objects": [
+      {
+        "Type": "Light",
+        "LightType": "Point",
+        "Flux": [
+          100,
+          100,
+          100
+        ],
+        "Position": [
+          0,
+          4.0,
+          0
+        ]
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Floor.obj",
+          "Translation": [
+            0,
+            4.95,
+            0
+          ],
+          "Scale": [
+            0,
+            1,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Diffuse",
+          "Color": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
       {
         "Type": "Geometry",
         "Shape": {
@@ -56,8 +97,7 @@
             1.0,
             1.0
           ]
-        },
-        "AreaLight": null
+        }
       },
       {
         "Type": "Geometry",
@@ -87,8 +127,7 @@
             1.0,
             1.0
           ]
-        },
-        "AreaLight": null
+        }
       },
       {
         "Type": "Geometry",
@@ -118,8 +157,7 @@
             1.0,
             0.1
           ]
-        },
-        "AreaLight": null
+        }
       },
       {
         "Type": "Geometry",
@@ -149,8 +187,7 @@
             0.1,
             0.1
           ]
-        },
-        "AreaLight": null
+        }
       },
       {
         "Type": "Geometry",
@@ -180,8 +217,29 @@
             1.0,
             1.0
           ]
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "Sphere",
+          "Position": [
+            -1.5,
+            -0.4,
+            -2
+          ],
+          "Radius": 0.6
         },
-        "AreaLight": null
+        "Material": {
+          "Type": "Glass",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": 0.3,
+          "IOR": 1.5
+        }
       },
       {
         "Type": "Geometry",
@@ -203,8 +261,7 @@
           ],
           "Roughness": 0.3,
           "IOR": 1.5
-        },
-        "AreaLight": null
+        }
       },
       {
         "Type": "Geometry",
@@ -218,7 +275,7 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Phong",
+          "Type": "Mirror",
           "Color": [
             1.0,
             1.0,
@@ -226,8 +283,7 @@
           ],
           "Roughness": 0.2,
           "K": 100
-        },
-        "AreaLight": null
+        }
       }
     ]
   }

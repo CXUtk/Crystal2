@@ -59,6 +59,12 @@ inline glm::mat3 adjoint(const glm::mat3& m, float invDet) {
     return Inverse;
 }
 
+template<glm::length_t L, typename T, enum glm::qualifier Q>
+inline T sqr(const glm::vec<L, T, Q>& v)
+{
+    return glm::dot(v, v);
+}
+
 inline glm::vec3 GetUnitVectorUsingCos(float cosTheta, float phi)
 {
     float r = std::sqrt(1 - cosTheta * cosTheta);

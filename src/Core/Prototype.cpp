@@ -6,22 +6,26 @@
 std::unique_ptr<Prototype> Prototype::CreatePrototype(JsonNode_CPTR pNode,
     const Scene* scene)
 {
-    std::shared_ptr<AreaLight> light = nullptr;
+    std::shared_ptr<crystal::AreaLight> areaLight = nullptr;
     std::shared_ptr<Material> material = nullptr;
     if (pNode->HasMember("Material"))
     {
         material = Material::CreateMaterial(pNode->GetMember("Material"), scene);
     }
-    return std::make_unique<Prototype>(nullptr, material);
+    if (pNode->HasMember("AreaLight"))
+    {
+
+    }
+    return std::make_unique<Prototype>(areaLight, material);
 }
 
-Prototype::Prototype(const std::shared_ptr<AreaLight>& light, const std::shared_ptr<Material>& material)
+Prototype::Prototype(const std::shared_ptr<crystal::AreaLight>& light, const std::shared_ptr<Material>& material)
     : _light(light), _material(material) {
 }
 
 Prototype::~Prototype() {
 }
 
-std::shared_ptr<BSDF> Prototype::ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera) const {
-    return _material->ComputeScatteringFunctions(isec, fromCamera);
+void Prototype::ComputeScatteringFunctions(SurfaceInteraction& isec, glm::vec3 dir, bool fromCamera) const {
+    _material->ComputeScatteringFunctions(isec, fromCamera);
 }

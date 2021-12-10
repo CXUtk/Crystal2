@@ -16,7 +16,7 @@ enum BxDFType {
 class BSDF {
 public:
     BSDF(const SurfaceInteraction* si);
-    int NumBxDFs() const { return _bxdfs.size(); }
+    int NumBxDFs() const { return _numBxDF; }
     void AddBxDF(const std::shared_ptr<BxDF>& bxdf);
     BxDFType Flags() const;
 
@@ -24,8 +24,10 @@ public:
     glm::vec3 SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType flags, BxDFType* sampledType) const;
 
 private:
-    const SurfaceInteraction* _hit;
-    std::vector<std::shared_ptr<BxDF>> _bxdfs;
+    static constexpr int MAX_BxDFs = 8;
+    const SurfaceInteraction* _hit = nullptr;
+    std::shared_ptr<BxDF> _bxdfs[MAX_BxDFs];
+    int _numBxDF = 0;
 };
 
 class BxDF {

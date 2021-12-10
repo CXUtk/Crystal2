@@ -7,6 +7,10 @@ namespace SJson {
     class SJsonNode;
 }
 
+namespace crystal
+{
+    class Light;
+}
 
 // Core
 class Engine;
@@ -18,7 +22,6 @@ class Integrator;
 class Camera;
 class Shape;
 class Accelerator;
-class Light;
 class Material;
 class BSDF;
 class BxDF;

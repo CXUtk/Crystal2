@@ -78,7 +78,7 @@ void Scene::loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& 
 void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo)
 {
 	assert(pObjectsNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
-	pObjectsNode->ForEachElements([&](const SJson::SJsonNode* node) {
+	pObjectsNode->ForEachElements([&](JsonNode_CPTR node) {
 		assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 		auto typeString = node->GetMember("Type")->GetString();
 		if (typeString == "Geometry")
@@ -92,7 +92,8 @@ void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& co
 		}
 		else if (typeString == "Light")
 		{
-
+			auto light = crystal::Light::CreateLight(node, this);
+			_lights.push_back(light);
 		}
 		else
 		{

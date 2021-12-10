@@ -7,7 +7,7 @@ public:
     DiffuseMaterial(const Texture_RGB* Kd);
     ~DiffuseMaterial() override;
 
-    std::shared_ptr<BSDF> ComputeScatteringFunctions(const SurfaceInteraction& isec, bool fromCamera = true) const override;
+    void ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera = true) const override;
 
 private:
     const Texture_RGB* _Kd;

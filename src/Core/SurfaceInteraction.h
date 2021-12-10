@@ -8,8 +8,8 @@ public:
     SurfaceInteraction();
 
     Ray SpawnRay(glm::vec3 dir, bool pass = false) const;
-    void SetHitInfo(float t, glm::vec3 hitPos, glm::vec3 hitDir, glm::vec3 normal, glm::vec2 uv,
-        bool frontFace, const Shape* shape, glm::vec3 dpdu, glm::vec3 dpdv);
+    void SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal, 
+        glm::vec2 uv, bool frontFace, const Shape* shape, const glm::vec3& dpdu, const glm::vec3& dpdv);
 
     bool IsFrontFace() const { return _frontFace; }
     float GetDistance() const { return _distance; }
@@ -22,13 +22,16 @@ public:
     glm::vec3 GetDpDv() const { return _dpdv; }
     glm::vec3 GetHitDir() const { return _dir; }
 
+    void SetBSDF(BSDF* bsdf) { _bsdf = bsdf; }
+    BSDF* GetBSDF() const { return _bsdf; }
 
 private:
-    const Shape* _hitShape;
+    const Shape* _hitShape = nullptr;
+    BSDF* _bsdf = nullptr;
 
-    float _distance;
-    bool _frontFace;
-    glm::vec3 _hitPos, _normal, _dir;
-    glm::vec2 _uv;
-    glm::vec3 _dpdu, _dpdv;
+    float _distance = std::numeric_limits<float>::infinity();
+    bool _frontFace = false;
+    glm::vec3 _hitPos{}, _normal{}, _dir{};
+    glm::vec2 _uv{};
+    glm::vec3 _dpdu{}, _dpdv{};
 };

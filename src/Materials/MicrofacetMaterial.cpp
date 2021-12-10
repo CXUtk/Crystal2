@@ -14,7 +14,7 @@ MicrofacetMaterial::~MicrofacetMaterial() {
 
 }
 
-std::shared_ptr<BSDF> MicrofacetMaterial::ComputeScatteringFunctions(const SurfaceInteraction& isec, bool fromCamera) const {
+void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const {
     auto TNB = glm::mat3(isec.GetDpDu(), isec.GetNormal(), isec.GetDpDv());
     float etaA = 1.f, etaB = _ior;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
@@ -23,6 +23,5 @@ std::shared_ptr<BSDF> MicrofacetMaterial::ComputeScatteringFunctions(const Surfa
 
     auto bsdf = std::make_shared<BSDF>(&isec);
     //bsdf->AddBxDF(std::make_shared<Lambertain>(_color, TNB));
-    bsdf->AddBxDF(std::make_shared<MicrofacetReflection>(_color, TNB, etaA, etaB, F, d));
-    return bsdf;
+    isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, TNB, etaA, etaB, F, d));
 }

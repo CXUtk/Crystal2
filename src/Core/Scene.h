@@ -16,9 +16,9 @@ public:
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
     bool IntersectTest(const Ray& ray, float tMin, float tMax) const;
-    std::vector<const Light*> GetLights() const
+    std::vector<const crystal::Light*> GetLights() const
     {
-        std::vector<const Light*> lights;
+        std::vector<const crystal::Light*> lights;
         for (auto& light : _lights)
         {
             lights.push_back(cptr(light));
@@ -43,7 +43,7 @@ private:
     std::vector<std::shared_ptr<Shape>> _sceneObjects;
     std::unique_ptr<Accelerator> _accelStructure;
     std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
-    std::vector<std::unique_ptr<Light>> _lights;
+    std::vector<std::shared_ptr<crystal::Light>> _lights;
     std::vector<std::unique_ptr<Prototype>> _prototypes;
 
     std::map<std::string, std::shared_ptr<Texture_RGB>> _defaultTextures;

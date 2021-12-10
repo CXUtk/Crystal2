@@ -9,7 +9,7 @@ namespace crystal
         PhongMaterial(const Texture_RGB* Kd, int K);
         ~PhongMaterial() override;
 
-        std::shared_ptr<BSDF> ComputeScatteringFunctions(const SurfaceInteraction& isec, 
+        void ComputeScatteringFunctions(SurfaceInteraction& isec, 
             bool fromCamera = true) const override;
 
     private:
