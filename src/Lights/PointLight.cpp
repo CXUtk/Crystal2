@@ -18,10 +18,6 @@ glm::vec3 crystal::PointLight::Sample_Li(const SurfaceInteraction& hit, const gl
     return Flux() / (4 * glm::pi<float>()) / distSqr;
 }
 
-glm::vec3 crystal::PointLight::Sample_Le(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
-{
-    return glm::vec3(0);
-}
 
 glm::vec3 crystal::PointLight::Flux() const {
     return _flux;

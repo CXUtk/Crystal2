@@ -54,7 +54,7 @@ $ ./Crystal2 <config file> <scene file>
 
 7. Lights
 - [x] Point Light
-- [ ] Area Light  
+- [x] Area Light  
 
 8. Volume Scattering
 - [ ] Volume Aware Tracer

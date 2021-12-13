@@ -1,5 +1,6 @@
 ﻿#include "SurfaceInteraction.h"
 #include <Shapes/Shape.h>
+#include <Core/Prototype.h>
 
 static constexpr float EPS = 1e-4f;
 
@@ -29,5 +30,11 @@ void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm:
 const Prototype* SurfaceInteraction::GetHitPrototype() const
 {
     return _hitShape->GetPrototype();
+}
+
+Spectrum SurfaceInteraction::Le(const Vector3f& w) const
+{
+    auto areaLight = GetHitPrototype()->GetAreaLight();
+    return areaLight ? areaLight->EvalEmission(*this, w) : Spectrum(0.f);
 }
 

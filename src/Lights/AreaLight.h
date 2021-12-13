@@ -7,6 +7,6 @@ namespace crystal
     {
     public:
         AreaLight(int numSamples) : Light(LightFlags::Area, numSamples) {}
-        virtual glm::vec3 EvalEmission(const SurfaceInteraction& isec) const = 0;
+        virtual Spectrum EvalEmission(const SurfaceInteraction& isec, const Vector3f& w) const = 0;
     };
 }

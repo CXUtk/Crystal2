@@ -77,3 +77,8 @@ bool Sphere::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     float t2 = (-b - discrim) / (2 * a);
     return (t1 >= tMin && t1 <= tMax) || (t2 >= tMin && t2 <= tMax);
 }
+
+float Sphere::SurfaceArea() const
+{
+    return 4 * glm::pi<float>() * _radius * _radius;
+}

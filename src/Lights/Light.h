@@ -30,9 +30,8 @@ namespace crystal
         // Get the radiance value from the light to the object surface hit point
         virtual glm::vec3 Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const = 0;
 
-        virtual glm::vec3 Sample_Le(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const = 0;
-
         int GetNumSamples() const { return _numSamples; }
+
         LightFlags GetFlags() const { return _flags; }
 
     private:

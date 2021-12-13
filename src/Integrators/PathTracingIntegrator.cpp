@@ -45,7 +45,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         // 如果是自发光物体就把发光项加上
         if (info.GetHitPrototype()->GetAreaLight() != nullptr && specular) {
             auto areaLight = info.GetHitPrototype()->GetAreaLight();
-            Lres += areaLight->EvalEmission(info);
+            Lres += areaLight->EvalEmission(info, -ray.dir);
         }
 
         // 计算从光源采样的radiance

@@ -78,6 +78,11 @@ bool Triangle::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     return res.z >= tMin && res.z <= tMax;
 }
 
+float Triangle::SurfaceArea() const
+{
+    return glm::length(glm::cross(_vertices[1]->Position - _vertices[0]->Position, _vertices[2]->Position - _vertices[0]->Position)) / 2.f;
+}
+
 
 
 void Triangle::calculateDerivative() {

@@ -11,6 +11,7 @@ public:
     BoundingBox GetBoundingBox() const override;
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const override;
     bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
+    float SurfaceArea() const override;
 
 private:
     const VertexData* _vertices[3];

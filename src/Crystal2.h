@@ -33,10 +33,22 @@ class CubemapTexture;
 // Shapes
 class TriangleMesh;
 
+
+// Type defines
+using Point2f = glm::vec2;
+using Point3f = glm::vec3;
+using Vector2f = glm::vec2;
+using Vector3f = glm::vec3;
+using Normal3f = glm::vec3;
+using Spectrum = glm::vec3;
+using Color3f = glm::vec3;
+
 using JsonNode_CPTR = const SJson::SJsonNode*;
-using Texture_RGB = Texture<glm::vec3>;
+using Texture_RGB = Texture<Color3f>;
 using Texture_Float = Texture<float>;
 using Texture_Int = Texture<int>;
+
+
 
 /**
  * @brief Converts a shared pointer to a pointer of the object

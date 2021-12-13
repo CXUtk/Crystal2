@@ -25,6 +25,13 @@ public:
     void SetBSDF(BSDF* bsdf) { _bsdf = bsdf; }
     BSDF* GetBSDF() const { return _bsdf; }
 
+    /**
+     * @brief Get the emitted radiance at a surface point intersected by a ray
+     * @param w Direction of the ray in world coord
+     * @return 
+    */
+    Spectrum Le(const Vector3f& w) const;
+
 private:
     const Shape* _hitShape = nullptr;
     BSDF* _bsdf = nullptr;
