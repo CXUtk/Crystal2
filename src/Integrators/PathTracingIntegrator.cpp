@@ -53,6 +53,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 
         // 计算从光源采样的radiance
         for (auto& light : scene->GetLights()) {
+            if (light->Flux() == glm::vec3(0)) continue;
             glm::vec3 endpoint;
             float pdf;
             auto Li = light->Sample_Li(info, sampler->Get2D(1), &endpoint, &pdf);
@@ -60,7 +61,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 
             auto LVec = endpoint - hitPos;
             auto LDir = glm::normalize(LVec);
-            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - EPS)) {
+            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - 0.01)) {
                 Lres += bsdf.DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
             }
         }

@@ -88,7 +88,7 @@ Point3f Triangle::sampleTriangle(glm::vec2 sample, float& pdf) const
     auto v = sample.y * std::sqrt(sample.x);
 
     pdf = 1.f / SurfaceArea();
-    return u * (_vertices[1]->Position - _vertices[0]->Position) + v * (_vertices[2]->Position - _vertices[0]->Position);
+    return _vertices[0]->Position + u * (_vertices[1]->Position - _vertices[0]->Position) + v * (_vertices[2]->Position - _vertices[0]->Position);
 }
 
 Point3f Triangle::SamplePos(const Vector2f& sample, float& pdf) const

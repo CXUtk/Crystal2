@@ -26,6 +26,12 @@
     },
     "Objects": [
       {
+        "Type": "Light",
+        "LightType": "Point",
+        "Position": [ 0, 4.9, 0 ],
+        "Flux": [0, 0, 0]
+      },
+      {
         "Type": "Geometry",
         "Shape": {
           "Type": "TriangleMesh",
@@ -36,7 +42,7 @@
             0
           ],
           "Scale": [
-            1,
+            -1,
             1,
             1
           ],
@@ -48,7 +54,7 @@
         },
         "AreaLight": {
           "Type": "Diffused",
-          "Flux": [ 100, 100, 100 ],
+          "Flux": [ 30, 30, 30 ],
           "Samples": 1
         }
       },
