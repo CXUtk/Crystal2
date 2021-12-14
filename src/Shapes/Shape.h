@@ -6,16 +6,12 @@
 
 class Shape {
 public:
-    Shape(const Prototype* prototype) : _prototype(prototype) {}
     virtual ~Shape() = 0 {}
     virtual BoundingBox GetBoundingBox() const = 0;
-    virtual bool Intersect(const Ray& ray, SurfaceInteraction* info) const = 0;
+    virtual bool Intersect(const Ray& ray, SurfaceInteraction* isec) const = 0;
     virtual bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const = 0;
     virtual float SurfaceArea() const = 0;
-
-    const Prototype* GetPrototype() const { return _prototype; }
-
+    virtual Point3f SamplePos(const Vector2f& sample, float& pdf) const = 0;
 
 private:
-    const Prototype* _prototype;
 };

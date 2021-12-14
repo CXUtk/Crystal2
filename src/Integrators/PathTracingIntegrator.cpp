@@ -3,12 +3,13 @@
 #include <Core/Scene.h>
 #include <Core/Geometry.h>
 #include <Core/SurfaceInteraction.h>
-#include <Core/Prototype.h>
+#include <Core/Entities.h>
 
 #include <glm/gtx/transform.hpp>
 #include <BSDFs/BSDF.h>
 #include <Samplers/DefaultSampler.h>
 #include <Lights/Light.h>
+#include <Lights/AreaLight.h>
 
 #include <Textures/CubemapTexture.h>
 
@@ -36,17 +37,19 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
     if (scene->Intersect(ray, &info)) {
         glm::vec3 N = info.GetNormal();
         glm::vec3 hitPos = info.GetHitPos();
-        auto prototype = info.GetHitPrototype();
+        auto entity = info.GetHitEntity();
+
+        // 如果是自发光物体就把发光项加上
+        if (entity->GetAreaLight() != nullptr && specular) {
+            auto areaLight = entity->GetAreaLight();
+            Lres += areaLight->EvalEmission(info, -ray.dir);
+        }
+
+        if (!entity->GetMaterial()) return Lres;
 
         BSDF bsdf(&info);
         info.SetBSDF(&bsdf);
-        prototype->ComputeScatteringFunctions(info, ray.dir);
-
-        // 如果是自发光物体就把发光项加上
-        if (info.GetHitPrototype()->GetAreaLight() != nullptr && specular) {
-            auto areaLight = info.GetHitPrototype()->GetAreaLight();
-            Lres += areaLight->EvalEmission(info, -ray.dir);
-        }
+        entity->ComputeScatteringFunctions(info);
 
         // 计算从光源采样的radiance
         for (auto& light : scene->GetLights()) {

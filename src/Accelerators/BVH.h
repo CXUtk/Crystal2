@@ -1,24 +1,23 @@
 ﻿#pragma once
 #include "Accelerator.h"
 
-namespace accel
-{
-	struct BVHNode;
-};
+
+struct BVHNode;
+
 
 class BVH : public Accelerator
 {
 public:
 	BVH();
 	~BVH() override;
-	void Build(const std::vector<const Shape*>& objects) override;
+	void Build(const std::vector<const crystal::Entity*>& objects) override;
 	bool Intersect(const Ray& ray, SurfaceInteraction* info, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 	bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 
 private:
-	accel::BVHNode* _nodes;
+	BVHNode* _nodes;
 	int _tot, _root;
-	std::vector<const Shape*> _shapes;
+	std::vector<const crystal::Entity*> _entities;
 
 	void _build(int& p, int l, int r);
 	int newNode(int startOffset, int cnt, int splitAxis, const BoundingBox& box);

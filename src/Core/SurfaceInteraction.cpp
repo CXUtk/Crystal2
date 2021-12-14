@@ -1,6 +1,7 @@
 ﻿#include "SurfaceInteraction.h"
 #include <Shapes/Shape.h>
 #include <Core/Prototype.h>
+#include <Core/Entities.h>
 
 static constexpr float EPS = 1e-4f;
 
@@ -14,11 +15,10 @@ Ray SurfaceInteraction::SpawnRay(glm::vec3 dir, bool pass) const {
 }
 
 void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal,
-        glm::vec2 uv, bool frontFace, const Shape* shape, const glm::vec3& dpdu, const glm::vec3& dpdv)
+        glm::vec2 uv, bool frontFace, const glm::vec3& dpdu, const glm::vec3& dpdv)
 {
     _hitPos = hitPos;
     _distance = t;
-    _hitShape = shape;
     _dir = hitDir;
     _uv = uv;
     _normal = normal;
@@ -27,14 +27,9 @@ void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm:
     _dpdv = dpdv;
 }
 
-const Prototype* SurfaceInteraction::GetHitPrototype() const
-{
-    return _hitShape->GetPrototype();
-}
-
 Spectrum SurfaceInteraction::Le(const Vector3f& w) const
 {
-    auto areaLight = GetHitPrototype()->GetAreaLight();
+    auto areaLight = _hitEntity->GetAreaLight();
     return areaLight ? areaLight->EvalEmission(*this, w) : Spectrum(0.f);
 }
 

@@ -5,13 +5,14 @@ struct VertexData;
 
 class Triangle : public Shape {
 public:
-    Triangle(const Prototype* prototype, const VertexData* a, const VertexData* b, const VertexData* c);
+    Triangle(const VertexData* a, const VertexData* b, const VertexData* c);
     ~Triangle() override;
 
     BoundingBox GetBoundingBox() const override;
-    bool Intersect(const Ray& ray, SurfaceInteraction* info) const override;
+    bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
     bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
+    Point3f SamplePos(const Vector2f& sample, float& pdf) const override;
 
 private:
     const VertexData* _vertices[3];
@@ -19,4 +20,5 @@ private:
     BoundingBox _bbox;
 
     void calculateDerivative();
+    Point3f sampleTriangle(glm::vec2 sample, float& pdf) const;
 };

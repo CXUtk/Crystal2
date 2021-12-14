@@ -9,12 +9,14 @@ public:
 
     Ray SpawnRay(glm::vec3 dir, bool pass = false) const;
     void SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal, 
-        glm::vec2 uv, bool frontFace, const Shape* shape, const glm::vec3& dpdu, const glm::vec3& dpdv);
+        glm::vec2 uv, bool frontFace, const glm::vec3& dpdu, const glm::vec3& dpdv);
 
     bool IsFrontFace() const { return _frontFace; }
     float GetDistance() const { return _distance; }
-    const Shape* GetHitShape() const { return _hitShape; }
-    const Prototype* GetHitPrototype() const;
+
+    void SetHitEntity(const crystal::Entity* entity) { _hitEntity = entity; }
+    const crystal::Entity* GetHitEntity() const { return _hitEntity; }
+
     glm::vec3 GetHitPos() const { return _hitPos; }
     glm::vec3 GetNormal() const { return _normal; }
     glm::vec2 GetUV() const { return _uv; }
@@ -33,7 +35,7 @@ public:
     Spectrum Le(const Vector3f& w) const;
 
 private:
-    const Shape* _hitShape = nullptr;
+    const crystal::Entity* _hitEntity = nullptr;
     BSDF* _bsdf = nullptr;
 
     float _distance = std::numeric_limits<float>::infinity();

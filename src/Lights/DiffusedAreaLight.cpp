@@ -10,12 +10,21 @@ crystal::DiffusedAreaLight::DiffusedAreaLight(const Shape* shape, Spectrum flux,
 
 Spectrum crystal::DiffusedAreaLight::EvalEmission(const SurfaceInteraction& isec, const Vector3f& w) const
 {
-	return _flux * normalizeFactor();
+	if (glm::dot(w, isec.GetNormal()) > 0)
+	{
+		return _flux * normalizeFactor();
+	}
+	else
+	{
+		return Spectrum(0.f);
+	}
 }
 
-glm::vec3 crystal::DiffusedAreaLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
+Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
 {
-	return glm::vec3();
+	*endpoint = _shape->SamplePos(sample, *pdf);
+	auto dir = glm::normalize(hit.GetHitPos() - *endpoint);
+	return EvalEmission(hit, dir);
 }
 
 float crystal::DiffusedAreaLight::normalizeFactor() const

@@ -60,5 +60,4 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
     else {
         throw std::exception("Invalid material name");
     }
-    return std::shared_ptr<Material>();
 }

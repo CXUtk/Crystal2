@@ -5,12 +5,14 @@
 #include <Loaders/JsonLoader.h>
 #include <Accelerators/Accelerator.h>
 #include <Core/Utils.h>
-#include <Core/Prototype.h>
+#include <Core/Entities.h>
 
 #include <Shapes/Triangle.h>
 #include <Shapes/Sphere.h>
 #include <Shapes/TriangleMesh.h>
 #include <Lights/PointLight.h>
+#include <Lights/AreaLight.h>
+#include <Materials/Material.h>
 
 #include <Textures/Texture.h>
 #include <Textures/Texel.h>
@@ -78,21 +80,27 @@ void Scene::loadTextures(JsonNode_CPTR pTexturesNode, const config::ConfigInfo& 
 void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo)
 {
 	assert(pObjectsNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
-	pObjectsNode->ForEachElements([&](JsonNode_CPTR node) {
-		assert(node->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
-		auto typeString = node->GetMember("Type")->GetString();
+	pObjectsNode->ForEachElements([&](JsonNode_CPTR pNode) {
+		assert(pNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
+		auto typeString = pNode->GetMember("Type")->GetString();
 		if (typeString == "Geometry")
 		{
-			auto prototype = Prototype::CreatePrototype(node, this);
-			for (auto& s : parse_shape(ptr(prototype), node->GetMember("Shape")))
+			auto shape = createShape(pNode->GetMember("Shape"));
+			const Material* material = nullptr;
+			const crystal::AreaLight* areaLight = nullptr;
+			if (pNode->HasMember("Material"))
 			{
-				_sceneObjects.push_back(s);
+				material = createMaterial(pNode->GetMember("Material"));
 			}
-			_prototypes.push_back(std::move(prototype));
+			if (pNode->HasMember("AreaLight"))
+			{
+				areaLight = createAreaLight(pNode->GetMember("AreaLight"), shape);
+			}
+			createGeometricEntity(shape, material, areaLight);
 		}
 		else if (typeString == "Light")
 		{
-			auto light = crystal::Light::CreateLight(node, this);
+			auto light = crystal::Light::CreateLight(pNode, this);
 			_lights.push_back(light);
 		}
 		else
@@ -119,25 +127,43 @@ void Scene::loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& conf
 		paths[3], paths[4], paths[5]);
 }
 
-std::vector<std::shared_ptr<Shape>> Scene::parse_shape(Prototype* prototype,
-	JsonNode_CPTR pShapeNode)
+const Shape* Scene::createShape(JsonNode_CPTR pShapeNode)
 {
 	assert(pShapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 	auto shapeType = pShapeNode->GetMember("Type")->GetString();
-	std::vector<std::shared_ptr<Shape>> shapes;
 	if (shapeType == "Sphere")
 	{
-		shapes.push_back(Sphere::CreateSphere(prototype, pShapeNode));
+		auto sphere = Sphere::CreateSphere(pShapeNode);
+		_shapes.push_back(sphere);
+		return cptr(sphere);
 	}
 	else if (shapeType == "TriangleMesh")
 	{
-		auto mesh = TriangleMesh::CreateTriangleMesh(prototype, pShapeNode);
-		this->_triangleMeshes.push_back(mesh);
-		shapes = mesh->GetTriangles();
+		auto mesh = TriangleMesh::CreateTriangleMesh(pShapeNode);
+		_shapes.push_back(mesh);
+		return cptr(mesh);
 	}
 	else
 	{
 		throw std::invalid_argument("Invalid Shape Type!");
 	}
-	return shapes;
+}
+
+const Material* Scene::createMaterial(JsonNode_CPTR pNode)
+{
+	auto material = Material::CreateMaterial(pNode, this);
+	_materials.push_back(material);
+	return cptr(material);
+}
+
+const crystal::AreaLight* Scene::createAreaLight(JsonNode_CPTR pNode, const Shape* shape)
+{
+	auto areaLight = crystal::Light::CreateAreaLight(pNode, shape, this);
+	_lights.push_back(areaLight);
+	return cptr(areaLight);
+}
+
+void Scene::createGeometricEntity(const Shape* shape, const Material* material, const crystal::AreaLight* areaLight)
+{
+	_sceneObjects.push_back(std::make_shared<crystal::GeometricEntity>(shape, material, areaLight));
 }

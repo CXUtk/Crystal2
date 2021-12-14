@@ -1,13 +1,14 @@
 ﻿#pragma once
+#include <Crystal2.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
 constexpr float EPS = 1e-6;
 
 struct VertexData {
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
+    Point3f Position;
+    Normal3f Normal;
+    Vector2f TexCoords;
 };
 
 // Solve for Ax = b
@@ -99,3 +100,18 @@ inline glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float& pdf) {
     pdf = 1.0f / glm::two_pi<float>();
     return glm::vec3(x, y, z);
 }
+
+
+inline glm::vec3 NextUnitSphere(glm::vec2 sample, float& pdf)
+{
+    auto y = 2.f * sample.x - 1.f;
+    auto phi = sample.y * glm::two_pi<float>();
+
+    float r = std::sqrt(1 - y * y);
+    auto x = r * std::cos(phi);
+    auto z = r * std::sin(phi);
+
+    pdf = .5f / glm::two_pi<float>();
+    return glm::vec3(x, y, z);
+}
+

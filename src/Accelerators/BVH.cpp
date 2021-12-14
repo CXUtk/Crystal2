@@ -1,28 +1,28 @@
 ﻿#include "BVH.h"
 #include <Core/Geometry.h>
-#include <Shapes/Shape.h>
+#include <Core/Entities.h>
 #include <algorithm>
+#include <Core/SurfaceInteraction.h>
 
-namespace accel
+
+enum class SplitMethod
 {
-	enum class SplitMethod
-	{
-		EQUAL_COUNTS,
-		SAH
-	};
-	constexpr int MAX_OBJ_IN_NODE = 4;
-	constexpr SplitMethod SLILT_METHOD = SplitMethod::EQUAL_COUNTS;
-	constexpr float TRAV_COST = 0.5f;
-	constexpr float INTERSECT_COST = 1.0f;
-
-	struct BVHNode
-	{
-		BoundingBox bound;
-		int shapeStartOffset, count;
-		int ch[2];
-		int splitAxis;
-	};
+	EQUAL_COUNTS,
+	SAH
 };
+constexpr int MAX_OBJ_IN_NODE = 4;
+constexpr SplitMethod SLILT_METHOD = SplitMethod::EQUAL_COUNTS;
+constexpr float TRAV_COST = 0.5f;
+constexpr float INTERSECT_COST = 1.0f;
+
+struct BVHNode
+{
+	BoundingBox bound;
+	int entitiesStartOffset, count;
+	int ch[2];
+	int splitAxis;
+};
+
 
 BVH::BVH() : _nodes(nullptr), _tot(0), _root(0)
 {}
@@ -33,13 +33,13 @@ BVH::~BVH()
 		delete[] _nodes;
 }
 
-void BVH::Build(const std::vector<const Shape*>& objects)
+void BVH::Build(const std::vector<const crystal::Entity*>& objects)
 {
 	for (auto& obj : objects)
 	{
-		_shapes.push_back(obj);
+		_entities.push_back(obj);
 	}
-	_nodes = new accel::BVHNode[objects.size() * 5];
+	_nodes = new BVHNode[objects.size() * 5];
 	_tot = 0;
 	_build(_root, 0, objects.size() - 1);
 }
@@ -58,20 +58,20 @@ bool BVH::IntersectTest(const Ray& ray, float tMin, float tMax) const
 
 void BVH::_build(int& p, int l, int r)
 {
-	if (r - l + 1 <= accel::MAX_OBJ_IN_NODE)
+	if (r - l + 1 <= MAX_OBJ_IN_NODE)
 	{
 		createLeaf(p, l, r);
 		return;
 	}
 	// 获取[l, r]的碰撞箱
-	BoundingBox box = _shapes[l]->GetBoundingBox();
+	BoundingBox box = _entities[l]->GetBoundingBox();
 	for (int i = l + 1; i <= r; i++)
 	{
-		box = box.Union(_shapes[i]->GetBoundingBox());
+		box = box.Union(_entities[i]->GetBoundingBox());
 	}
 
 	int splitAxis, splitPos;
-	if constexpr (accel::SLILT_METHOD == accel::SplitMethod::EQUAL_COUNTS)
+	if constexpr (SLILT_METHOD == SplitMethod::EQUAL_COUNTS)
 	{
 		splitAxis = splitByEqualCount(l, r, box, splitPos);
 	}
@@ -93,7 +93,7 @@ void BVH::_build(int& p, int l, int r)
 int BVH::newNode(int offset, int cnt, int splitAxis, const BoundingBox& box)
 {
 	_tot++;
-	_nodes[_tot].shapeStartOffset = offset;
+	_nodes[_tot].entitiesStartOffset = offset;
 	_nodes[_tot].bound = box;
 	_nodes[_tot].count = cnt;
 	_nodes[_tot].splitAxis = splitAxis;
@@ -111,7 +111,7 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 		for (int i = 0; i < objCnt; i++)
 		{
 			float t1 = tMin, t2 = std::min(tMax, info->GetDistance());
-			const Shape* const* startP = &_shapes[_nodes[p].shapeStartOffset];
+			const crystal::Entity* const* startP = &_entities[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
 			if (!startP[i]->Intersect(ray, &isec)) continue;
 			auto dis = isec.GetDistance();
@@ -121,6 +121,7 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 			}
 			if (dis < info->GetDistance())
 			{
+				isec.SetHitEntity(startP[i]);
 				*info = std::move(isec);
 			}
 		}
@@ -155,7 +156,7 @@ bool BVH::_intersectP(int p, const Ray& ray, float tMin, float tMax) const
 		for (int i = 0; i < objCnt; i++)
 		{
 			float t1 = tMin, t2 = tMax;
-			const Shape* const* startP = &_shapes[_nodes[p].shapeStartOffset];
+			const crystal::Entity* const* startP = &_entities[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
 			if (!startP[i]->Intersect(ray, &isec)) continue;
 			return true;
@@ -181,11 +182,11 @@ int BVH::splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos)
 {
 	int splitAxis = box.MaxExtent();
 	// 按照某种方式分割物体，并且排序
-	auto cmp = [splitAxis](const Shape* a, const Shape* b) {
+	auto cmp = [splitAxis](const crystal::Entity* a, const crystal::Entity* b) {
 		return a->GetBoundingBox().GetCenter()[splitAxis] < b->GetBoundingBox().GetCenter()[splitAxis];
 	};
 	splitPos = l + (r - l) / 2;
-	std::nth_element(_shapes.begin() + l, _shapes.begin() + splitPos, _shapes.begin() + r + 1, cmp);
+	std::nth_element(_entities.begin() + l, _entities.begin() + splitPos, _entities.begin() + r + 1, cmp);
 	return splitAxis;
 }
 
@@ -193,16 +194,16 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 {
 	splitAxis = 0, splitPos = l;
 	float minCost = std::numeric_limits<float>::infinity();
-	const Shape* const* startP = &_shapes[l];
+	const crystal::Entity* const* startP = &_entities[l];
 	float totArea = box.SurfaceArea();
 	float* sufArea = new float[r - l + 2];
 	for (int i = 0; i < 3; i++)
 	{
 		// 按照中点坐标排序
-		auto cmp = [i](const Shape* a, const Shape* b) {
+		auto cmp = [i](const crystal::Entity* a, const crystal::Entity* b) {
 			return a->GetBoundingBox().GetCenter()[i] < b->GetBoundingBox().GetCenter()[i];
 		};
-		std::sort(_shapes.begin() + l, _shapes.begin() + r + 1, cmp);
+		std::sort(_entities.begin() + l, _entities.begin() + r + 1, cmp);
 
 		BoundingBox currentBox;
 		// 求后缀包围盒表面积和
@@ -218,7 +219,7 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 		currentBox = startP[0]->GetBoundingBox();
 		for (int j = 1; j <= r - l; j++)
 		{
-			float cost = accel::TRAV_COST + (currentBox.SurfaceArea() * j + sufArea[j] * (r - l + 1 - j)) / totArea * accel::INTERSECT_COST;
+			float cost = TRAV_COST + (currentBox.SurfaceArea() * j + sufArea[j] * (r - l + 1 - j)) / totArea * INTERSECT_COST;
 			if (cost < minCost)
 			{
 				splitAxis = i;
@@ -232,16 +233,16 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 		}
 	}
 	delete[] sufArea;
-	return minCost < (r - l + 1)* accel::INTERSECT_COST;
+	return minCost < (r - l + 1) * INTERSECT_COST;
 }
 
 void BVH::createLeaf(int& p, int l, int r)
 {
-	BoundingBox box = _shapes[l]->GetBoundingBox();
+	BoundingBox box = _entities[l]->GetBoundingBox();
 	// 获取[l, r]的碰撞箱，并且把纯指针放进shapes里
 	for (int i = l + 1; i <= r; i++)
 	{
-		box = box.Union(_shapes[i]->GetBoundingBox());
+		box = box.Union(_entities[i]->GetBoundingBox());
 	}
 	p = newNode(l, r - l + 1, -1, box);
 

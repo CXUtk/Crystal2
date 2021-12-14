@@ -9,7 +9,9 @@ namespace SJson {
 
 namespace crystal
 {
+    class Entity;
     class Light;
+    class AreaLight;
 }
 
 // Core
@@ -25,7 +27,7 @@ class Accelerator;
 class Material;
 class BSDF;
 class BxDF;
-class Prototype;
+
 template<typename T>
 class Texture;
 class CubemapTexture;

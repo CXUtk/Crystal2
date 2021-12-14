@@ -1,4 +1,6 @@
 ﻿#include "Brute.h"
+#include <Core/SurfaceInteraction.h>
+#include <Core/Entities.h>
 
 Brute::Brute() {
 }
@@ -6,11 +8,11 @@ Brute::Brute() {
 Brute::~Brute() {
 }
 
-void Brute::Build(const std::vector<const Shape*>& objects)
+void Brute::Build(const std::vector<const crystal::Entity*>& objects)
 {
     for (auto ptr : objects)
     {
-        _objects.push_back(ptr);
+        _entities.push_back(ptr);
     }
 }
 
@@ -18,7 +20,7 @@ bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec, float tMin, floa
 {
     bool hit = false;
     int cnt = 0;
-    for (auto& obj : _objects)
+    for (auto& obj : _entities)
     {
         SurfaceInteraction tmp;
         if (obj->Intersect(ray, &tmp))
@@ -26,6 +28,7 @@ bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec, float tMin, floa
             auto dist = tmp.GetDistance();
             if (dist < isec->GetDistance())
             {
+                tmp.SetHitEntity(obj);
                 *isec = std::move(tmp);
             }
             hit = true;
@@ -37,9 +40,8 @@ bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec, float tMin, floa
 
 bool Brute::IntersectTest(const Ray& ray, float tMin, float tMax) const
 {
-    for (auto& obj : _objects)
+    for (auto& obj : _entities)
     {
-        SurfaceInteraction tmp;
         if (obj->IntersectTest(ray, tMin, tMax))
         {
             return true;

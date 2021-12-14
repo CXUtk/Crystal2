@@ -13,9 +13,7 @@ crystal::PointLight::~PointLight() {
 glm::vec3 crystal::PointLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const {
     *endpoint = _pos;
     *pdf = 1.0f;
-    auto hitPos = hit.GetHitPos();
-    auto distSqr = sqr(*endpoint - hitPos);
-    return Flux() / (4 * glm::pi<float>()) / distSqr;
+    return Flux() / (4 * glm::pi<float>());
 }
 
 

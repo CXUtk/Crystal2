@@ -2,16 +2,17 @@
 #include <glm/gtx/transform.hpp>
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
+#include <Core/Utils.h>
 
-std::shared_ptr<Shape> Sphere::CreateSphere(Prototype* prototype, JsonNode_CPTR pShapeNode) {
+std::shared_ptr<Shape> Sphere::CreateSphere(JsonNode_CPTR pShapeNode) {
     auto pos = loader::parse_vec3(pShapeNode->GetMember("Position"));
     auto r = pShapeNode->GetMember("Radius")->GetFloat();
-    return std::make_shared<Sphere>(prototype, pos, r, glm::vec3(0));
+    return std::make_shared<Sphere>(pos, r, glm::vec3(0));
 }
 
-Sphere::Sphere(Prototype* prototype, glm::vec3 pos, 
-    float radius, glm::vec3 rotation) : Shape(prototype),
-        _pos(pos), _radius(radius), _rot(rotation) {
+Sphere::Sphere(glm::vec3 pos, 
+    float radius, glm::vec3 rotation) 
+    : _pos(pos), _radius(radius), _rot(rotation) {
 
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
     rotMatrix = glm::rotate(rotMatrix, rotation.x, glm::vec3(1, 0, 0));
@@ -57,9 +58,7 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     auto realHitPos = _local2World * dummyHitPos + _pos;
     auto dpdu = glm::normalize(_local2World * glm::vec3(-N.z, 0, N.x));
     N = _local2World * N;
-    info->SetHitInfo(t, realHitPos, ray.dir, N, glm::vec2(theta, phi), front_face, this,
-        dpdu,
-        glm::cross(N, dpdu));
+    info->SetHitInfo(t, realHitPos, ray.dir, N, glm::vec2(theta, phi), front_face, dpdu, glm::cross(N, dpdu));
     return true;
 }
 
@@ -81,4 +80,11 @@ bool Sphere::IntersectTest(const Ray& ray, float tMin, float tMax) const {
 float Sphere::SurfaceArea() const
 {
     return 4 * glm::pi<float>() * _radius * _radius;
+}
+
+Point3f Sphere::SamplePos(const Vector2f& sample, float& pdf) const
+{
+    pdf = 1.f / SurfaceArea();
+    float p;
+    return NextUnitSphere(sample, p) * _radius;
 }

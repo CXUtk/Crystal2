@@ -16,6 +16,7 @@ namespace crystal
     {
     public:
         static std::shared_ptr<Light> CreateLight(JsonNode_CPTR pNode, const Scene* scene);
+        static std::shared_ptr<AreaLight> CreateAreaLight(JsonNode_CPTR pNode, const Shape* shape, const Scene* scene);
 
 
         Light(LightFlags flags, int numSamples) : _flags(flags), _numSamples(numSamples) { }
@@ -23,12 +24,12 @@ namespace crystal
 
         virtual ~Light() = 0 {}
 
-        virtual glm::vec3 Flux() const = 0;
+        virtual Spectrum Flux() const = 0;
 
         virtual void Preprocess(const Scene* scene) const { }
 
         // Get the radiance value from the light to the object surface hit point
-        virtual glm::vec3 Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const = 0;
+        virtual Spectrum Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const = 0;
 
         int GetNumSamples() const { return _numSamples; }
 

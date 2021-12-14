@@ -3,7 +3,7 @@
   "Height": 600,
   "SamplesPerPixel": 256,
   "Threads": 8,
-  "Acceleration": "BVH",
+  "Acceleration": "Brute",
   "Integrator": {
     "Type": "PathTracer",
     "Depth": 16,

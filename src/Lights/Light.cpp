@@ -1,6 +1,9 @@
 #include "Light.h"
+#include "AreaLight.h"
+#include "DiffusedAreaLight.h"
 #include <SJson/SJson.h>
 #include <Loaders/JsonLoader.h>
+
 
 #include "PointLight.h"
 
@@ -17,7 +20,21 @@ namespace crystal
 		}
 		else
 		{
-			throw std::exception("Invalid material name");
+			throw std::exception("Invalid light name");
+		}
+	}
+	std::shared_ptr<AreaLight> Light::CreateAreaLight(JsonNode_CPTR pNode, const Shape* shape, const Scene* scene)
+	{
+		auto lightType = pNode->GetMember("Type")->GetString();
+		if (lightType == "Diffused")
+		{
+			auto flux = loader::parse_vec3(pNode->GetMember("Flux"));
+			auto numSamples = pNode->GetMember("Samples")->GetInt();
+			return std::make_shared<DiffusedAreaLight>(shape, flux, numSamples);
+		}
+		else
+		{
+			throw std::exception("Invalid area light name");
 		}
 	}
 }
