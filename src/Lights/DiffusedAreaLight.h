@@ -8,7 +8,7 @@ namespace crystal
     public:
         DiffusedAreaLight(const Shape* shape, Spectrum flux, int numSamples);
 
-        Spectrum EvalEmission(const SurfaceInteraction& isec, const Vector3f& w) const override;
+        Spectrum EvalEmission(const SurfaceInfo& surface, const Vector3f& w) const override;
         Spectrum Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const override;
         Spectrum Flux() const override { return _flux; }
 

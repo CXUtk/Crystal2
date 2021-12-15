@@ -90,15 +90,14 @@ bool TriangleMesh::IntersectTest(const Ray& ray, float tMin, float tMax) const
     return false;
 }
 
-Point3f TriangleMesh::SamplePos(const Vector2f& sample, float& pdf) const
+SurfaceInfo TriangleMesh::SampleSurface(const Vector2f& sample, float& pdf) const
 {
     int size = _triangles.size();
     pdf = 1.f / size;
 
     int v = (int)(std::min(0.9999999404f, sample.x) * size);
     float pdf2;
-    auto pos = _triangles[v]->SamplePos(sample, pdf2);
+    auto surface = _triangles[v]->SampleSurface(sample, pdf2);
     pdf *= pdf2;
-    return pos;
+    return surface;
 }
-

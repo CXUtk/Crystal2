@@ -27,9 +27,13 @@ void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm:
     _dpdv = dpdv;
 }
 
+SurfaceInfo SurfaceInteraction::GetSurfaceInfo() const
+{
+    return SurfaceInfo(_hitPos, _frontFace ? _normal : -_normal);
+}
+
 Spectrum SurfaceInteraction::Le(const Vector3f& w) const
 {
     auto areaLight = _hitEntity->GetAreaLight();
-    return areaLight ? areaLight->EvalEmission(*this, w) : Spectrum(0.f);
+    return areaLight ? areaLight->EvalEmission(GetSurfaceInfo(), w) : Spectrum(0.f);
 }
-

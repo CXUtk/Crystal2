@@ -26,23 +26,20 @@ void SamplerIntegrator::Render(Scene* scene,
     int SPP = _sampler->GetSamplesPerPixel();
 
     size_t total = (size_t)w * h * SPP;
-
     size_t totalSampled = 0;
 
     std::mutex mutexLock;
-    for (int k = 0; k < SPP; k++)
-    {
-        _sampler->GenerateNextFrame(k);
-        int split = h % _numThreads;
-        int blockLower = h / _numThreads;
-        int blockUpper = (h + _numThreads - 1) / _numThreads;
 
-        std::atomic<bool> canExit = false;
-        size_t current = 0;
-        for (int mod = 0; mod < _numThreads; mod++)
-        {
+    int split = h % _numThreads;
+    int blockLower = h / _numThreads;
+    int blockUpper = (h + _numThreads - 1) / _numThreads;
+    std::atomic<bool> canExit = false;
+    for (int mod = 0; mod < _numThreads; mod++)
+    {
+        _threadPool->RunAsync([&, mod, w, h]() {
             size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (blockUpper) : (blockLower));
-            _threadPool->RunAsync([&, mod, totalSamplesThisTask, w, h]() {
+            for (int k = 0; k < SPP; k++)
+            {
                 for (int i = mod; i < h; i += _numThreads)
                 {
                     for (int j = 0; j < w; j++)
@@ -57,21 +54,17 @@ void SamplerIntegrator::Render(Scene* scene,
                         frameBuffer->AddSample(j, i, color);
                     }
                 }
-
                 mutexLock.lock();
-                current += totalSamplesThisTask;
                 totalSampled += totalSamplesThisTask;
                 fprintf(stdout, "Tracing: %.2lf%%\n", (double)totalSampled / total * 100.0);
                 mutexLock.unlock();
-
-                if (current == (size_t)w * h)
-                {
-                    canExit = true;
-                }
+            }
+            if (totalSampled == total)
+            {
+                canExit = true;
+            }
             });
-        }
-        // Wait until finish a frame
-        while (!canExit) {}
     }
-
+    // Wait until finish a frame
+    while (!canExit) {}
 }

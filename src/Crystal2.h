@@ -17,7 +17,10 @@ namespace crystal
 // Core
 class Engine;
 class RayTracer;
+
 class SurfaceInteraction;
+class SurfaceInfo;
+
 class FrameBuffer;
 class Scene;
 class Integrator;

@@ -38,12 +38,12 @@
           "ObjFile": "Resources/Models/Floor.obj",
           "Translation": [
             0,
-            4.95,
+            4.99,
             0
           ],
           "Scale": [
-            -1,
             1,
+            -1,
             1
           ],
           "Rotation": [
@@ -242,7 +242,7 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Diffuse",
           "Color": [
             1.0,
             1.0,

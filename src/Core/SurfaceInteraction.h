@@ -3,6 +3,17 @@
 #include <Core/Geometry.h>
 #include <memory>
 
+class SurfaceInfo
+{
+public:
+    SurfaceInfo(const Point3f& position, const Normal3f& normal) :_pos(position), _normal(normal) {}
+    Point3f GetPosition() const { return _pos; }
+    Normal3f GetNormal() const { return _normal; }
+private:
+    Point3f _pos;
+    Normal3f _normal;
+};
+
 class SurfaceInteraction {
 public:
     SurfaceInteraction();
@@ -23,6 +34,8 @@ public:
     glm::vec3 GetDpDu() const { return _dpdu; }
     glm::vec3 GetDpDv() const { return _dpdv; }
     glm::vec3 GetHitDir() const { return _dir; }
+
+    SurfaceInfo GetSurfaceInfo() const;
 
     void SetBSDF(BSDF* bsdf) { _bsdf = bsdf; }
     BSDF* GetBSDF() const { return _bsdf; }

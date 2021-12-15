@@ -41,8 +41,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 
         // 如果是自发光物体就把发光项加上
         if (entity->GetAreaLight() != nullptr && specular) {
-            auto areaLight = entity->GetAreaLight();
-            Lres += areaLight->EvalEmission(info, -ray.dir);
+            Lres += info.Le(-ray.dir);
         }
 
         if (!entity->GetMaterial()) return Lres;
