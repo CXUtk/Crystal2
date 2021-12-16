@@ -82,10 +82,10 @@ float Sphere::SurfaceArea() const
     return 4 * glm::pi<float>() * _radius * _radius;
 }
 
-SurfaceInfo Sphere::SampleSurface(const Vector2f& sample, float& pdf) const
+SurfaceInfo Sphere::SampleSurface(const Vector2f& sample, float* pdf) const
 {
-    pdf = 1.f / SurfaceArea();
+    *pdf = 1.f / SurfaceArea();
     float p;
-    auto dir = NextUnitSphere(sample, p);
+    auto dir = NextUnitSphere(sample, &p);
     return SurfaceInfo(_pos + dir * _radius, dir);
 }

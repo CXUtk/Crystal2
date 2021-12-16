@@ -1,8 +1,8 @@
 ﻿#include "SpecularFresnel.h"
 
-SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, glm::vec3 N, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel)
+SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel)
 	: BxDF(BxDFType(BxDFType::BxDF_TRANSMISSION | BxDFType::BxDF_REFLECTION | BxDFType::BxDF_SPECULAR)),
-	_R(R), _T(T), _N(N), _etaA(etaA), _etaB(etaB), _fresnel(fresnel)
+	_R(R), _T(T), _etaA(etaA), _etaB(etaB), _fresnel(fresnel)
 {
 
 }
@@ -32,18 +32,18 @@ static bool refract(glm::vec3 wo, glm::vec3 N, float etaA, float etaB, glm::vec3
 
 glm::vec3 SpecularFresnel::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
-	auto fr = _fresnel->Eval(_etaA, _etaB, glm::dot(_N, wOut));
+	auto fr = _fresnel->Eval(_etaA, _etaB, glm::dot(Vector3f(0, 1.f, 0), wOut));
 	*pdf = 1.0f;
 	if (sample[0] < fr.r)
 	{
 		*sampledType = BxDFType(BxDFType::BxDF_REFLECTION | BxDFType::BxDF_SPECULAR);
-		*wIn = glm::reflect(-wOut, _N);
+		*wIn = glm::reflect(-wOut, Vector3f(0, 1.f, 0));
 		return _R;
 	}
 	else
 	{
 		*sampledType = BxDFType(BxDFType::BxDF_REFLECTION | BxDFType::BxDF_SPECULAR);
-		refract(wOut, _N, _etaA, _etaB, *wIn);
+		refract(wOut, Vector3f(0, 1.f, 0), _etaA, _etaB, *wIn);
 		return _T;
 	}
 }

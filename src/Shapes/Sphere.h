@@ -15,7 +15,7 @@ public:
     bool IntersectTest(const Ray& ray, float tMin = 0,
         float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
-    SurfaceInfo SampleSurface(const Vector2f& sample, float& pdf) const override;
+    SurfaceInfo SampleSurface(const Vector2f& sample, float* pdf) const override;
 
 private:
     glm::vec3 _pos, _rot;

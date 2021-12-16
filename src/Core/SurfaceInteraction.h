@@ -33,7 +33,9 @@ public:
     glm::vec2 GetUV() const { return _uv; }
     glm::vec3 GetDpDu() const { return _dpdu; }
     glm::vec3 GetDpDv() const { return _dpdv; }
-    glm::vec3 GetHitDir() const { return _dir; }
+    glm::vec3 GetHitDir() const { return _hitDir; }
+    glm::mat3 GetTNB() const;
+    glm::mat3 GetInverseTNB() const;
 
     SurfaceInfo GetSurfaceInfo() const;
 
@@ -53,7 +55,8 @@ private:
 
     float _distance = std::numeric_limits<float>::infinity();
     bool _frontFace = false;
-    glm::vec3 _hitPos{}, _normal{}, _dir{};
-    glm::vec2 _uv{};
-    glm::vec3 _dpdu{}, _dpdv{};
+    Point3f _hitPos{};
+    Vector3f _hitDir{}, _dpdu{}, _dpdv{};
+    Normal3f _normal{};
+    Vector2f _uv{};
 };

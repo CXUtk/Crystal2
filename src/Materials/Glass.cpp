@@ -12,7 +12,7 @@ Glass::~Glass() {
 }
 
 
-static float Fresnel(glm::vec3 N, glm::vec3 wo, glm::vec3 T, float etaA, float etaB) {
+static float fresnel(glm::vec3 N, glm::vec3 wo, glm::vec3 T, float etaA, float etaB) {
     auto cosI = glm::dot(N, wo);
     auto cosT = glm::dot(-N, T);
     float r1 = (etaB * cosI - etaA * cosT) / (etaB * cosI + etaA * cosT);
@@ -39,5 +39,5 @@ void Glass::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
     auto F = std::make_shared<FresnelDielectric>();
 
-    isec.GetBSDF()->AddBxDF(std::make_shared<SpecularFresnel>(_color, _color, N, etaA, etaB, F));
+    isec.GetBSDF()->AddBxDF(std::make_shared<SpecularFresnel>(_color, _color, etaA, etaB, F));
 }

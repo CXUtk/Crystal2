@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <Core/SurfaceInteraction.h>
 
-BSDF::BSDF(const SurfaceInteraction* si) : _hit(si) {
+BSDF::BSDF(const SurfaceInteraction* si) : _isec(si) {
 }
 
 void BSDF::AddBxDF(const std::shared_ptr<BxDF>& bxdf) {
@@ -20,12 +20,12 @@ BxDFType BSDF::Flags() const {
 
 glm::vec3 BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const {
     auto result = glm::vec3(0);
-    bool reflect = glm::dot(_hit->GetNormal(), wIn) * glm::dot(_hit->GetNormal(), wOut) > 0;
+    bool reflect = glm::dot(_isec->GetNormal(), wIn) * glm::dot(_isec->GetNormal(), wOut) > 0;
     glm::vec3 L(0);
     for (int i = 0; i < _numBxDF; i++) {
         auto& bxdf = _bxdfs[i];
         if ((reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION)) || (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION))) {
-            L += bxdf->DistributionFunction(wOut, wIn);
+            L += bxdf->DistributionFunction(_isec->GetInverseTNB() * wOut, _isec->GetInverseTNB() * wIn);
         }
     }
     return L;
@@ -33,6 +33,7 @@ glm::vec3 BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const {
 
 glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, 
     float* pdf, BxDFType flags, BxDFType* sampledType) const {
+    assert(_numBxDF < 10);
     int tot = 0;
     int idMap[10] = {0};
 
@@ -48,7 +49,11 @@ glm::vec3 BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wO
     std::shared_ptr<BxDF> bxdf = _bxdfs[idMap[v]];
 
     *sampledType = bxdf->GetType();
+
+    wOut = _isec->GetInverseTNB() * wOut;
     auto L = bxdf->SampleDirection(sample, wOut, wIn, pdf, sampledType);
+    *wIn = _isec->GetTNB() * (*wIn);
+
     *pdf /= tot;
     return L;
 }

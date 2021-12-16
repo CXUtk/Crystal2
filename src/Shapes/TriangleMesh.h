@@ -16,7 +16,7 @@ public:
     bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
     bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override { return _surfaceArea; }
-    SurfaceInfo SampleSurface(const Vector2f& sample, float& pdf) const override;
+    SurfaceInfo SampleSurface(const Vector2f& sample, float* pdf) const override;
 
 private:
     int _numVertices;

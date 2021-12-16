@@ -1,8 +1,8 @@
 ﻿#include "SpecularReflection.h"
 
 
-SpecularReflection::SpecularReflection(glm::vec3 color, glm::vec3 N, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel) :
-    BxDF(BxDFType(BxDFType::BxDF_SPECULAR | BxDFType::BxDF_REFLECTION)), _albedo(color), _normal(N), _etaA(etaA), _etaB(etaB),
+SpecularReflection::SpecularReflection(glm::vec3 color, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel) :
+    BxDF(BxDFType(BxDFType::BxDF_SPECULAR | BxDFType::BxDF_REFLECTION)), _albedo(color), _etaA(etaA), _etaB(etaB),
     _fresnel(fresnel) {
 }
 
@@ -15,7 +15,7 @@ glm::vec3 SpecularReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn
 
 glm::vec3 SpecularReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const {
     *sampledType = GetType();
-    *wIn = glm::reflect(-wOut, _normal);
+    *wIn = glm::reflect(-wOut, Vector3f(0, 1, 0));
     *pdf = 1.0f;
-    return _albedo * _fresnel->Eval(_etaA, _etaB, glm::dot(wOut, _normal));
+    return _albedo * _fresnel->Eval(_etaA, _etaB, wOut.y);
 }

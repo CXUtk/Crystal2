@@ -22,7 +22,7 @@ Spectrum crystal::DiffusedAreaLight::EvalEmission(const SurfaceInfo& surface, co
 
 Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
 {
-	auto surface = _shape->SampleSurface(sample, *pdf);
+	auto surface = _shape->SampleSurface(sample, pdf);
 	*endpoint = surface.GetPosition();
 	auto dir = glm::normalize(hit.GetHitPos() - *endpoint);
 	return EvalEmission(surface, dir);

@@ -12,7 +12,7 @@ public:
     bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
     bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
-    SurfaceInfo SampleSurface(const Vector2f& sample, float& pdf) const override;
+    SurfaceInfo SampleSurface(const Vector2f& sample, float* pdf) const override;
 
 private:
     const VertexData* _vertices[3];
@@ -20,5 +20,5 @@ private:
     BoundingBox _bbox;
 
     void calculateDerivative();
-    Vector3f sampleTriangle(glm::vec2 sample, float& pdf) const;
+    Vector3f sampleTriangle(glm::vec2 sample, float* pdf) const;
 };

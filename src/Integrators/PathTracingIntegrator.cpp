@@ -30,28 +30,35 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
-    Sampler* sampler, int level, bool specular) {
+    Sampler* sampler, int level, bool specular)
+{
     if (level == _maxDepth) return glm::vec3(0.0f);
     glm::vec3 Lres(0);
     SurfaceInteraction info;
-    if (scene->Intersect(ray, &info)) {
+    if (scene->Intersect(ray, &info))
+    {
         glm::vec3 N = info.GetNormal();
         glm::vec3 hitPos = info.GetHitPos();
         auto entity = info.GetHitEntity();
 
         // 如果是自发光物体就把发光项加上
-        if (entity->GetAreaLight() != nullptr && specular) {
+        if (entity->GetAreaLight() != nullptr && specular)
+        {
             Lres += info.Le(-ray.dir);
         }
 
-        if (!entity->GetMaterial()) return Lres;
+        if (!entity->GetMaterial())
+        {
+            return Lres;
+        }
 
         BSDF bsdf(&info);
         info.SetBSDF(&bsdf);
         entity->ComputeScatteringFunctions(info);
 
         // 计算从光源采样的radiance
-        for (auto& light : scene->GetLights()) {
+        for (auto& light : scene->GetLights())
+        {
             if (light->Flux() == glm::vec3(0)) continue;
             glm::vec3 endpoint;
             float pdf;
@@ -60,7 +67,8 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 
             auto LVec = endpoint - hitPos;
             auto LDir = glm::normalize(LVec);
-            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - 0.01)) {
+            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - 0.01))
+            {
                 Lres += bsdf.DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
             }
         }

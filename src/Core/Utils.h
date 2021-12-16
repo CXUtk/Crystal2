@@ -78,18 +78,18 @@ inline glm::vec3 GetUnitVector(float theta, float phi)
     return glm::vec3(r * std::cos(phi), 1.0f - r * r, -r * std::sin(phi));
 }
 
-inline glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float& pdf) {
+inline glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float* pdf) {
     auto r = std::sqrt(sample.x);
     auto phi = sample.y * glm::two_pi<float>();
 
     auto x = r * std::cos(phi);
     auto z = r * std::sin(phi);
     auto y = std::sqrt(1.0f - r * r);
-    pdf = y / glm::pi<float>();
+    *pdf = y / glm::pi<float>();
     return glm::vec3(x, y, z);
 }
 
-inline glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float& pdf) {
+inline glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float* pdf) {
     auto y = sample.x;
     auto phi = sample.y * glm::two_pi<float>();
 
@@ -97,12 +97,12 @@ inline glm::vec3 NextUnitHemiSphere(glm::vec2 sample, float& pdf) {
     auto x = r * std::cos(phi);
     auto z = r * std::sin(phi);
 
-    pdf = 1.0f / glm::two_pi<float>();
+    *pdf = 1.0f / glm::two_pi<float>();
     return glm::vec3(x, y, z);
 }
 
 
-inline glm::vec3 NextUnitSphere(glm::vec2 sample, float& pdf)
+inline glm::vec3 NextUnitSphere(glm::vec2 sample, float* pdf)
 {
     auto y = 2.f * sample.x - 1.f;
     auto phi = sample.y * glm::two_pi<float>();
@@ -111,7 +111,7 @@ inline glm::vec3 NextUnitSphere(glm::vec2 sample, float& pdf)
     auto x = r * std::cos(phi);
     auto z = r * std::sin(phi);
 
-    pdf = .5f / glm::two_pi<float>();
+    *pdf = .5f / glm::two_pi<float>();
     return glm::vec3(x, y, z);
 }
 

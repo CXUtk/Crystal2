@@ -242,14 +242,15 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Diffuse",
+          "Type": "Phong",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
           "Roughness": 0.3,
-          "IOR": 1.5
+          "IOR": 1.5,
+          "K": 100
         }
       },
       {

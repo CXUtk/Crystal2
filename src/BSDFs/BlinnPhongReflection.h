@@ -9,7 +9,7 @@ namespace crystal
     class BlinnPhongReflection : public BxDF
     {
     public:
-        BlinnPhongReflection(glm::vec3 color, const glm::mat3& TNB, int k);
+        BlinnPhongReflection(glm::vec3 color, int k);
         ~BlinnPhongReflection() override;
 
         glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
@@ -17,7 +17,6 @@ namespace crystal
 
     private:
         glm::vec3 _albedo;
-        glm::mat3 _TNB;
         int _k;
     };
 }

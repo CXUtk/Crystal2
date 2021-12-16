@@ -5,7 +5,7 @@
 
 class Lambertain : public BxDF {
 public:
-    Lambertain(glm::vec3 color, glm::mat3 TNB);
+    Lambertain(glm::vec3 color);
     ~Lambertain() override;
 
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
@@ -13,5 +13,4 @@ public:
 
 private:
     glm::vec3 _albedo;
-    glm::mat3 _TNB;
 };
