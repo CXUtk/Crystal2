@@ -20,8 +20,8 @@ public:
     void AddBxDF(const std::shared_ptr<BxDF>& bxdf);
     BxDFType Flags() const;
 
-    glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const;
-    glm::vec3 SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType flags, BxDFType* sampledType) const;
+    Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const;
+    Spectrum SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType flags, BxDFType* sampledType) const;
 
 private:
     static constexpr int MAX_BxDFs = 8;

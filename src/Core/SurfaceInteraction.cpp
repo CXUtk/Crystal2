@@ -29,7 +29,7 @@ void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm:
 
 glm::mat3 SurfaceInteraction::GetTNB() const
 {
-    return glm::mat3(_dpdu, _frontFace ? _normal : -_normal, _dpdv);
+    return glm::mat3(_dpdu, _normal, _dpdv);
 }
 
 glm::mat3 SurfaceInteraction::GetInverseTNB() const

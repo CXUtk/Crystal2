@@ -36,7 +36,7 @@ void SamplerIntegrator::Render(Scene* scene,
     std::atomic<bool> canExit = false;
     for (int mod = 0; mod < _numThreads; mod++)
     {
-        _threadPool->RunAsync([&, mod, w, h]() {
+        auto task = [&, mod, w, h]() {
             size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (blockUpper) : (blockLower));
             for (int k = 0; k < SPP; k++)
             {
@@ -63,7 +63,15 @@ void SamplerIntegrator::Render(Scene* scene,
             {
                 canExit = true;
             }
-            });
+        };
+        if (mod < _numThreads - 1)
+        {
+            _threadPool->RunAsync(task);
+        }
+        else
+        {
+            task();
+        }
     }
     // Wait until finish a frame
     while (!canExit) {}
