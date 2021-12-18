@@ -242,12 +242,13 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Phong",
+          "Type": "OrenNayar",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
+          "Sigma": 0.1,
           "Roughness": 0.3,
           "IOR": 1.5,
           "K": 100

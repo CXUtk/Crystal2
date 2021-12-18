@@ -10,8 +10,12 @@
 #include "MicrofacetMaterial.h"
 #include "PhongMaterial.h"
 #include <Textures/Texture.h>
+#include <queue>
 
-static std::vector<std::shared_ptr<PureTexture>> textures;
+using PureTexture_RGB = PureTexture<Color3f>;
+using PureTexture_Value = PureTexture<float>;
+static std::deque<PureTexture_RGB> textures_rgb;
+static std::deque<PureTexture_Value> textures_v;
 
 std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Scene* scene) {
     auto type = pNode->GetMember("Type")->GetString();
@@ -24,8 +28,8 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
         else
         {
             auto color = loader::parse_vec3(pNode->GetMember("Color"));
-            textures.push_back(std::make_shared<PureTexture>(color));
-            return std::make_shared<DiffuseMaterial>(ptr(textures.back()));
+            textures_rgb.push_back(PureTexture_RGB(color));
+            return std::make_shared<DiffuseMaterial>(&textures_rgb.back());
         }
     }
     else if (type == "Mirror") {
@@ -53,8 +57,26 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
         else
         {
             auto color = loader::parse_vec3(pNode->GetMember("Color"));
-            textures.push_back(std::make_shared<PureTexture>(color));
-            return std::make_shared<crystal::PhongMaterial>(ptr(textures.back()), k);
+            textures_rgb.push_back(PureTexture_RGB(color));
+            return std::make_shared<crystal::PhongMaterial>(&textures_rgb.back(), k);
+        }
+    }
+    else if (type == "OrenNayar")
+    {
+        if (pNode->HasMember("Kd"))
+        {
+            throw std::exception("Not implemented");
+            /*auto kdTexture = pNode->GetMember("Kd")->GetString();
+            auto sigmaTexture = pNode->GetMember("SigmaTex")->GetString();
+            return std::make_shared<OrenNayarMaterial>(scene->GetTextureByName(kdTexture), , k);*/
+        }
+        else
+        {
+            auto color = loader::parse_vec3(pNode->GetMember("Color"));
+            auto sigmaValue = pNode->GetMember("Sigma")->GetFloat();
+            textures_rgb.push_back(PureTexture_RGB(color));
+            textures_v.push_back(PureTexture_Value(sigmaValue));
+            return std::make_shared<OrenNayarMaterial>(&textures_rgb.back(), &textures_v.back());
         }
     }
     else {

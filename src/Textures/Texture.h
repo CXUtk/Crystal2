@@ -10,14 +10,14 @@ public:
 };
 
 
-
-class PureTexture : public Texture<glm::vec3>
+template <typename T>
+class PureTexture : public Texture<T>
 {
 public:
-	PureTexture(glm::vec3 color) : _color(color) {}
-	glm::vec3 Evaluate(const SurfaceInteraction&) const override { return _color; }
+	PureTexture(T value) : _value(value) {}
+	T Evaluate(const SurfaceInteraction&) const override { return _value; }
 	~PureTexture() override {}
 
 private:
-	glm::vec3 _color;
+	T _value;
 };
