@@ -7,7 +7,7 @@
 
 class MicrofacetReflection : public BxDF {
 public:
-    MicrofacetReflection(glm::vec3 color, const glm::mat3& TNB, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel,
+    MicrofacetReflection(glm::vec3 color, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel,
         const std::shared_ptr<MicrofacetDistribution>& distribution);
     ~MicrofacetReflection() override;
 
@@ -16,7 +16,6 @@ public:
 
 private:
     glm::vec3 _R;
-    glm::mat3 _TNB, _invTNB;
     float _etaA, _etaB;
     std::shared_ptr<Fresnel> _fresnel;
     std::shared_ptr<MicrofacetDistribution> _microDistribution;

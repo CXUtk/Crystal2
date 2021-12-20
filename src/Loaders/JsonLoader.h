@@ -16,4 +16,11 @@ namespace loader {
         auto z = pNode->ElementAt(2)->GetFloat();
         return glm::vec3(x, y, z);
     }
+    inline glm::vec2 parse_vec2(JsonNode_CPTR pNode)
+    {
+        assert(pNode->GetType() == SJson::SJsonNodeType::JSON_ARRAY);
+        auto x = pNode->ElementAt(0)->GetFloat();
+        auto y = pNode->ElementAt(1)->GetFloat();
+        return glm::vec2(x, y);
+    }
 }

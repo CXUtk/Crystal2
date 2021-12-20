@@ -67,5 +67,4 @@ private:
 	Vector2f _alpha;
 
 	float lambda(const Vector3f& wh) const;
-	float G1(const Vector3f& w) const;
 };

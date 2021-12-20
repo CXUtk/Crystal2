@@ -167,7 +167,7 @@ float BeckmannDistribution::G(const Vector3f& wo, const Vector3f& wi) const
 
 Vector3f BeckmannDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
 {
-	return
+	return Vector3f(0.f);
 }
 
 float BeckmannDistribution::Pdf(const Vector3f& wi, const Vector3f& wh) const
@@ -186,9 +186,4 @@ float BeckmannDistribution::lambda(const Vector3f& wh) const
 	float a = 1.f / (tanTheta * alpha);
 	if (a >= 1.6f) return 0.f;
 	return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
-}
-
-float BeckmannDistribution::G1(const Vector3f& w) const
-{
-	return 1.f / (1.f + lambda(w));
 }

@@ -11,8 +11,6 @@ namespace crystal
 		CrystalEngine(const std::shared_ptr<SJson::SJsonNode>& configInfo, const std::shared_ptr<SJson::SJsonNode>& sceneInfo);
 		~CrystalEngine() override;
 
-		void Run();
-
 		virtual void Initialize(trv2::Engine* engine) override;
 
 		virtual void Update(double deltaTime) override;
