@@ -6,7 +6,7 @@
 #include "BlinnPhongReflection.h"
 
 crystal::BlinnPhongReflection::BlinnPhongReflection(glm::vec3 color, int k)
-	: BxDF(BxDFType(BxDFType::BxDF_SPECULAR | BxDFType::BxDF_REFLECTION)), _albedo(color), _k(k)
+	: BxDF(BxDFType(BxDFType::BxDF_GLOSSY | BxDFType::BxDF_REFLECTION)), _albedo(color), _k(k)
 {
 	
 }
@@ -34,14 +34,14 @@ glm::vec3 crystal::BlinnPhongReflection::SampleDirection(glm::vec2 sample, glm::
 		// Invalid normal
 		if (glm::dot(N, wOut) < 0)
 		{
-			return glm::vec3(0);
+			//return glm::vec3(0);
 			sample = glm::vec2(uniformRandomFloat(mt), uniformRandomFloat(mt));
 			continue;
 		}
 		*wIn = glm::reflect(-wOut, N);
 		if (wIn->y < 0)
 		{
-			return glm::vec3(0);
+			//return glm::vec3(0);
 			sample = glm::vec2(uniformRandomFloat(mt), uniformRandomFloat(mt));
 			continue;
 		}

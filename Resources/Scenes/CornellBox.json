@@ -266,11 +266,11 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Mirror",
+          "Type": "Phong",
           "Color": [
             1.0,
             1.0,
-            1.0
+            0.1
           ],
           "Roughness": 0.2,
           "K": 100

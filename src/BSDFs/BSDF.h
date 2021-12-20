@@ -38,7 +38,7 @@ public:
     /**
      * @brief Each wOut and wIn are normalized to TNB coordinates
     */
-    virtual glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const = 0;
+    virtual Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const = 0;
 
     /**
      * @brief Each wOut and wIn are normalized to TNB coordinates
@@ -49,7 +49,7 @@ public:
      * @param sampledType 
      * @return 
     */
-    virtual glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const = 0;
+    virtual Spectrum SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const = 0;
 
     bool Contains(BxDFType type) const { return (_bxdfType & type); }
 

@@ -8,9 +8,9 @@ public:
     Lambertain(glm::vec3 color);
     ~Lambertain() override;
 
-    glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
-    glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
+    Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
+    Spectrum SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
 
 private:
-    glm::vec3 _albedo;
+    Spectrum _albedo;
 };

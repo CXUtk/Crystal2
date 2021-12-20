@@ -9,12 +9,12 @@ SpecularReflection::SpecularReflection(glm::vec3 color, float etaA, float etaB, 
 SpecularReflection::~SpecularReflection()
 {}
 
-glm::vec3 SpecularReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
+Spectrum SpecularReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	return glm::vec3(0);
 }
 
-glm::vec3 SpecularReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
+Spectrum SpecularReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
 	*wIn = Vector3f(-wOut.x, wOut.y, -wOut.z);
 	*pdf = 1.0f;

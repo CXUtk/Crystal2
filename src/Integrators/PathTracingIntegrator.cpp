@@ -63,7 +63,6 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
             glm::vec3 endpoint;
             float pdf;
             auto Li = light->Sample_Li(info, sampler->Get2D(1), &endpoint, &pdf);
-            SurfaceInteraction hit;
 
             auto LVec = endpoint - hitPos;
             auto LDir = glm::normalize(LVec);
@@ -78,7 +77,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         float pdf;
         BxDFType type;
         auto brdf = bsdf.SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
-        if (std::abs(pdf) < EPS || brdf == glm::vec3(0)) return Lres;
+        if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return Lres;
         bool specular = (type & BxDF_SPECULAR) != 0;
 
         auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));

@@ -30,12 +30,12 @@ static void refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
 
 glm::vec3 SpecularFresnel::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
-	auto fr = _fresnel->Eval(_etaA, _etaB, glm::dot(Vector3f(0, 1.f, 0), wOut));
+	auto fr = _fresnel->Eval(_etaA, _etaB, wOut.y);
 	*pdf = 1.0f;
 	if (sample[0] < fr.r)
 	{
 		*sampledType = BxDFType(BxDFType::BxDF_REFLECTION | BxDFType::BxDF_SPECULAR);
-		*wIn = glm::reflect(-wOut, Vector3f(0, 1.f, 0));
+		*wIn = Vector3f(-wOut.x, wOut.y, -wOut.z);
 		return _R;
 	}
 	else
