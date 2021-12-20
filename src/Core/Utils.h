@@ -115,3 +115,4 @@ inline glm::vec3 NextUnitSphere(glm::vec2 sample, float* pdf)
     return glm::vec3(x, y, z);
 }
 
+inline float square(float x) { return x * x; }
