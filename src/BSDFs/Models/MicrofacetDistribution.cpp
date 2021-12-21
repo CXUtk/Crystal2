@@ -167,12 +167,17 @@ float BeckmannDistribution::G(const Vector3f& wo, const Vector3f& wi) const
 
 Vector3f BeckmannDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
 {
-	return Vector3f(0.f);
+	float logSample = std::log(1.f - sample.x);
+	if (std::isinf(logSample)) logSample = 0;
+	float tan2Theta = -square(_alpha.x) * logSample;
+	float phi = sample.y * glm::two_pi<float>();
+	float cosTheta = 1.f / std::sqrt(1.f + tan2Theta);
+	return GetUnitVectorUsingCos(cosTheta, phi);
 }
 
-float BeckmannDistribution::Pdf(const Vector3f& wi, const Vector3f& wh) const
+float BeckmannDistribution::Pdf(const Vector3f& wo, const Vector3f& wh) const
 {
-	return 0.0f;
+	return D(wh) * std::max(0.f, wh.y);
 }
 
 float BeckmannDistribution::lambda(const Vector3f& wh) const

@@ -28,8 +28,6 @@ glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 w
 
 glm::vec3 MicrofacetReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
-	*pdf = 0.f;
-	return Spectrum(0.f);
 	auto H = _microDistribution->Sample_wh(wOut, sample);
 	if (glm::dot(wOut, H) <= 0) return glm::vec3(0.f);
 	auto L = glm::reflect(-wOut, H);
