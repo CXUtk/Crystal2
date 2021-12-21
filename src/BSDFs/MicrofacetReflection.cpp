@@ -21,7 +21,7 @@ glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 w
 	auto F = _fresnel->Eval(_etaA, _etaB, std::max(0.f, glm::dot(wOut, H)));
 	auto G = _microDistribution->G(wOut, wIn);
 	auto D = _microDistribution->D(H);
-	return glm::vec3(1.f) * (D * G * F / (4 * std::max(0.f, wIn.y) * std::max(0.f, wOut.y)));
+	return _R * (D * G * F / (4 * std::max(0.f, wIn.y) * std::max(0.f, wOut.y)));
 }
 
 

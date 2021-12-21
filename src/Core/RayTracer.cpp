@@ -43,5 +43,6 @@ void RayTracer::TraceAsync() {
 }
 
 RayTracer::~RayTracer() {
-    _renderThread->join();
+    if(_renderThread)
+        _renderThread->join();
 }
