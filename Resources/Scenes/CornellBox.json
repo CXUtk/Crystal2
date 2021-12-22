@@ -19,6 +19,9 @@
     ]
   },
   "Scene": {
+    "Skybox": {
+      "Path": "Resources/Images/Skyboxes/Grace"
+    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -29,7 +32,7 @@
         "Type": "Light",
         "LightType": "Point",
         "Position": [ 0, 4.9, 0 ],
-        "Flux": [0, 0, 0]
+        "Flux": [ 0, 0, 0 ]
       },
       {
         "Type": "Geometry",
@@ -249,7 +252,7 @@
             1.0
           ],
           "Sigma": 0.1,
-          "Roughness": [0.3, 0.3],
+          "Roughness": [ 0.01, 0.01 ],
           "IOR": 1.5,
           "K": 100
         }
@@ -266,7 +269,7 @@
           "Radius": 1.0
         },
         "Material": {
-          "Type": "Phong",
+          "Type": "Mirror",
           "Color": [
             1.0,
             1.0,

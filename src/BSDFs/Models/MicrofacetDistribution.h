@@ -55,7 +55,11 @@ private:
 class BeckmannDistribution : public MicrofacetDistribution
 {
 public:
-	BeckmannDistribution(float alphaX, float alphaY);
+	// BeckmannDistribution Public Methods
+	static float RoughnessToAlpha(float roughness);
+
+
+	BeckmannDistribution(Vector2f roughness);
 	~BeckmannDistribution() override;
 
 	float D(const Vector3f& wh) const override;

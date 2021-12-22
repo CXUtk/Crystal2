@@ -67,14 +67,23 @@ bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
         SurfaceInteraction tmp;
         if (triangle->Intersect(ray, &tmp))
         {
+
             auto dist = tmp.GetDistance();
             if (dist < isec->GetDistance())
             {
-                *isec = std::move(tmp);
+                *isec = tmp;
+            }
+            if (std::isinf(isec->GetDistance()))
+            {
+                printf("Time too large\n");
+                printf("%.lf\n", tmp.GetDistance());
+                throw;
             }
             hit = true;
         }
     }
+
+
     return hit;
 }
 
