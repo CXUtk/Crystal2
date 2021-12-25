@@ -139,9 +139,19 @@ static Vector2f getCosSinPhi(Vector3f w, float sinTheta)
 //	return NdotH / (NdotH * (1.0f - k) + k);
 //}
 
-BeckmannDistribution::BeckmannDistribution(float alphaX, float alphaY)
-	: _alpha(alphaX, alphaY)
-{}
+float BeckmannDistribution::RoughnessToAlpha(float roughness)
+{
+	roughness = std::max(roughness, 1e-3f);
+	float x = std::log(roughness);
+	return 1.62142f + 0.819955f * x + 0.1734f * x * x +
+		0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
+}
+
+BeckmannDistribution::BeckmannDistribution(Vector2f roughness)
+	:_alpha(RoughnessToAlpha(roughness.x), RoughnessToAlpha(roughness.y))
+{
+	//printf("%lf, %lf\n", _alpha.x, _alpha.y);
+}
 
 BeckmannDistribution::~BeckmannDistribution()
 {}

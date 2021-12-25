@@ -30,10 +30,8 @@ bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
     glm::vec3 P = ray.start - _vertices[0]->Position;
     glm::vec3 res;
     // 通过求解 Ax = b 算出光线打在三角形上的重心坐标
-    auto det = glm::determinant(A);
-    if (std::abs(det) < EPS) return false;
-    auto inv = adjoint(A, 1.0f / det);
-    res = inv * P;
+    res = glm::inverse(A) * P;
+    if (glm::isnan(res) != glm::bvec3(false)) return false;
     if (res.x < 0.f || res.x > 1.f || res.y < 0.f || res.y > 1.f || res.x + res.y > 1.0f + EPS || res.z < 0.f) return false;
     glm::vec3 bary_coord = glm::vec3(1 - res.x - res.y, res.x, res.y);
     glm::vec3 N;
@@ -62,17 +60,20 @@ bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
     }
 
     isec->SetHitInfo(res.z, ray.start + ray.dir * res.z, ray.dir, N, UV, front_face, dpdu, glm::cross(N, dpdu));
+    if (std::isinf(res.z) || std::isnan(res.z))
+    {
+        printf("Invalid distance\n");
+        throw;
+    }
     return true;
 }
 
 bool Triangle::IntersectTest(const Ray& ray, float tMin, float tMax) const {
     if (tMin > tMax) return false;
     glm::mat3 A(_vertices[1]->Position - _vertices[0]->Position, _vertices[2]->Position - _vertices[0]->Position, -ray.dir);
-    auto det = glm::determinant(A);
-    if (std::abs(det) < EPS) return false;
-    auto inv = adjoint(A, 1.0f / det);
     glm::vec3 P = ray.start - _vertices[0]->Position;
-    auto res = inv * P;
+    auto res = glm::inverse(A) * P;
+    if (glm::isnan(res) != glm::bvec3(false)) return false;
     if (res.x < 0 || res.x > 1 || res.y < 0 || res.y > 1 || res.x + res.y > 1 || res.z < 0) return false;
     return res.z >= tMin && res.z <= tMax;
 }

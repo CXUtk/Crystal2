@@ -43,8 +43,8 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     float t2 = (-b - discrim) / (2 * a);
     if (t1 > t2) std::swap(t1, t2);
     float t = t1;
-    if (t1 < 0) t = t2;
-    if (t < 0) return false;
+    if (std::isnan(t1) || t1 < 0) t = t2;
+    if (std::isnan(t) || t < 0) return false;
 
     // Calculate local hit info, normal, front face, etc..
     auto dummyHitPos = P + d * t;
@@ -59,6 +59,12 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     auto dpdu = glm::normalize(_local2World * glm::vec3(-N.z, 0, N.x));
     N = _local2World * N;
     info->SetHitInfo(t, realHitPos, ray.dir, N, glm::vec2(theta, phi), front_face, dpdu, glm::cross(N, dpdu));
+    
+    if (std::isinf(t) || std::isnan(t))
+    {
+        printf("Invalid distance: %.lf\n", t);
+        throw;
+    }
     return true;
 }
 

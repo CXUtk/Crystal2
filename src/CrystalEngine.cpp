@@ -3,10 +3,6 @@
 #include <SJson/SJson.h>
 #include <Loaders/ConfigLoader.h>
 #include <Core/FrameBuffer.h>
-#include <BSDFs/Lambertain.h>
-#include <BSDFs/BlinnPhongReflection.h>
-#include <BSDFs/Reflections.h>
-#include <BSDFs/MicrofacetReflection.h>
 
 #include <glm/gtx/transform.hpp>
 
@@ -44,7 +40,7 @@ void crystal::CrystalEngine::Initialize(trv2::Engine* engine)
 {
 	fprintf(stdout, "All resources loaded, started ray tracing...\n");
 
-	//_rayTracer->TraceAsync();
+	_rayTracer->TraceAsync();
 
 	trv2::TextureParameters texPara{};
 	_renderTexture = std::make_unique<trv2::Texture2D>(trv2::Engine::GetInstance()->GetGraphicsResourceManager(),
@@ -54,12 +50,6 @@ void crystal::CrystalEngine::Initialize(trv2::Engine* engine)
 void crystal::CrystalEngine::Update(double deltaTime)
 {}
 
-
-struct Data
-{
-	Vector3f unit;
-	float v;
-};
 
 void crystal::CrystalEngine::Draw(double deltaTime)
 {
@@ -73,59 +63,17 @@ void crystal::CrystalEngine::Draw(double deltaTime)
 
 	graphicsDevice->Clear(glm::vec4(0));
 
-	auto transform = glm::ortho((float)-_config.Width, (float)_config.Width,
-		 (float)-_config.Height, (float)_config.Height);
-	//auto transform = glm::ortho(0.f, (float)_config.Width,
-	// 0.f, (float)_config.Height);
+	auto transform = glm::ortho(0.f, (float)_config.Width,
+	 0.f, (float)_config.Height);
 
-	//trv2::BatchSettings defaultSetting{};
-	//auto size = glm::vec2(_config.Width, _config.Height);
-	//renderer->Begin(transform, defaultSetting);
-	//{
-	//	renderer->Draw(trv2::cptr(_renderTexture), glm::vec2(0), size, glm::vec2(0), 0.f, glm::vec4(1.f), trv2::SpriteFlipMode::FlipVertical);
-	//}
-	//renderer->End();
-
-
-	float root2 = std::sqrt(2) / 2.f;
-	//Vector3f(-cos(0.1), sin(0.1), 0.f);
-	Vector3f wo = Vector3f(-root2, root2, 0.f);
-
-
-	auto fresnel = std::make_shared<FresnelDielectric>();
-	auto beckmann = std::make_shared<BeckmannDistribution>(0.3f, 0.3f);
-	auto bsdf = MicrofacetReflection(glm::vec3(1), 1.f, 1.5f, fresnel, beckmann);
-	float radius = 500;
-	std::vector<Data> dataList;
-
-	float maxxV = 0.f;
-	for (int i = 0; i < 1024; i++)
+	trv2::BatchSettings defaultSetting{};
+	auto size = glm::vec2(_config.Width, _config.Height);
+	renderer->Begin(transform, defaultSetting);
 	{
-		float r = i * glm::two_pi<float>() / 1024.f;
-		Vector3f wi = Vector3f(glm::cos(r), glm::sin(r), 0.f);
-		float vcosTheta = std::max(0.f, wi.y) * bsdf.DistributionFunction(wo, wi).r;
-		dataList.push_back({ wi, vcosTheta });
-		maxxV = std::max(maxxV, vcosTheta);
+		renderer->Draw(trv2::cptr(_renderTexture), glm::vec2(0), size, glm::vec2(0), 0.f, glm::vec4(1.f), trv2::SpriteFlipMode::FlipVertical);
 	}
+	renderer->End();
 
-	universialRenderer->DrawLine(Vector3f(-_config.Width, 0, 0), Vector3f(_config.Width, 0, 0), glm::vec4(1, 1, 0, 1), glm::vec4(1, 1, 0, 1));
-	universialRenderer->DrawLine(Vector3f(0.f, -_config.Height, 0), Vector3f(0.f, _config.Height, 0), glm::vec4(1, 1, 0, 1), glm::vec4(1, 1, 0, 1));
-
-	float scale = 1.f;
-	if (maxxV > 1.f)
-	{
-		scale = 1.f / maxxV;
-	}
-	for (int i = 0; i < 1024; i++)
-	{
-		auto& cur = dataList[i];
-		auto& nxt = dataList[(static_cast<std::vector<Data, std::allocator<Data>>::size_type>(i) + 1) % 1024];
-		universialRenderer->DrawLine(cur.unit * cur.v * radius * scale, nxt.unit * nxt.v * radius * scale);
-	}
-
-	universialRenderer->DrawLine(wo * radius, Vector3f(0.f, 0, 0), glm::vec4(1, 0, 0, 1), glm::vec4(1, 0, 0, 1));
-
-	universialRenderer->Flush(trv2::PrimitiveType::LINE_LIST, transform);
 }
 
 void crystal::CrystalEngine::Exit()
