@@ -211,13 +211,23 @@
       {
         "Type": "Geometry",
         "Shape": {
-          "Type": "Sphere",
-          "Position": [
-            -1.5,
-            -0.4,
-            -2
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Cube.obj",
+          "Translation": [
+            0,
+            2,
+            3
           ],
-          "Radius": 0.6
+          "Scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "Rotation": [
+            90,
+            0,
+            0
+          ]
         },
         "Material": {
           "Type": "Glass",
