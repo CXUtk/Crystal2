@@ -19,9 +19,6 @@
     ]
   },
   "Scene": {
-    "Skybox": {
-      "Path": "Resources/Images/Skyboxes/Grace"
-    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -217,23 +214,55 @@
           "Type": "TriangleMesh",
           "ObjFile": "Resources/Models/Cube.obj",
           "Translation": [
-            0,
-            2,
-            3
+            1,
+            1,
+            1
           ],
           "Scale": [
-            0.5,
-            0.5,
-            0.5
+            1.0,
+            2.0,
+            1.0
           ],
           "Rotation": [
-            90,
             0,
+            25,
             0
           ]
         },
         "Material": {
-          "Type": "Glass",
+          "Type": "Diffuse",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": 0.3,
+          "IOR": 1.5
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Cube.obj",
+          "Translation": [
+            -1,
+            0,
+            -1
+          ],
+          "Scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Rotation": [
+            0,
+            -25,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Diffuse",
           "Color": [
             1.0,
             1.0,
@@ -248,45 +277,22 @@
         "Shape": {
           "Type": "Sphere",
           "Position": [
-            -1.5,
+            1.5,
             0,
-            0
+            -1.5
           ],
-          "Radius": 1.0
+          "Radius": 0.75
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Glass",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
-          "Sigma": 0.1,
-          "Roughness": [ 0.01, 0.01 ],
-          "IOR": 1.5,
-          "K": 100
-        }
-      },
-      {
-        "Type": "Geometry",
-        "Shape": {
-          "Type": "Sphere",
-          "Position": [
-            1.5,
-            0,
-            0
-          ],
-          "Radius": 1.0
-        },
-        "Material": {
-          "Type": "Mirror",
-          "Color": [
-            1.0,
-            1.0,
-            0.1
-          ],
           "Roughness": 0.2,
-          "K": 100
+          "K": 100,
+          "IOR": 1.5
         }
       }
     ]

@@ -23,6 +23,10 @@ static void refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
 	auto sin2ThetaT = wo.x * wo.x + wo.z * wo.z;
 	wo.y = -std::sqrt(1.f - sin2ThetaT);
 	*wt = wo;
+	if (std::isnan(wt->y))
+	{
+		printf("NaN on refract\n");
+	}
 }
 
 
@@ -44,6 +48,6 @@ glm::vec3 SpecularFresnel::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm
 		*sampledType = BxDFType(BxDFType::BxDF_TRANSMISSION | BxDFType::BxDF_SPECULAR);
 		refract(wOut, _etaA, _etaB, wIn);
 		*pdf = 1.f - fr.r;
-		return _T * (1.f - fr.r);
+		return (1.f - fr.r) * _T;
 	}
 }

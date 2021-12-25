@@ -62,7 +62,7 @@ bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
     isec->SetHitInfo(res.z, ray.start + ray.dir * res.z, ray.dir, N, UV, front_face, dpdu, glm::cross(N, dpdu));
     if (std::isinf(res.z) || std::isnan(res.z))
     {
-        printf("Invalid distance\n");
+        printf("Invalid distance on triangle intersection: %lf\n", res.z);
         throw;
     }
     return true;

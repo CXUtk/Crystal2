@@ -65,6 +65,11 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 	auto L = bxdf->SampleDirection(sample, wOut, wIn, pdf, sampledType);
 	*wIn = _isec->GetTNB() * (*wIn);
 
+	if (glm::isnan(*wIn) != glm::bvec3(false) || glm::isinf(*wIn) != glm::bvec3(false))
+	{
+		printf("Invalid value on BSDF::SampleDirection: wIn is [%lf, %lf, %lf]\n", wIn->x, wIn->y, wIn->z);
+	}
+
 	*pdf /= tot;
 	return L;
 }

@@ -62,7 +62,7 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     
     if (std::isinf(t) || std::isnan(t))
     {
-        printf("Invalid distance: %.lf\n", t);
+        printf("Invalid distance on Sphere intersection: %.lf\n", t);
         throw;
     }
     return true;

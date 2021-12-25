@@ -73,10 +73,10 @@ bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
             {
                 *isec = tmp;
             }
-            if (std::isinf(isec->GetDistance()))
+            if (std::isinf(isec->GetDistance()) || std::isnan(isec->GetDistance()))
             {
-                printf("Time too large\n");
-                printf("%.lf\n", tmp.GetDistance());
+                printf("Invalid distance on triangle mesh intersection: %lf %lf\n", tmp.GetDistance(), 
+                    isec->GetDistance());
                 throw;
             }
             hit = true;
