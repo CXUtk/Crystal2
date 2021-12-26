@@ -19,6 +19,9 @@
     ]
   },
   "Scene": {
+    "Skybox": {
+      "Path": "Resources/Images/Skyboxes/Grace"
+    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -246,7 +249,7 @@
           "Type": "TriangleMesh",
           "ObjFile": "Resources/Models/Cube.obj",
           "Translation": [
-            -1,
+            -1.5,
             0,
             -1
           ],
@@ -262,13 +265,13 @@
           ]
         },
         "Material": {
-          "Type": "Diffuse",
+          "Type": "Micro",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
-          "Roughness": 0.3,
+          "Roughness": [ 0.08, 0.2 ],
           "IOR": 1.5
         }
       },
@@ -277,21 +280,20 @@
         "Shape": {
           "Type": "Sphere",
           "Position": [
-            1.5,
             0,
-            -1.5
+            0,
+            -3
           ],
           "Radius": 0.75
         },
         "Material": {
-          "Type": "Glass",
+          "Type": "Micro",
           "Color": [
-            1.0,
+            0.0,
             1.0,
             1.0
           ],
-          "Roughness": 0.2,
-          "K": 100,
+          "Roughness": [ 0.08, 0.2 ],
           "IOR": 1.5
         }
       }

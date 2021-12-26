@@ -34,8 +34,11 @@ std::unique_ptr<Scene> Scene::CreateScene(JsonNode_CPTR pSceneNode,
 		scene->loadSkybox(pSceneNode->GetMember("Skybox"), configInfo);
 	}
 
-	scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType);
-	scene->_accelStructure->Build(scene->GetObjects());
+	scene->_accelStructure = Accelerator::GetAccelerator(configInfo.AccelType, true);
+	auto sceneEntities = scene->GetObjects();
+	auto objects = std::vector<const crystal::IIntersectable*>(sceneEntities.begin(),
+		sceneEntities.end());
+	scene->_accelStructure->Build(objects);
 	return scene;
 }
 

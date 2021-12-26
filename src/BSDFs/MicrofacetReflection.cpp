@@ -33,7 +33,7 @@ glm::vec3 MicrofacetReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut
 	auto L = glm::reflect(-wOut, wh);
 	*pdf = _microDistribution->Pdf(L, wh) / (4 * glm::dot(wOut, wh));
 	*wIn = L;
-	if (glm::isnan(*pdf))
+	if (glm::isnan(*pdf) || glm::isnan(*wIn) != glm::bvec3(false))
 	{
 		assert(false);
 	}

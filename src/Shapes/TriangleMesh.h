@@ -22,6 +22,7 @@ private:
     int _numVertices;
     std::unique_ptr<VertexData[]> _vertices;
     std::vector<std::shared_ptr<Triangle>> _triangles;
+    std::unique_ptr<Accelerator> _accelStructure;
     glm::mat4 _transform;
 
     BoundingBox _boundingBox;

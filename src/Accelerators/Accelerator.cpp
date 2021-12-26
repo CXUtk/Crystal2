@@ -2,15 +2,15 @@
 #include "Brute.h"
 #include "BVH.h"
 
-std::unique_ptr<Accelerator> Accelerator::GetAccelerator(const std::string& name)
+std::unique_ptr<Accelerator> Accelerator::GetAccelerator(const std::string& name, bool shouldSetHitEntity)
 {
 	if (name == "Brute")
 	{
-		return std::make_unique<Brute>();
+		return std::make_unique<Brute>(shouldSetHitEntity);
 	}
 	else if (name == "BVH")
 	{
-		return std::make_unique<BVH>();
+		return std::make_unique<BVH>(shouldSetHitEntity);
 	}
 	else
 	{

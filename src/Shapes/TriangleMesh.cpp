@@ -4,6 +4,7 @@
 #include <glm/gtx/transform.hpp>
 #include <Loaders/JsonLoader.h>
 #include <Loaders/ObjLoader.h>
+#include <Accelerators/Accelerator.h>
 
 std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(JsonNode_CPTR pShapeNode) {
     auto filePath = pShapeNode->GetMember("ObjFile")->GetString();
@@ -54,6 +55,14 @@ TriangleMesh::TriangleMesh(const std::vector<VertexData>& vertices, const std::v
         _triangles.push_back(triangle);
         _surfaceArea += triangle->SurfaceArea();
     }
+
+    _accelStructure = Accelerator::GetAccelerator("BVH", false);
+    std::vector<const crystal::IIntersectable*> objects;
+    for (auto& triangle : _triangles)
+    {
+        objects.push_back(cptr(triangle));
+    }
+    _accelStructure->Build(objects);
 }
 
 TriangleMesh::~TriangleMesh() {
@@ -61,7 +70,8 @@ TriangleMesh::~TriangleMesh() {
 
 bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
 {
-    bool hit = false;
+    return _accelStructure->Intersect(ray, isec);
+    /*bool hit = false;
     for (auto& triangle : _triangles)
     {
         SurfaceInteraction tmp;
@@ -82,21 +92,12 @@ bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
             hit = true;
         }
     }
-
-
-    return hit;
+    return hit;*/
 }
 
 bool TriangleMesh::IntersectTest(const Ray& ray, float tMin, float tMax) const
 {
-    for (auto& triangle : _triangles)
-    {
-        if (triangle->IntersectTest(ray, tMin, tMax))
-        {
-            return true;
-        }
-    }
-    return false;
+    return _accelStructure->IntersectTest(ray, tMin, tMax);
 }
 
 SurfaceInfo TriangleMesh::SampleSurface(const Vector2f& sample, float* pdf) const

@@ -24,7 +24,7 @@ struct BVHNode
 };
 
 
-BVH::BVH() : _nodes(nullptr), _tot(0), _root(0)
+BVH::BVH(bool shouldSetHitEntity) : Accelerator(shouldSetHitEntity), _nodes(nullptr), _tot(0), _root(0)
 {}
 
 BVH::~BVH()
@@ -33,11 +33,11 @@ BVH::~BVH()
 		delete[] _nodes;
 }
 
-void BVH::Build(const std::vector<const crystal::Entity*>& objects)
+void BVH::Build(const std::vector<const crystal::IIntersectable*>& objects)
 {
 	for (auto& obj : objects)
 	{
-		_entities.push_back(obj);
+		_objects.push_back(obj);
 	}
 	_nodes = new BVHNode[objects.size() * 5];
 	_tot = 0;
@@ -64,10 +64,10 @@ void BVH::_build(int& p, int l, int r)
 		return;
 	}
 	// 获取[l, r]的碰撞箱
-	BoundingBox box = _entities[l]->GetBoundingBox();
+	BoundingBox box = _objects[l]->GetBoundingBox();
 	for (int i = l + 1; i <= r; i++)
 	{
-		box = box.Union(_entities[i]->GetBoundingBox());
+		box = box.Union(_objects[i]->GetBoundingBox());
 	}
 
 	int splitAxis, splitPos;
@@ -111,7 +111,7 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 		for (int i = 0; i < objCnt; i++)
 		{
 			float t1 = tMin, t2 = std::min(tMax, info->GetDistance());
-			const crystal::Entity* const* startP = &_entities[_nodes[p].entitiesStartOffset];
+			const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
 			if (!startP[i]->Intersect(ray, &isec)) continue;
 			auto dis = isec.GetDistance();
@@ -121,7 +121,10 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 			}
 			if (dis < info->GetDistance())
 			{
-				isec.SetHitEntity(startP[i]);
+				if (_shouldSetHitEntity)
+				{
+					isec.SetHitEntity(dynamic_cast<const crystal::Entity*>(startP[i]));
+				}
 				*info = std::move(isec);
 			}
 		}
@@ -156,7 +159,7 @@ bool BVH::_intersectP(int p, const Ray& ray, float tMin, float tMax) const
 		for (int i = 0; i < objCnt; i++)
 		{
 			float t1 = tMin, t2 = tMax;
-			const crystal::Entity* const* startP = &_entities[_nodes[p].entitiesStartOffset];
+			const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
 			if (!startP[i]->Intersect(ray, &isec)) continue;
 			return true;
@@ -182,11 +185,11 @@ int BVH::splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos)
 {
 	int splitAxis = box.MaxExtent();
 	// 按照某种方式分割物体，并且排序
-	auto cmp = [splitAxis](const crystal::Entity* a, const crystal::Entity* b) {
+	auto cmp = [splitAxis](const crystal::IIntersectable* a, const crystal::IIntersectable* b) {
 		return a->GetBoundingBox().GetCenter()[splitAxis] < b->GetBoundingBox().GetCenter()[splitAxis];
 	};
 	splitPos = l + (r - l) / 2;
-	std::nth_element(_entities.begin() + l, _entities.begin() + splitPos, _entities.begin() + r + 1, cmp);
+	std::nth_element(_objects.begin() + l, _objects.begin() + splitPos, _objects.begin() + r + 1, cmp);
 	return splitAxis;
 }
 
@@ -194,16 +197,16 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 {
 	splitAxis = 0, splitPos = l;
 	float minCost = std::numeric_limits<float>::infinity();
-	const crystal::Entity* const* startP = &_entities[l];
+	const crystal::IIntersectable* const* startP = &_objects[l];
 	float totArea = box.SurfaceArea();
 	float* sufArea = new float[r - l + 2];
 	for (int i = 0; i < 3; i++)
 	{
 		// 按照中点坐标排序
-		auto cmp = [i](const crystal::Entity* a, const crystal::Entity* b) {
+		auto cmp = [i](const crystal::IIntersectable* a, const crystal::IIntersectable* b) {
 			return a->GetBoundingBox().GetCenter()[i] < b->GetBoundingBox().GetCenter()[i];
 		};
-		std::sort(_entities.begin() + l, _entities.begin() + r + 1, cmp);
+		std::sort(_objects.begin() + l, _objects.begin() + r + 1, cmp);
 
 		BoundingBox currentBox;
 		// 求后缀包围盒表面积和
@@ -238,12 +241,11 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 
 void BVH::createLeaf(int& p, int l, int r)
 {
-	BoundingBox box = _entities[l]->GetBoundingBox();
+	BoundingBox box = _objects[l]->GetBoundingBox();
 	// 获取[l, r]的碰撞箱，并且把纯指针放进shapes里
 	for (int i = l + 1; i <= r; i++)
 	{
-		box = box.Union(_entities[i]->GetBoundingBox());
+		box = box.Union(_objects[i]->GetBoundingBox());
 	}
 	p = newNode(l, r - l + 1, -1, box);
-
 }

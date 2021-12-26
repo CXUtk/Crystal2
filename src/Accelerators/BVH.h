@@ -8,16 +8,16 @@ struct BVHNode;
 class BVH : public Accelerator
 {
 public:
-	BVH();
+	BVH(bool shouldSetHitEntity);
 	~BVH() override;
-	void Build(const std::vector<const crystal::Entity*>& objects) override;
+	void Build(const std::vector<const crystal::IIntersectable*>& objects) override;
 	bool Intersect(const Ray& ray, SurfaceInteraction* info, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 	bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 
 private:
 	BVHNode* _nodes;
 	int _tot, _root;
-	std::vector<const crystal::Entity*> _entities;
+	std::vector<const crystal::IIntersectable*> _objects;
 
 	void _build(int& p, int l, int r);
 	int newNode(int startOffset, int cnt, int splitAxis, const BoundingBox& box);

@@ -18,7 +18,7 @@ void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bo
     float etaA = 1.f, etaB = _ior;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
     //auto F = std::make_shared<FresnelDielectric>();
-    auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.02));
+    auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.97));
     auto d = std::make_shared<BeckmannDistribution>(_roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);

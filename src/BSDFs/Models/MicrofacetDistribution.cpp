@@ -148,7 +148,7 @@ float BeckmannDistribution::RoughnessToAlpha(float roughness)
 }
 
 BeckmannDistribution::BeckmannDistribution(Vector2f roughness)
-	:_alpha(RoughnessToAlpha(roughness.x), RoughnessToAlpha(roughness.y))
+	:_alpha(roughness.x, roughness.y)
 {
 	//printf("%lf, %lf\n", _alpha.x, _alpha.y);
 }
@@ -179,8 +179,23 @@ Vector3f BeckmannDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) c
 {
 	float logSample = std::log(1.f - sample.x);
 	if (std::isinf(logSample)) logSample = 0;
-	float tan2Theta = -square(_alpha.x) * logSample;
-	float phi = sample.y * glm::two_pi<float>();
+	float tan2Theta, phi;
+	if (_alpha.x == _alpha.y)
+	{
+		tan2Theta = -square(_alpha.x) * logSample;
+		phi = sample.y * glm::two_pi<float>();
+	}
+	else
+	{
+		phi = std::atan(_alpha.y / _alpha.x *
+				   std::tan(glm::two_pi<float>() * sample.y + glm::half_pi<float>()));
+		// sample.y <= 0.5的时候我们认为方向在左半边，否则就是在右半边
+		if (sample.y > 0.5) phi += glm::pi<float>();
+		float sinPhi = glm::sin(phi), cosPhi = glm::cos(phi);
+		tan2Theta = -logSample /
+			(cosPhi * cosPhi / square(_alpha.x) + sinPhi * sinPhi / square(_alpha.y));
+	}
+
 	float cosTheta = 1.f / std::sqrt(1.f + tan2Theta);
 	return GetUnitVectorUsingCos(cosTheta, phi);
 }

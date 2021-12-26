@@ -1,5 +1,6 @@
 ﻿#include "FrameBuffer.h"
 #include <glm/glm.hpp>
+#include <Crystal2.h>
 //FrameBuffer::FrameBuffer(glm::vec3* data, int width, int height) {
 //    
 //    for (int i = 0; i < height; i++) {
@@ -19,11 +20,11 @@ FrameBuffer::FrameBuffer(int width, int height) :_width(width), _height(height) 
 void FrameBuffer::AddSample(int x, int y, glm::vec3 hdr, float weight) {
     if (glm::isnan(hdr) != glm::bvec3(false)) {
         hdr = glm::vec3(0);
-        printf("NAN detected\n");
+        printf("FrameBuffer::AddSample NAN detected\n");
     }
     if (glm::isinf(hdr) != glm::bvec3(false)) {
         hdr = glm::vec3(0);
-        printf("INF detected\n");
+        printf("FrameBuffer::AddSample INF detected\n");
     }
     auto& pixel = _hdrData[y * _width + x];
     pixel.color += hdr * weight;
