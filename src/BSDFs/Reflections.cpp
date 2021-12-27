@@ -28,6 +28,11 @@ namespace crystal
 	OrenNayarReflection::~OrenNayarReflection()
 	{}
 
+	float OrenNayarReflection::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+	{
+		return std::max(0.f, wIn.y) / glm::pi<float>();
+	}
+
 	Spectrum OrenNayarReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 	{
 		float sinThetaO = sinTheta(wOut);

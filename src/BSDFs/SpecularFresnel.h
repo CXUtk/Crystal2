@@ -9,6 +9,7 @@ public:
     SpecularFresnel(glm::vec3 R, glm::vec3 T, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel);
     ~SpecularFresnel() override;
 
+    float Pdf(glm::vec3 wOut, glm::vec3 wIn) const override;
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
     glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
 

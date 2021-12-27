@@ -40,6 +40,8 @@ public:
     */
     virtual Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const = 0;
 
+    virtual float Pdf(glm::vec3 wOut, glm::vec3 wIn) const = 0;
+
     /**
      * @brief Each wOut and wIn are normalized to TNB coordinates
      * @param sample 

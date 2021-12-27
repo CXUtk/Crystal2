@@ -13,6 +13,12 @@ MicrofacetReflection::MicrofacetReflection(glm::vec3 color, float etaA, float et
 MicrofacetReflection::~MicrofacetReflection()
 {}
 
+float MicrofacetReflection::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	auto H = glm::normalize(wOut + wIn);
+	return _microDistribution->Pdf(wOut, H);
+}
+
 glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	if (wIn.y <= 0 || wOut.y <= 0) return glm::vec3(0);
@@ -21,7 +27,14 @@ glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 w
 	auto F = _fresnel->Eval(_etaA, _etaB, std::max(0.f, glm::dot(wIn, H)));
 	auto G = _microDistribution->G(wOut, wIn);
 	auto D = _microDistribution->D(H);
-	return _R * D * G * F / (4 * std::max(0.f, wIn.y) * std::max(0.f, wOut.y));
+	auto v = _R * D * G * F / (4 * std::max(0.f, wIn.y) * std::max(0.f, wOut.y));
+	if (glm::isnan(v) != glm::bvec3(false))
+	{
+		printf("NAN: %lf, %lf, %lf, %lf, %lf\n", wOut.x, wOut.y, wOut.z, G, wIn.x);
+	}
+	NAN_DETECT_V(v, "MicrofacetReflection::DistributionFunction");
+	INF_DETECT_V(v, "MicrofacetReflection::DistributionFunction");
+	return v;
 }
 
 
@@ -37,5 +50,6 @@ glm::vec3 MicrofacetReflection::SampleDirection(glm::vec2 sample, glm::vec3 wOut
 	{
 		assert(false);
 	}
+	fixVector(*wIn);
 	return DistributionFunction(wOut, *wIn);
 }

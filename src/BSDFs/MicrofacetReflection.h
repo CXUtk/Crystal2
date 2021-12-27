@@ -11,6 +11,7 @@ public:
         const std::shared_ptr<MicrofacetDistribution>& distribution);
     ~MicrofacetReflection() override;
 
+    float Pdf(glm::vec3 wOut, glm::vec3 wIn) const override;
     glm::vec3 DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
     glm::vec3 SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
 

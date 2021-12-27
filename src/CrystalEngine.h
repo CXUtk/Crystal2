@@ -27,5 +27,6 @@ namespace crystal
 		std::shared_ptr<RayTracer> _rayTracer;
 		config::ConfigInfo _config;
 		std::unique_ptr<trv2::Texture2D> _renderTexture;
+		float _gamma = 2.2f;
 	};
 }

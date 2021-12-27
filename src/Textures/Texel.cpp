@@ -22,9 +22,8 @@ ImageTexels::~ImageTexels() {
     delete[] _data;
 }
 
-static float byte2RGB(unsigned char x, bool gamma = true) {
-    float v = (float)x / 255.f;
-    return gamma ? std::pow(v, 2.2f) : v;
+static float byte2RGB(unsigned char x) {
+    return (float)x / 255.f;
 }
 
 ImageTexels::ImageTexels(int width, int height, unsigned char* data) :_width(width), _height(height) {

@@ -37,7 +37,7 @@ void RayTracer::TraceAsync() {
 
         _finished = true;
         auto& fb = _frameBuffer;
-        stbi_write_png("result.png", fb->Width(), fb->Height(), 3, fb->GetImageData().get(), fb->Width() * 3);
+        stbi_write_hdr("result.hdr", fb->Width(), fb->Height(), 3, fb->GetImageDataRGB32F().get());
         fprintf(stdout, "Finished!\n");
     });
 }

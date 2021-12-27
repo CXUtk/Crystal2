@@ -9,6 +9,7 @@ public:
     SpecularReflection(glm::vec3 color, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel);
     ~SpecularReflection() override;
 
+    float Pdf(glm::vec3 wOut, glm::vec3 wIn) const override;
     Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const override;
     Spectrum SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const override;
 

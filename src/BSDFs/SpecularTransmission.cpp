@@ -11,6 +11,11 @@ SpecularTransmission::SpecularTransmission(glm::vec3 color, const std::shared_pt
 SpecularTransmission::~SpecularTransmission()
 {}
 
+float SpecularTransmission::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	return 0.0f;
+}
+
 glm::vec3 SpecularTransmission::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	return glm::vec3(0);

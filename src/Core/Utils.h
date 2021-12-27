@@ -116,3 +116,19 @@ inline glm::vec3 NextUnitSphere(glm::vec2 sample, float* pdf)
 }
 
 inline float square(float x) { return x * x; }
+
+
+template<typename T>
+inline void quickPrint(const T& value) {}
+
+template<>
+inline void quickPrint(const glm::vec3& value) 
+{
+    printf("%lf, %lf, %lf", value.x, value.y, value.z);
+}
+
+inline void fixVector(glm::vec3& vector)
+{
+    vector = glm::normalize(vector);
+    vector = glm::clamp(vector, glm::vec3(-1.0), glm::vec3(1.0));
+}

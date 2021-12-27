@@ -14,14 +14,15 @@ MicrofacetMaterial::~MicrofacetMaterial() {
 
 }
 
-void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const {
+void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const
+{
     float etaA = 1.f, etaB = _ior;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
-    //auto F = std::make_shared<FresnelDielectric>();
-    auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.97));
+    auto F = std::make_shared<FresnelDielectric>();
+    //auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.04));
     auto d = std::make_shared<BeckmannDistribution>(_roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    //bsdf->AddBxDF(std::make_shared<Lambertain>(_color, TNB));
+    isec.GetBSDF()->AddBxDF(std::make_shared<Lambertain>(glm::vec3(0.8f, 0.2f, 0.3f)));
     isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
 }

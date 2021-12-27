@@ -11,6 +11,11 @@ crystal::BlinnPhongReflection::BlinnPhongReflection(glm::vec3 color, int k)
 	
 }
 
+float crystal::BlinnPhongReflection::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	return 0.0f;
+}
+
 glm::vec3 crystal::BlinnPhongReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	auto V = glm::normalize(wOut + wIn);

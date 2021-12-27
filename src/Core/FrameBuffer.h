@@ -10,7 +10,8 @@ public:
     int Height() const { return _height; }
     void Clear();
 
-    std::shared_ptr<unsigned char[]> GetImageData() const;
+    std::shared_ptr<unsigned char[]> GetImageDataRGB8() const;
+    std::shared_ptr<float[]> GetImageDataRGB32F() const;
 
 private:
     struct Pixel {

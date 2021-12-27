@@ -101,7 +101,7 @@ SurfaceInfo Triangle::SampleSurface(const Vector2f& sample, float* pdf) const
 
 Vector3f Triangle::sampleTriangle(glm::vec2 sample, float* pdf) const
 {
-    auto u = 1.f - std::sqrt(sample.x);
+    auto u = 1 - std::sqrt(sample.x);
     auto v = sample.y * std::sqrt(sample.x);
 
     *pdf = 1.f / SurfaceArea();

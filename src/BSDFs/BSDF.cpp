@@ -1,14 +1,15 @@
 ﻿#include "BSDF.h"
 #include <glm/glm.hpp>
 #include <Core/SurfaceInteraction.h>
+#include <Core/Utils.h>
 
 BSDF::BSDF(const SurfaceInteraction* si) : _isec(si)
 {}
 
 void BSDF::AddBxDF(const std::shared_ptr<BxDF>& bxdf)
 {
+	assert(_numBxDF < MAX_BxDFs);
 	_bxdfs[_numBxDF++] = bxdf;
-	assert(_numBxDF <= MAX_BxDFs);
 }
 
 BxDFType BSDF::Flags() const
@@ -42,6 +43,7 @@ Spectrum BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn,
 	float* pdf, BxDFType flags, BxDFType* sampledType) const
 {
+	// 最大10个
 	assert(_numBxDF < 10);
 	int tot = 0;
 	int idMap[10] = { 0 };
@@ -56,16 +58,48 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 			++tot;
 		}
 	}
-	int v = (int)(std::min(0.9999999404f, sampleBSDF) * tot);
-	std::shared_ptr<BxDF> bxdf = _bxdfs[idMap[v]];
 
-	*sampledType = bxdf->GetType();
+	if (!tot) return Spectrum(0.f);
+
+	// Select one bxdf to sample wIn
+	int v = (int)(std::min(0.9999999404f, sampleBSDF) * tot);
+	std::shared_ptr<BxDF> selectedBxdf = _bxdfs[idMap[v]];
+
+	*sampledType = selectedBxdf->GetType();
 
 	wOut = _isec->GetInverseTNB() * wOut;
-	auto L = bxdf->SampleDirection(sample, wOut, wIn, pdf, sampledType);
-	*wIn = _isec->GetTNB() * (*wIn);
+	fixVector(wOut);
 
-	if (glm::isnan(*wIn) != glm::bvec3(false) || glm::isinf(*wIn) != glm::bvec3(false))
+	auto L = selectedBxdf->SampleDirection(sample, wOut, wIn, pdf, sampledType);
+	if(*pdf == 0.f) return Spectrum(0.f);
+
+	if (!selectedBxdf->Contains(BxDFType::BxDF_SPECULAR))
+	{
+		for (int i = 0; i < _numBxDF; i++)
+		{
+			auto& bxdf = _bxdfs[i];
+			if (bxdf != selectedBxdf && bxdf->Contains(flags))
+			{
+				*pdf += bxdf->Pdf(wOut, *wIn);
+			}
+		}
+
+		L = Spectrum(0.f);
+		bool reflect = wIn->y * wOut.y > 0;
+		for (int i = 0; i < _numBxDF; i++)
+		{
+			auto& bxdf = _bxdfs[i];
+			if ((reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION)) || (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
+			{
+				L += bxdf->DistributionFunction(wOut, *wIn);
+			}
+		}
+	}
+	*wIn = _isec->GetTNB() * (*wIn);
+	fixVector(*wIn);
+
+
+	if (L != Spectrum(0.f) && (glm::isnan(*wIn) != glm::bvec3(false) || glm::isinf(*wIn) != glm::bvec3(false)))
 	{
 		printf("Invalid value on BSDF::SampleDirection: wIn is [%lf, %lf, %lf]\n", wIn->x, wIn->y, wIn->z);
 	}

@@ -59,7 +59,8 @@ void crystal::CrystalEngine::Draw(double deltaTime)
 
 	trv2::TextureParameters texPara{};
 	_renderTexture->ChangeBuffer(glm::ivec2(_config.Width, _config.Height), texPara,
-		trv2::PixelFormat::RGB, trv2::EngineDataType::UNSIGNED_BYTE, _rayTracer->GetFrameBuffer()->GetImageData().get());
+		trv2::PixelFormat::RGB, trv2::EngineDataType::UNSIGNED_BYTE, 
+		_rayTracer->GetFrameBuffer()->GetImageDataRGB8().get());
 
 	graphicsDevice->Clear(glm::vec4(0));
 

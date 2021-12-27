@@ -10,6 +10,11 @@ SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, float etaA, float eta
 SpecularFresnel::~SpecularFresnel()
 {}
 
+float SpecularFresnel::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	return 0.0f;
+}
+
 glm::vec3 SpecularFresnel::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	return glm::vec3(0);

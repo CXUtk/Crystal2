@@ -14,6 +14,11 @@ glm::vec3 Lambertain::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 	return _albedo / glm::pi<float>();
 }
 
+float Lambertain::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	return std::max(0.f, wIn.y) / glm::pi<float>();
+}
+
 glm::vec3 Lambertain::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
 	*wIn = NextCosineUnitHemiSphere(sample, pdf);

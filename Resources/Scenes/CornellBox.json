@@ -19,9 +19,6 @@
     ]
   },
   "Scene": {
-    "Skybox": {
-      "Path": "Resources/Images/Skyboxes/Grace"
-    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -31,7 +28,7 @@
       {
         "Type": "Light",
         "LightType": "Point",
-        "Position": [ 0, 4.9, 0 ],
+        "Position": [ 0, 4, 0 ],
         "Flux": [ 0, 0, 0 ]
       },
       {
@@ -45,7 +42,7 @@
             0
           ],
           "Scale": [
-            1,
+            1.5,
             -1,
             1
           ],
@@ -57,7 +54,7 @@
         },
         "AreaLight": {
           "Type": "Diffused",
-          "Flux": [ 30, 30, 30 ],
+          "Flux": [ 40, 40, 40 ],
           "Samples": 1
         }
       },
@@ -146,7 +143,7 @@
           "Type": "Diffuse",
           "Color": [
             0.1,
-            1.0,
+            0.6,
             0.1
           ]
         }
@@ -175,9 +172,9 @@
         "Material": {
           "Type": "Diffuse",
           "Color": [
-            1.0,
-            0.1,
-            0.1
+            0.7,
+            0.05,
+            0.06
           ]
         }
       },
@@ -249,7 +246,7 @@
           "Type": "TriangleMesh",
           "ObjFile": "Resources/Models/Cube.obj",
           "Translation": [
-            -1.5,
+            -1.2,
             0,
             -1
           ],
@@ -265,7 +262,7 @@
           ]
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Diffuse",
           "Color": [
             1.0,
             1.0,
@@ -280,16 +277,16 @@
         "Shape": {
           "Type": "Sphere",
           "Position": [
+            1.5,
             0,
-            0,
-            -3
+            -1
           ],
           "Radius": 0.75
         },
         "Material": {
           "Type": "Micro",
           "Color": [
-            0.0,
+            1.0,
             1.0,
             1.0
           ],

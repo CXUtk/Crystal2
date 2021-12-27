@@ -9,6 +9,11 @@ SpecularReflection::SpecularReflection(glm::vec3 color, float etaA, float etaB, 
 SpecularReflection::~SpecularReflection()
 {}
 
+float SpecularReflection::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
+{
+	return 0.0f;
+}
+
 Spectrum SpecularReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	return glm::vec3(0);

@@ -39,18 +39,36 @@ void FrameBuffer::Clear() {
     }
 }
 
-std::shared_ptr<unsigned char[]> FrameBuffer::GetImageData() const {
+std::shared_ptr<unsigned char[]> FrameBuffer::GetImageDataRGB8() const {
     auto data = std::shared_ptr<unsigned char[]>(new unsigned char[_width * _height * 3]);
     for (int i = 0; i < _height; i++) {
         for (int j = 0; j < _width; j++) {
             int orig = (_height - i - 1) * _width + j;
             int dest = i * _width + j;
             auto c = _hdrData[orig].color / _hdrData[orig].weight;
-            c = glm::pow(c, glm::vec3(1.0 / 2.2));
 
             data[dest * 3] = (unsigned char)floor(glm::clamp(c.r, 0.f, 0.999f) * 256);
             data[dest * 3 + 1] = (unsigned char)floor(glm::clamp(c.g, 0.f, 0.999f) * 256);
             data[dest * 3 + 2] = (unsigned char)floor(glm::clamp(c.b, 0.f, 0.999f) * 256);
+        }
+    }
+    return data;
+}
+
+std::shared_ptr<float[]> FrameBuffer::GetImageDataRGB32F() const
+{
+    auto data = std::shared_ptr<float[]>(new float[_width * _height * 3]);
+    for (int i = 0; i < _height; i++)
+    {
+        for (int j = 0; j < _width; j++)
+        {
+            int orig = (_height - i - 1) * _width + j;
+            int dest = i * _width + j;
+            auto c = _hdrData[orig].color / _hdrData[orig].weight;
+
+            data[dest * 3] = c.r;
+            data[dest * 3 + 1] = c.g;
+            data[dest * 3 + 2] = c.b;
         }
     }
     return data;
