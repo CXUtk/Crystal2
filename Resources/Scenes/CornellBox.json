@@ -284,7 +284,7 @@
           "Radius": 0.75
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Glass",
           "Color": [
             1.0,
             1.0,

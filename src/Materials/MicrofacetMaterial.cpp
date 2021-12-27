@@ -23,6 +23,6 @@ void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bo
     auto d = std::make_shared<BeckmannDistribution>(_roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    isec.GetBSDF()->AddBxDF(std::make_shared<Lambertain>(glm::vec3(0.8f, 0.2f, 0.3f)));
+    isec.GetBSDF()->AddBxDF(std::make_shared<Lambertain>(glm::vec3(1.f)));
     isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
 }

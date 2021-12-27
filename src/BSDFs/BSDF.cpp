@@ -89,7 +89,9 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 		for (int i = 0; i < _numBxDF; i++)
 		{
 			auto& bxdf = _bxdfs[i];
-			if ((reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION)) || (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
+			if (bxdf->Contains(flags) && 
+				(reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION)) 
+				|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
 			{
 				L += bxdf->DistributionFunction(wOut, *wIn);
 			}
