@@ -6,7 +6,7 @@
 
 class SpecularFresnel : public BxDF {
 public:
-    SpecularFresnel(glm::vec3 R, glm::vec3 T, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel);
+    SpecularFresnel(glm::vec3 R, glm::vec3 T, const std::shared_ptr<Fresnel>& fresnel,float etaA, float etaB);
     ~SpecularFresnel() override;
 
     float Pdf(glm::vec3 wOut, glm::vec3 wIn) const override;

@@ -1,9 +1,9 @@
 ﻿#include "SpecularReflection.h"
 
 
-SpecularReflection::SpecularReflection(glm::vec3 color, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel) :
-	BxDF(BxDFType(BxDFType::BxDF_SPECULAR | BxDFType::BxDF_REFLECTION)), _albedo(color), _etaA(etaA), _etaB(etaB),
-	_fresnel(fresnel)
+SpecularReflection::SpecularReflection(glm::vec3 color, const std::shared_ptr<Fresnel>& fresnel, float etaA, float etaB) 
+	: BxDF(BxDFType(BxDFType::BxDF_SPECULAR | BxDFType::BxDF_REFLECTION)), 
+	_albedo(color), _fresnel(fresnel), _etaA(etaA), _etaB(etaB)
 {}
 
 SpecularReflection::~SpecularReflection()

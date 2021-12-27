@@ -10,7 +10,7 @@ public:
     int Height() const { return _height; }
     void Clear();
 
-    std::shared_ptr<unsigned char[]> GetImageDataRGB8() const;
+    std::shared_ptr<unsigned char[]> GetImageDataRGB8(float gamma = 1.0) const;
     std::shared_ptr<float[]> GetImageDataRGB32F() const;
 
 private:

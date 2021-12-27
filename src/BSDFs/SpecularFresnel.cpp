@@ -1,8 +1,9 @@
 ﻿#include "SpecularFresnel.h"
 
-SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, float etaA, float etaB, const std::shared_ptr<Fresnel>& fresnel)
+SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, const std::shared_ptr<Fresnel>& fresnel, 
+	float etaA, float etaB)
 	: BxDF(BxDFType(BxDFType::BxDF_TRANSMISSION | BxDFType::BxDF_REFLECTION | BxDFType::BxDF_SPECULAR)),
-	_R(R), _T(T), _etaA(etaA), _etaB(etaB), _fresnel(fresnel)
+	_R(R), _T(T), _fresnel(fresnel), _etaA(etaA), _etaB(etaB)
 {
 
 }

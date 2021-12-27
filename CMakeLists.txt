@@ -95,7 +95,7 @@ add_executable (Crystal2 "Crystal2.cpp"
 "src/Textures/Texel.cpp"
 "src/Textures/CubemapTexture.h" 
 "src/Textures/CubemapTexture.cpp"
- "src/BSDFs/BlinnPhongReflection.h" "src/BSDFs/BlinnPhongReflection.cpp" "src/Materials/PhongMaterial.h" "src/Materials/PhongMaterial.cpp" "src/Lights/DiffusedAreaLight.h" "src/Lights/DiffusedAreaLight.cpp" "src/Core/Entities.h" "src/Core/Entities.cpp" "src/Integrators/DirectLightingIntegrator.h" "src/BSDFs/Reflections.h" "src/BSDFs/Reflections.cpp" "src/Demos/BRDFDemo.h" "src/Demos/BRDFDemo.cpp")
+ "src/BSDFs/BlinnPhongReflection.h" "src/BSDFs/BlinnPhongReflection.cpp" "src/Materials/PhongMaterial.h" "src/Materials/PhongMaterial.cpp" "src/Lights/DiffusedAreaLight.h" "src/Lights/DiffusedAreaLight.cpp" "src/Core/Entities.h" "src/Core/Entities.cpp" "src/Integrators/DirectLightingIntegrator.h" "src/BSDFs/Reflections.h" "src/BSDFs/Reflections.cpp" "src/Demos/BRDFDemo.h" "src/Demos/BRDFDemo.cpp" "src/BSDFs/FresnelBlend.h" "src/BSDFs/FresnelBlend.cpp")
 
 # 编译选项
 set_target_properties("Crystal2" PROPERTIES

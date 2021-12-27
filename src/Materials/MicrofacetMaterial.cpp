@@ -4,6 +4,7 @@
 #include <BSDFs/Models/Fresnel.h>
 #include <BSDFs/Models/MicrofacetDistribution.h>
 #include <BSDFs/Lambertain.h>
+#include <BSDFs/FresnelBlend.h>
 
 
 MicrofacetMaterial::MicrofacetMaterial(glm::vec3 color, float IOR, glm::vec2 roughness)
@@ -23,6 +24,6 @@ void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bo
     auto d = std::make_shared<BeckmannDistribution>(_roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    isec.GetBSDF()->AddBxDF(std::make_shared<Lambertain>(glm::vec3(1.f)));
-    isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
+    //isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
+    isec.GetBSDF()->AddBxDF(std::make_shared<FresnelBlend>(glm::vec3(0.8, 0.2, 0.3), glm::vec3(0.09), d));
 }

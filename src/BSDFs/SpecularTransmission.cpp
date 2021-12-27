@@ -37,5 +37,5 @@ Spectrum SpecularTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOut,
 {
 	*pdf = 1.0f;
 	if (!refract(wOut, _etaA, _etaB, wIn)) return Spectrum(0.f);
-	return _albedo * (1.f - _fresnel->Eval(_etaA, _etaB, glm::dot(wOut, Vector3f(0, 1.f, 0))));
+	return _albedo * (1.f - _fresnel->Eval(_etaA, _etaB, wOut.y));
 }

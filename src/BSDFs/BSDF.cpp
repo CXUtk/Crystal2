@@ -105,6 +105,10 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 	{
 		printf("Invalid value on BSDF::SampleDirection: wIn is [%lf, %lf, %lf]\n", wIn->x, wIn->y, wIn->z);
 	}
+	if (L != Spectrum(0.f) && (glm::isnan(L) != glm::bvec3(false) || glm::isinf(L) != glm::bvec3(false)))
+	{
+		printf("Invalid value on BSDF::SampleDirection: L is [%lf, %lf, %lf]\n", L.r, L.g, L.b);
+	}
 
 	*pdf /= tot;
 	return L;
