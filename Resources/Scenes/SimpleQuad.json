@@ -2,7 +2,7 @@
   "Camera": {
     "Type": "Normal",
     "Position": [
-      0,
+      1,
       3,
       -5
     ],
@@ -127,7 +127,7 @@
           ],
           "Scale": [
             1,
-            0.1,
+            0.05,
             1
           ],
           "Rotation": [
@@ -137,13 +137,13 @@
           ]
         },
         "Material": {
-          "Type": "Glass",
+          "Type": "Micro",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
-          "Roughness": [ 0.15, 0.15 ],
+          "Roughness": [ 0.3, 0.3 ],
           "IOR": 1.45,
           "Kd": "Test"
         }

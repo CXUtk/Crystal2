@@ -26,6 +26,6 @@ glm::vec3 SpecularTransmission::DistributionFunction(glm::vec3 wOut, glm::vec3 w
 Spectrum SpecularTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
 {
 	*pdf = 1.0f;
-	if (!refract(wOut, _etaA, _etaB, wIn)) return Spectrum(0.f);
+	if (!refract(wOut, Normal3f(0, 1, 0), _etaA / _etaB, wIn)) return Spectrum(0.f);
 	return _albedo * (1.f - _fresnel->Eval(_etaA, _etaB, wOut.y));
 }

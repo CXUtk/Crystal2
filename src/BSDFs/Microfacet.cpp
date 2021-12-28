@@ -25,7 +25,7 @@ glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 w
 	if (wIn.y <= 0 || wOut.y <= 0) return glm::vec3(0);
 	auto H = glm::normalize(wOut + wIn);
 
-	auto F = _fresnel->Eval(_etaA, _etaB, std::max(0.f, glm::dot(wIn, H)));
+	auto F = _fresnel->Eval(_etaA, _etaB, std::max(0.f, glm::dot(wOut, H)));
 	auto G = _microDistribution->G(wOut, wIn);
 	auto D = _microDistribution->D(H);
 	auto v = _R * D * G * F / (4 * std::max(0.f, wIn.y) * std::max(0.f, wOut.y));
@@ -89,7 +89,9 @@ Spectrum MicrofacetTransmission::DistributionFunction(glm::vec3 wOut, glm::vec3 
 	auto G = _microDistribution->G(wOut, wIn);
 	auto D = _microDistribution->D(H);
 	auto v = _R * D * G * F 
-		* std::abs(glm::dot(H, wOut)) * std::abs(glm::dot(H, wIn))
+		* std::abs(glm::dot(H, wOut)) 
+		* std::abs(glm::dot(H, wIn))
+		 * eta * eta
 		/ (bot * std::max(0.f, -wIn.y) * std::max(0.f, wOut.y));
 	if (glm::isnan(v) != glm::bvec3(false))
 	{
@@ -107,7 +109,12 @@ Spectrum MicrofacetTransmission::SampleDirection(glm::vec2 sample, glm::vec3 wOu
 	float eta = _etaA / _etaB;
 	if (refract(wOut, wh, eta, wIn))
 	{
+		if (glm::isnan(*wIn) != glm::bvec3(false))
+		{
+			printf("NAN: %lf, %lf, %lf\n", wOut.x, wOut.y, wOut.z);
+		}
 		*pdf = Pdf(wOut, *wIn);
+		fixVector(*wIn);
 		return DistributionFunction(wOut, *wIn);
 	}
 	else

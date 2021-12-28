@@ -1,4 +1,5 @@
 ﻿#include "SpecularFresnel.h"
+#include <Core/Utils.h>
 
 SpecularFresnel::SpecularFresnel(glm::vec3 R, glm::vec3 T, const std::shared_ptr<Fresnel>& fresnel, 
 	float etaA, float etaB)
@@ -22,20 +23,6 @@ glm::vec3 SpecularFresnel::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) c
 }
 
 
-static void refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
-{
-	float eta = etaA / etaB;
-	wo *= -eta;
-	auto sin2ThetaT = wo.x * wo.x + wo.z * wo.z;
-	wo.y = -std::sqrt(1.f - sin2ThetaT);
-	*wt = wo;
-	if (std::isnan(wt->y))
-	{
-		printf("NaN on refract\n");
-	}
-}
-
-
 
 
 glm::vec3 SpecularFresnel::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const
@@ -52,7 +39,7 @@ glm::vec3 SpecularFresnel::SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm
 	else
 	{
 		*sampledType = BxDFType(BxDFType::BxDF_TRANSMISSION | BxDFType::BxDF_SPECULAR);
-		refract(wOut, _etaA, _etaB, wIn);
+		refract(wOut, Normal3f(0, 1, 0), _etaA / _etaB, wIn);
 		*pdf = 1.f - fr.r;
 		return (1.f - fr.r) * _T;
 	}

@@ -8,6 +8,7 @@
 
 #include <TREngine/Engine.h>
 #include <TREngine/Core/Render/render.h>
+#include <Core/Utils.h>
 
 crystal::CrystalEngine::CrystalEngine(const std::shared_ptr<SJson::SJsonNode>& configNode, const std::shared_ptr<SJson::SJsonNode>& sceneInfo)
 {
@@ -40,6 +41,9 @@ void crystal::CrystalEngine::Initialize(trv2::Engine* engine)
 {
 	fprintf(stdout, "All resources loaded, started ray tracing...\n");
 
+	glm::vec3 x;
+	bool s = refract(glm::vec3(-0.01, 0.999, -0.05), glm::vec3(-0.01, 0.999, -0.05), 0.688, &x);
+	printf("%d\n", s);
 	_rayTracer->TraceAsync();
 
 	trv2::TextureParameters texPara{};

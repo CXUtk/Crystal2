@@ -91,8 +91,8 @@ inline bool refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
 
 inline bool refract(const Vector3f& wo, const Vector3f& wh, float eta, glm::vec3* wt)
 {
-    auto cosThetaO = glm::dot(wo, wh);
-    auto sin2ThetaO = std::sqrt(1.f - cosThetaO * cosThetaO);
+    auto cosThetaO = glm::clamp(glm::dot(wo, wh), -1.f, 1.f);
+    auto sin2ThetaO = std::max(0.f, 1.f - cosThetaO * cosThetaO);
     auto sin2ThetaI = eta * eta * sin2ThetaO;
     if (sin2ThetaI > 1.f) return false;
 
