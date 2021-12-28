@@ -82,7 +82,9 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return Lres;
         bool specular = (type & BxDF_SPECULAR) != 0;
 
-        auto cosine = specular ? 1.0f : std::max(0.f, glm::dot(N, wIn));
+        
+        auto cosine = specular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION) 
+            ? glm::dot(-N, wIn) : glm::dot(N, wIn));
         auto Lindir = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1, specular) * brdf * cosine / pdf;
         Lres += Lindir;
 

@@ -44,7 +44,8 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
     else if (type == "Micro") {
         auto color = loader::parse_vec3(pNode->GetMember("Color"));
         auto roughness = loader::parse_vec2(pNode->GetMember("Roughness"));
-        return std::make_shared<MicrofacetMaterial>(color, 1.5f, roughness);
+        auto eta = pNode->GetMember("IOR")->GetFloat();
+        return std::make_shared<MicrofacetMaterial>(color, eta, roughness);
     }
     else if (type == "Phong")
     {

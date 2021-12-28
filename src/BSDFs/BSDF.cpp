@@ -71,7 +71,7 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 	fixVector(wOut);
 
 	auto L = selectedBxdf->SampleDirection(sample, wOut, wIn, pdf, sampledType);
-	if(*pdf == 0.f) return Spectrum(0.f);
+	if (L == Spectrum(0.f) || *pdf == 0.f) return Spectrum(0.f);
 
 	if (!selectedBxdf->Contains(BxDFType::BxDF_SPECULAR))
 	{
@@ -84,14 +84,13 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 			}
 		}
 
-		L = Spectrum(0.f);
 		bool reflect = wIn->y * wOut.y > 0;
 		for (int i = 0; i < _numBxDF; i++)
 		{
 			auto& bxdf = _bxdfs[i];
-			if (bxdf->Contains(flags) && 
-				(reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION)) 
-				|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
+			if (bxdf != selectedBxdf && bxdf->Contains(flags) &&
+				((reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION))
+					|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION))))
 			{
 				L += bxdf->DistributionFunction(wOut, *wIn);
 			}

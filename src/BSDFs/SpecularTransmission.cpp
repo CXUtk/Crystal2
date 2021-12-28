@@ -1,4 +1,5 @@
 ﻿#include "SpecularTransmission.h"
+#include <Core/Utils.h>
 
 SpecularTransmission::SpecularTransmission(glm::vec3 color, const std::shared_ptr<Fresnel>& fresnel,
 	float etaA, float etaB)
@@ -19,17 +20,6 @@ float SpecularTransmission::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
 glm::vec3 SpecularTransmission::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	return glm::vec3(0);
-}
-
-static bool refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
-{
-	float eta = etaA / etaB;
-	wo *= -eta;
-	auto sin2ThetaT = wo.x * wo.x + wo.z * wo.z;
-	if (sin2ThetaT > 1.f) return false;
-	wo.y = -std::sqrt(1.f - sin2ThetaT);
-	*wt = wo;
-	return true;
 }
 
 

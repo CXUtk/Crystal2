@@ -23,7 +23,7 @@ ImageTexels::~ImageTexels() {
 }
 
 static float byte2RGB(unsigned char x) {
-    return (float)x / 255.f;
+    return std::pow((float)x / 255.f, 2.2f);
 }
 
 ImageTexels::ImageTexels(int width, int height, unsigned char* data) :_width(width), _height(height) {

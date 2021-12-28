@@ -202,7 +202,7 @@ Vector3f BeckmannDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) c
 
 float BeckmannDistribution::Pdf(const Vector3f& wo, const Vector3f& wh) const
 {
-	return D(wh) * std::max(0.f, wh.y);
+	return D(wh) * std::abs(wh.y);
 }
 
 float BeckmannDistribution::lambda(const Vector3f& wh) const

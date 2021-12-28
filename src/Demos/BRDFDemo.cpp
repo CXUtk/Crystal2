@@ -8,7 +8,7 @@
 #include <TREngine/Core/Render/render.h>
 #include <BSDFs/Models/Fresnel.h>
 #include <BSDFs/Models/MicrofacetDistribution.h>
-#include <BSDFs/MicrofacetReflection.h>
+#include <BSDFs/Microfacet.h>
 
 crystal::BRDFDemo::BRDFDemo(const std::shared_ptr<SJson::SJsonNode>& configInfo)
 {

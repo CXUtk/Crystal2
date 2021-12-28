@@ -78,6 +78,29 @@ inline glm::vec3 GetUnitVector(float theta, float phi)
     return glm::vec3(r * std::cos(phi), 1.0f - r * r, -r * std::sin(phi));
 }
 
+inline bool refract(glm::vec3 wo, float etaA, float etaB, glm::vec3* wt)
+{
+    float eta = etaA / etaB;
+    wo *= -eta;
+    auto sin2ThetaT = wo.x * wo.x + wo.z * wo.z;
+    if (sin2ThetaT > 1.f) return false;
+    wo.y = -std::sqrt(1.f - sin2ThetaT);
+    *wt = wo;
+    return true;
+}
+
+inline bool refract(const Vector3f& wo, const Vector3f& wh, float eta, glm::vec3* wt)
+{
+    auto cosThetaO = glm::dot(wo, wh);
+    auto sin2ThetaO = std::sqrt(1.f - cosThetaO * cosThetaO);
+    auto sin2ThetaI = eta * eta * sin2ThetaO;
+    if (sin2ThetaI > 1.f) return false;
+
+    auto cosThetaI = std::sqrt(1.f - sin2ThetaI);
+    *wt = eta * -wo + (eta * cosThetaO - cosThetaI) * wh;
+    return true;
+}
+
 inline glm::vec3 NextCosineUnitHemiSphere(glm::vec2 sample, float* pdf) {
     auto r = std::sqrt(sample.x);
     auto phi = sample.y * glm::two_pi<float>();
@@ -129,6 +152,5 @@ inline void quickPrint(const glm::vec3& value)
 
 inline void fixVector(glm::vec3& vector)
 {
-    vector = glm::normalize(vector);
     vector = glm::clamp(vector, glm::vec3(-1.0), glm::vec3(1.0));
 }

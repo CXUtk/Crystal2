@@ -19,6 +19,5 @@ void Glass::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
     auto F = std::make_shared<FresnelDielectric>();
     //auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.02));
-    isec.GetBSDF()->AddBxDF(std::make_shared<SpecularReflection>(_color, F, etaA, etaB));
-    isec.GetBSDF()->AddBxDF(std::make_shared<SpecularTransmission>(_color, F, etaA, etaB));
+    isec.GetBSDF()->AddBxDF(std::make_shared<SpecularFresnel>(_color, _color, F, etaA, etaB));
 }
