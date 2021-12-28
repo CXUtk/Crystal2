@@ -17,6 +17,7 @@ $ ./Crystal2 <config file> <scene file>
 ## Features
 1. Integrators
 - [x] Path Tracing
+- [ ] Path Tracing + MIS
 - [x] Photon Mapping
 - [ ] Bidirectional Path Tracing
 
@@ -24,9 +25,10 @@ $ ./Crystal2 <config file> <scene file>
 - [x] Diffuse Material
 - [x] Mirror Material
 - [x] Glass Material
+- [x] Microfacet Glass Material
 - [x] Microfacet Material (GGX)
-- [ ] Microfacet Material (Anisotrophic)
-- [ ] Phong Material
+- [x] Microfacet Material (Anisotrophic)
+- [x] Phong Material
 
 3. Samplers
 - [x] Random Sampler
