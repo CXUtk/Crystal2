@@ -19,12 +19,13 @@ void MicrofacetMaterial::ComputeScatteringFunctions(SurfaceInteraction& isec, bo
 {
     float etaA = 1.f, etaB = _ior;
     if (!isec.IsFrontFace()) std::swap(etaA, etaB);
-    auto F = std::make_shared<FresnelDielectric>();
-    //auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.04));
+    //auto F = std::make_shared<FresnelDielectric>();
+    auto F = std::make_shared<FresnelSchlick>(glm::vec3(0.94));
     auto d = std::make_shared<BeckmannDistribution>(_roughness);
+    auto dggx = std::make_shared<GGXDistribution>(_roughness);
 
     auto bsdf = std::make_shared<BSDF>(&isec);
-    isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
-    //isec.GetBSDF()->AddBxDF(std::make_shared<FresnelBlend>(glm::vec3(0.8, 0.2, 0.3), glm::vec3(0.09), d));
-    isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetTransmission>(_color, etaA, etaB, F, d));
+    isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, dggx));
+    //isec.GetBSDF()->AddBxDF(std::make_shared<FresnelBlend>(glm::vec3(0.8, 0.2, 0.3), glm::vec3(0.94), d));
+    //isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetTransmission>(_color, etaA, etaB, F, d));
 }
