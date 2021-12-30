@@ -59,7 +59,7 @@ $ ./Crystal2 <config file> <scene file>
 - [x] Area Light  
 
 8. Volume Scattering
-- [ ] Volume Aware Tracer
+- [ ] Volume Path Tracer
 
 9. Scene Loader
 - [x] JSON Loader

@@ -56,6 +56,23 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
         info.SetBSDF(&bsdf);
         entity->ComputeScatteringFunctions(info);
 
+        // 进行一次路径追踪采样
+        glm::vec3 wIn;
+        float pdf;
+        BxDFType type;
+        auto brdf = bsdf.SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
+        NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+        INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+        if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return Lres;
+        bool specular = (type & BxDF_SPECULAR) != 0;
+
+        auto cosine = specular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
+           ? glm::dot(-N, wIn) : glm::dot(N, wIn));
+        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1, specular) * brdf * cosine / pdf;
+
+        bool glossy = (type & BxDFType::BxDF_GLOSSY) != 0;
+
+
         // 计算从光源采样的radiance
         for (auto& light : scene->GetLights())
         {
@@ -72,20 +89,6 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
             }
         }
 
-        // 进行一次路径追踪采样
-        glm::vec3 wIn;
-        float pdf;
-        BxDFType type;
-        auto brdf = bsdf.SampleDirection(sampler->Get1D(1), sampler->Get2D(1), -ray.dir, &wIn, &pdf, BxDFType::BxDF_ALL, &type);
-        NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
-        INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
-        if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return Lres;
-        bool specular = (type & BxDF_SPECULAR) != 0;
-
-        
-        auto cosine = specular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION) 
-            ? glm::dot(-N, wIn) : glm::dot(N, wIn));
-        auto Lindir = eval_rec(info.SpawnRay(wIn), scene, sampler, level + 1, specular) * brdf * cosine / pdf;
         Lres += Lindir;
 
         NAN_DETECT_V(Lres, "PathTracingIntegrator");

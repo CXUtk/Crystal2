@@ -20,6 +20,7 @@ GGXDistribution::~GGXDistribution()
 
 float GGXDistribution::D(const Vector3f & wh) const
 {
+	if (wh.y < 0) return 0.f;
 	float cos2Theta = wh.y * wh.y;
 	assert(1.f - cos2Theta >= 0.f);
 	float sin2Theta = std::max(0.f, 1.f - cos2Theta);
@@ -28,6 +29,8 @@ float GGXDistribution::D(const Vector3f & wh) const
 	return 1.f / (glm::pi<float>() * _alpha.x * _alpha.y * square(A - cos2Theta * (A - 1)));
 	//return 1.f / (glm::pi<float>() * _alpha.x * _alpha.y * square(1 + sin2Theta * (A - 1)));
 	//return  _alpha.x * _alpha.y / (glm::pi<float>() * square(cos2Theta * (_alpha.x * _alpha.y - 1) + 1));
+	//return  1.f / (glm::pi<float>() * _alpha.x * _alpha.y * cos2Theta * cos2Theta 
+	//	* square(1 + sin2Theta / cos2Theta * A));
 }
 
 float GGXDistribution::G(const Vector3f& wo, const Vector3f& wi) const
@@ -40,10 +43,24 @@ Vector3f GGXDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
 	float cosTheta, phi;
 	if (_alpha.x == _alpha.y)
 	{
-		cosTheta = std::sqrt((sample.x - 1) / (sample.x * (1 - _alpha.x * _alpha.x) - 1));
+		cosTheta = std::sqrt((1 - sample.x) / (sample.x * (_alpha.x * _alpha.x - 1) + 1));
+		//cosTheta = std::sqrt(_alpha.x * _alpha.x / (sample.x * (_alpha.x * _alpha.x - 1) + 1));
 		NAN_DETECT_V(cosTheta, "GGXDistribution::Sample_wh");
 
 		phi = glm::two_pi<float>() * sample.y;
+	}
+	else
+	{
+		phi = std::atan(_alpha.y / _alpha.x *
+					  std::tan(glm::two_pi<float>() * sample.y + glm::half_pi<float>()));
+		// sample.y <= 0.5的时候我们认为方向在左半边，否则就是在右半边
+		if (sample.y > 0.5) phi += glm::pi<float>();
+
+		float sinPhi = glm::sin(phi), cosPhi = glm::cos(phi);
+		float A = square(cosPhi) / square(_alpha.x) + square(sinPhi) / square(_alpha.y);
+		
+		float cos2Theta = A * (1 - sample.x) / (A * (1 - sample.x) + 1);
+		cosTheta = std::sqrt(cos2Theta);
 	}
 	return GetUnitVectorUsingCos(cosTheta, phi);
 }
@@ -64,124 +81,6 @@ float GGXDistribution::lambda(const Vector3f& wh) const
 	float alpha2 = square(phi.x) * square(_alpha.x) + square(phi.y) * square(_alpha.y);
 	return (-1 + std::sqrt(1 + alpha2 * tan2Theta)) / 2;
 }
-
-//float GGXDistribution::D(const Vector3f& wh) const
-//{
-//	float cosTheta = std::max(0.f, wh.y);
-//	float cos2Theta = cosTheta * cosTheta;
-//	float sin2Theta = 1.f - cos2Theta;
-//	float tan2Theta = sin2Theta / cos2Theta;
-//
-//	if (std::isinf(tan2Theta)) return 0.f;
-//
-//	float cosPhi = (sin2Theta == 0.f) ? 1.f : glm::clamp(wh.x / std::sqrt(sin2Theta), -1.f, 1.f);
-//	float cos2Phi = cosPhi * cosPhi;
-//	float sin2Phi = 1.f - cos2Phi;
-//
-//	float cos4Theta = cos2Theta * cos2Theta;
-//	float e = tan2Theta * (cos2Phi / (_alphaX * _alphaX) + sin2Phi / (_alphaY * _alphaY));
-//	return 1.f / (glm::pi<float>() * _alphaX * _alphaY * cos4Theta * (1 + e) * (1 + e));
-//}
-//
-//float GGXDistribution::G(const Vector3f& wo, const Vector3f& wi) const
-//{
-//	return 1.f / (1.f + lambda(wo) + lambda(wi));
-//}
-//
-//const Vector3f& GGXDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
-//{
-//	return const Vector3f&();
-//}
-//
-//float GGXDistribution::Pdf(const Vector3f& wi, const Vector3f& wh) const
-//{
-//	return 0.0f;
-//}
-//
-//float GGXDistribution::lambda(const Vector3f& w) const
-//{
-//	float cosTheta = std::max(0.f, w.y);
-//	float cos2Theta = cosTheta * cosTheta;
-//	float sin2Theta = 1.f - cos2Theta;
-//	float tan2Theta = sin2Theta / cos2Theta;
-//
-//	if (std::isinf(tan2Theta)) return 0.f;
-//
-//	float cosPhi = (sin2Theta == 0.f) ? 1.f : glm::clamp(w.x / std::sqrt(sin2Theta), -1.f, 1.f);
-//	float cos2Phi = cosPhi * cosPhi;
-//	float sin2Phi = 1.f - cos2Phi;
-//
-//	float alpha2 = _alphaX * _alphaX * cos2Phi + _alphaY * _alphaY * sin2Phi;
-//	return 0.5f * (std::sqrt(1.f + alpha2 * tan2Theta) - 1.f);
-//}
-//
-//float GGXDistribution::G1(const Vector3f& w) const
-//{
-//	return 1.f / (1.f + lambda(w));
-//}
-//
-//
-//
-//GGXRTDistribution::GGXRTDistribution(const glm::mat3& TNB, float roughness) : _TNB(TNB), _roughness(roughness)
-//{}
-//
-//GGXRTDistribution::~GGXRTDistribution()
-//{}
-//
-//float GGXRTDistribution::D(const Vector3f& wh) const
-//{
-//	auto alpha = _roughness * _roughness;
-//	auto a2 = alpha * alpha;
-//	auto NdotH = std::max(wh.y, 0.f);
-//	auto NdotH2 = NdotH * NdotH;
-//
-//	auto nom = a2;
-//	auto denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
-//	denom = glm::pi<float>() * denom * denom;
-//
-//	return nom / denom;
-//}
-//
-//float GGXRTDistribution::G(const Vector3f& wo, const Vector3f& wi) const
-//{
-//	return G1(wo) * G1(wi);
-//}
-//
-//glm::vec2 Hammersley(uint32_t i, uint32_t N)
-//{ // 0-1
-//	uint32_t bits = (i << 16u) | (i >> 16u);
-//	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
-//	bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
-//	bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
-//	bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
-//	float rdi = float(bits) * 2.3283064365386963e-10;
-//	return { float(i) / float(N), rdi };
-//}
-//
-//
-//const Vector3f& GGXRTDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
-//{
-//	float a = _roughness * _roughness;
-//	auto thetaM = std::atan(a * std::sqrt(sample.x) / std::sqrt(1 - sample.x));
-//	auto phiH = glm::two_pi<float>() * sample.y;
-//	auto r = std::sin(thetaM);
-//	auto dir = const Vector3f&(std::cos(phiH) * r, std::cos(thetaM), std::sin(phiH) * r);
-//	return dir;
-//}
-//
-//float GGXRTDistribution::Pdf(const Vector3f& wi, const Vector3f& wh) const
-//{
-//	auto NdotH = std::max(wh.y, 0.f);
-//	auto IdotH = std::max(glm::dot(wi, wh), 0.f);
-//	return D(wh) * NdotH / (4.f * IdotH);
-//}
-//
-//float GGXRTDistribution::G1(const Vector3f& w) const
-//{
-//	auto k = (_roughness * _roughness) / 2.0f;
-//	auto NdotH = std::max(w.y, 0.f);
-//	return NdotH / (NdotH * (1.0f - k) + k);
-//}
 
 float BeckmannDistribution::RoughnessToAlpha(float roughness)
 {
