@@ -9,7 +9,9 @@
 #include "Glass.h"
 #include "MicrofacetMaterial.h"
 #include "PhongMaterial.h"
+#include "Plastic.h"
 #include <Textures/Texture.h>
+#include <TREngine/Core/Utils/Utils.h>
 #include <queue>
 
 using PureTexture_RGB = PureTexture<Color3f>;
@@ -38,14 +40,52 @@ std::shared_ptr<Material> Material::CreateMaterial(JsonNode_CPTR pNode, const Sc
     }
     else if (type == "Glass") {
         auto color = loader::parse_vec3(pNode->GetMember("Color"));
-        auto eta = pNode->GetMember("IOR")->GetFloat();
-        return std::make_shared<Glass>(color, eta);
+        auto roughness = loader::parse_vec2(pNode->GetMember("Roughness"));
+        auto ior = pNode->GetMember("IOR")->GetFloat();
+        return std::make_shared<Glass>(color, ior, roughness);
     }
     else if (type == "Micro") {
         auto color = loader::parse_vec3(pNode->GetMember("Color"));
         auto roughness = loader::parse_vec2(pNode->GetMember("Roughness"));
         auto eta = pNode->GetMember("IOR")->GetFloat();
-        return std::make_shared<MicrofacetMaterial>(color, eta, roughness);
+        auto NDFTypeStr = pNode->GetMember("NDF")->GetString();
+
+        NDFType type;
+        if (NDFTypeStr == "Beckmann")
+        {
+            type = NDFType::Beckmann;
+        }
+        else if (NDFTypeStr == "GGX")
+        {
+            type = NDFType::GGX;
+        }
+        else
+        {
+            throw std::exception(string_format("Cannot find NDF Type: %s", NDFTypeStr.c_str()).c_str());
+        }
+        return std::make_shared<MicrofacetMaterial>(color, eta, roughness, type);
+    }
+    else if (type == "Plastic")
+    {
+        auto kd = loader::parse_vec3(pNode->GetMember("Kd"));
+        auto ks = loader::parse_vec3(pNode->GetMember("Ks"));
+        auto roughness = loader::parse_vec2(pNode->GetMember("Roughness"));
+        auto NDFTypeStr = pNode->GetMember("NDF")->GetString();
+
+        NDFType type;
+        if (NDFTypeStr == "Beckmann")
+        {
+            type = NDFType::Beckmann;
+        }
+        else if (NDFTypeStr == "GGX")
+        {
+            type = NDFType::GGX;
+        }
+        else
+        {
+            throw std::exception(string_format("Cannot find NDF Type: %s", NDFTypeStr.c_str()).c_str());
+        }
+        return std::make_shared<Plastic>(kd, ks, roughness, type);
     }
     else if (type == "Phong")
     {

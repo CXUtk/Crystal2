@@ -68,7 +68,8 @@ bool Triangle::Intersect(const Ray& ray, SurfaceInteraction* isec) const {
     return true;
 }
 
-bool Triangle::IntersectTest(const Ray& ray, float tMin, float tMax) const {
+bool Triangle::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+    float tMin, float tMax) const {
     if (tMin > tMax) return false;
     glm::mat3 A(_vertices[1]->Position - _vertices[0]->Position, _vertices[2]->Position - _vertices[0]->Position, -ray.dir);
     glm::vec3 P = ray.start - _vertices[0]->Position;

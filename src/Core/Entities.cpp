@@ -15,7 +15,7 @@ crystal::GeometricEntity::~GeometricEntity()
 
 BoundingBox crystal::GeometricEntity::GetBoundingBox() const
 {
-	return BoundingBox();
+	return _shape->GetBoundingBox();
 }
 
 bool crystal::GeometricEntity::Intersect(const Ray& ray, SurfaceInteraction* info) const
@@ -23,9 +23,11 @@ bool crystal::GeometricEntity::Intersect(const Ray& ray, SurfaceInteraction* inf
 	return _shape->Intersect(ray, info);
 }
 
-bool crystal::GeometricEntity::IntersectTest(const Ray& ray, float tMin, float tMax) const
+bool crystal::GeometricEntity::IntersectTest(const Ray& ray, const IIntersectable* ignoreShape, 
+	float tMin, float tMax) const
 {
-	return _shape->IntersectTest(ray, tMin, tMax);
+	if (ignoreShape == _shape) return false;
+	return _shape->IntersectTest(ray, nullptr, tMin, tMax);
 }
 
 void crystal::GeometricEntity::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const

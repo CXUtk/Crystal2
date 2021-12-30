@@ -83,7 +83,9 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 
             auto LVec = endpoint - hitPos;
             auto LDir = glm::normalize(LVec);
-            if (!scene->IntersectTest(info.SpawnRay(LDir), 0, glm::length(LVec) - 0.01))
+            auto obj = light->GetAttachedObject();
+            if (!scene->IntersectTest(info.SpawnRay(LDir), EPS, glm::length(LVec) - 0.01, 
+                obj))
             {
                 Lres += bsdf.DistributionFunction(-ray.dir, LDir) * Li / glm::dot(LVec, LVec) * std::max(0.f, glm::dot(N, LDir)) / pdf;
             }

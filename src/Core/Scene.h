@@ -15,7 +15,8 @@ public:
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
-    bool IntersectTest(const Ray& ray, float tMin, float tMax) const;
+    bool IntersectTest(const Ray& ray, float tMin, float tMax, 
+        const crystal::IIntersectable* ignoreShape) const;
     std::vector<const crystal::Light*> GetLights() const
     {
         std::vector<const crystal::Light*> lights;

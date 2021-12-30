@@ -10,7 +10,8 @@ public:
 
     BoundingBox GetBoundingBox() const override;
     bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
-    bool IntersectTest(const Ray& ray, float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
+    bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+        float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
     SurfaceInfo SampleSurface(const Vector2f& sample, float* pdf) const override;
 

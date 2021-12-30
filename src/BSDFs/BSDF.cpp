@@ -27,6 +27,8 @@ Spectrum BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 	auto transform = _isec->GetInverseTNB();
 	wOut = transform * wOut;
 	wIn = transform * wIn;
+	fixVector(wOut);
+	fixVector(wIn);
 	Spectrum L(0);
 	bool reflect = wIn.y * wOut.y > 0;
 	for (int i = 0; i < _numBxDF; i++)

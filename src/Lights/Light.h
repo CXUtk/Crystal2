@@ -18,11 +18,11 @@ namespace crystal
         static std::shared_ptr<Light> CreateLight(JsonNode_CPTR pNode, const Scene* scene);
         static std::shared_ptr<AreaLight> CreateAreaLight(JsonNode_CPTR pNode, const Shape* shape, const Scene* scene);
 
-
         Light(LightFlags flags, int numSamples) : _flags(flags), _numSamples(numSamples) { }
 
-
         virtual ~Light() = 0 {}
+
+        virtual const crystal::IIntersectable* GetAttachedObject() const { return nullptr; }
 
         virtual Spectrum Flux() const = 0;
 
@@ -34,6 +34,7 @@ namespace crystal
         int GetNumSamples() const { return _numSamples; }
 
         LightFlags GetFlags() const { return _flags; }
+
 
     private:
         int _numSamples;

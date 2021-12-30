@@ -2,8 +2,9 @@
 #include <glm/gtx/transform.hpp>
 #include <Shapes/Shape.h>
 
-crystal::DiffusedAreaLight::DiffusedAreaLight(const Shape* shape, Spectrum flux, int numSamples)
-	: AreaLight(numSamples), _shape(shape), _flux(flux)
+crystal::DiffusedAreaLight::DiffusedAreaLight(const Shape* shape, 
+	Spectrum flux, int numSamples)
+	: AreaLight(numSamples, shape), _shape(shape), _flux(flux)
 {
 	_area = _shape->SurfaceArea();
 }

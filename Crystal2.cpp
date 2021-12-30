@@ -1,6 +1,7 @@
 ﻿#include "CrystalEngine.h"
 #include <TREngine/Engine.h>
 #include <Loaders/JsonLoader.h>
+#include <Demos/BRDFDemo.h>
 #include <cstdio>
 #include <string>
 
@@ -19,7 +20,9 @@ int main(int argc, char** argv) {
 
 			try
 			{
-				trv2::Engine engine(argc, argv, std::make_shared<crystal::CrystalEngine>(configNode, sceneNode));
+				auto renderer = std::make_shared<crystal::CrystalEngine>(configNode, sceneNode);
+				//auto brdf = std::make_shared<crystal::BRDFDemo>(configNode);
+				trv2::Engine engine(argc, argv, renderer);
 				engine.Run();
 			}
 			catch (std::exception ex)

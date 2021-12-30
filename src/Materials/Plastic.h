@@ -2,16 +2,16 @@
 #include "Material.h"
 #include <glm/glm.hpp>
 
-class MicrofacetMaterial : public Material {
+class Plastic : public Material
+{
 public:
-    MicrofacetMaterial(const Spectrum& color, float IOR, Vector2f roughness, NDFType ndf);
-    ~MicrofacetMaterial() override;
+    Plastic(const Spectrum& kd, const Spectrum& ks, Vector2f roughness, NDFType ndf);
+    ~Plastic() override;
 
     void ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera = true) const override;
 
 private:
-    Spectrum _color;
-    float _ior;
+    Spectrum _kd, _ks;
     Vector2f _roughness;
     NDFType _ndfType;
 };

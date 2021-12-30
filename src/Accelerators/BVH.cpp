@@ -50,10 +50,11 @@ bool BVH::Intersect(const Ray& ray, SurfaceInteraction* info, float tMin, float 
 	return _intersect(_root, ray, info, tMin, tMax);
 }
 
-bool BVH::IntersectTest(const Ray& ray, float tMin, float tMax) const
+bool BVH::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+	float tMin, float tMax) const
 {
 	if (!RayBoxTest(ray, _nodes[_root].bound, tMin, tMax)) return false;
-	return _intersectP(_root, ray, tMin, tMax);
+	return _intersectP(_root, ray, ignoreShape, tMin, tMax);
 }
 
 void BVH::_build(int& p, int l, int r)
@@ -108,10 +109,10 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 	if (objCnt != 0)
 	{
 		SurfaceInteraction isec;
+		const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 		for (int i = 0; i < objCnt; i++)
 		{
 			float t1 = tMin, t2 = std::min(tMax, info->GetDistance());
-			const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
 			if (!startP[i]->Intersect(ray, &isec)) continue;
 			auto dis = isec.GetDistance();
@@ -149,19 +150,21 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 	return hit;
 }
 
-bool BVH::_intersectP(int p, const Ray& ray, float tMin, float tMax) const
+bool BVH::_intersectP(int p, const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+	float tMin, float tMax) const
 {
 	int objCnt = _nodes[p].count;
 	// 如果是叶子节点就是暴力判定一下
 	if (objCnt != 0)
 	{
 		SurfaceInteraction isec;
+		const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 		for (int i = 0; i < objCnt; i++)
 		{
+			if (startP[i] == ignoreShape) continue;
 			float t1 = tMin, t2 = tMax;
-			const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 			if (!RayBoxTest(ray, startP[i]->GetBoundingBox(), t1, t2)) continue;
-			if (!startP[i]->Intersect(ray, &isec)) continue;
+			if (!startP[i]->IntersectTest(ray, ignoreShape, t1, t2)) continue;
 			return true;
 		}
 		return false;
@@ -171,12 +174,12 @@ bool BVH::_intersectP(int p, const Ray& ray, float tMin, float tMax) const
 	float t1 = tMin, t2 = tMax;
 	if (RayBoxTest(ray, _nodes[_nodes[p].ch[0]].bound, t1, t2))
 	{
-		hit |= _intersectP(_nodes[p].ch[0], ray, t1, t2);
+		hit |= _intersectP(_nodes[p].ch[0], ray, ignoreShape, t1, t2);
 	}
 	if (hit) return true;
 	if (RayBoxTest(ray, _nodes[_nodes[p].ch[1]].bound, tMin, tMax))
 	{
-		hit |= _intersectP(_nodes[p].ch[1], ray, tMin, tMax);
+		hit |= _intersectP(_nodes[p].ch[1], ray, ignoreShape, tMin, tMax);
 	}
 	return hit;
 }

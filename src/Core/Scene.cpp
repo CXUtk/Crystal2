@@ -50,9 +50,10 @@ bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const
 	return _accelStructure->Intersect(ray, info);
 }
 
-bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax) const
+bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax, 
+	const crystal::IIntersectable* ignoreShape) const
 {
-	return _accelStructure->IntersectTest(ray, tMin, tMax);
+	return _accelStructure->IntersectTest(ray, ignoreShape, tMin, tMax);
 }
 
 const Texture_RGB* Scene::GetTextureByName(const std::string& name) const
@@ -168,5 +169,6 @@ const crystal::AreaLight* Scene::createAreaLight(JsonNode_CPTR pNode, const Shap
 
 void Scene::createGeometricEntity(const Shape* shape, const Material* material, const crystal::AreaLight* areaLight)
 {
-	_sceneObjects.push_back(std::make_shared<crystal::GeometricEntity>(shape, material, areaLight));
+	auto entity = std::make_shared<crystal::GeometricEntity>(shape, material, areaLight);
+	_sceneObjects.push_back(entity);
 }

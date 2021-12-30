@@ -95,9 +95,10 @@ bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
     return hit;*/
 }
 
-bool TriangleMesh::IntersectTest(const Ray& ray, float tMin, float tMax) const
+bool TriangleMesh::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+    float tMin, float tMax) const
 {
-    return _accelStructure->IntersectTest(ray, tMin, tMax);
+    return _accelStructure->IntersectTest(ray, ignoreShape, tMin, tMax);
 }
 
 SurfaceInfo TriangleMesh::SampleSurface(const Vector2f& sample, float* pdf) const

@@ -4,12 +4,13 @@
 
 class Glass : public Material {
 public:
-    Glass(glm::vec3 color, float eta);
+    Glass(const Spectrum& color, float IOR, Vector2f roughness);
     ~Glass() override;
 
     void ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera = true) const override;
 
 private:
-    glm::vec3 _color;
-    float _eta;
+    Spectrum _color;
+    float _ior;
+    Vector2f _roughness;
 };

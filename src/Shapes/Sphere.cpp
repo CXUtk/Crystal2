@@ -68,7 +68,8 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     return true;
 }
 
-bool Sphere::IntersectTest(const Ray& ray, float tMin, float tMax) const {
+bool Sphere::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+    float tMin, float tMax) const {
     if (tMin > tMax) return false;
     glm::vec3 P = _world2Local * (ray.start - _pos);
     glm::vec3 d = _world2Local * ray.dir;

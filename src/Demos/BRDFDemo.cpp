@@ -63,8 +63,8 @@ void crystal::BRDFDemo::Draw(double deltaTime)
 	Vector3f wo = Vector3f(-root2, root2, 0.f);
 
 
-	auto fresnel = std::make_shared<FresnelDielectric>();
-	auto beckmann = std::make_shared<BeckmannDistribution>(Vector2f(0.3f));
+	auto fresnel = std::make_shared<FresnelSchlick>(Spectrum(0.95f));
+	auto beckmann = std::make_shared<BeckmannDistribution>(Vector2f(1.f));
 	auto bsdf = MicrofacetReflection(glm::vec3(1), 1.f, 1.5f, fresnel, beckmann);
 	float radius = 500;
 	std::vector<Data> dataList;

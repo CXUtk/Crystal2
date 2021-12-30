@@ -1,178 +1,321 @@
 {
-    "Camera": {
-        "Type": "Normal",
-        "Position": [
-            0,
-            40,
-            -60
-        ],
-        "FOV": 90,
-        "LookAt": [
-            0,
-            2,
-            0
-        ],
-        "Up": [
-            0,
-            1,
-            0
-        ]
+  "Camera": {
+    "Type": "Normal",
+    "Position": [
+      0,
+      15,
+      -25
+    ],
+    "FOV": 60,
+    "LookAt": [
+      0,
+      0,
+      0
+    ],
+    "Up": [
+      0,
+      1,
+      0
+    ]
+  },
+  "Scene": {
+    "Skybox": {
+      "Path": "Resources/Images/Skyboxes/Grace"
     },
-    "Scene": {
-        "Skybox": {
-            "Path": "../../../Images/Skyboxes/Grace"
+    "Textures": {
+      "Test": {
+        "Path": "Resources/Images/White.jpg"
+      },
+      "Grid": {
+        "Path": "Resources/Images/Grid.png"
+      }
+    },
+    "Objects": [
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Floor.obj",
+          "Translation": [
+            0,
+            20,
+            0
+          ],
+          "Scale": [
+            10,
+            -1,
+            10
+          ],
+          "Rotation": [
+            0,
+            0,
+            0
+          ]
         },
-        "Textures": {
-            "Test": {
-                "Path": "../../../Images/White.jpg"
-            }
+        "AreaLight": {
+          "Type": "Diffused",
+          "Flux": [ 2000, 2000, 2000 ],
+          "Samples": 1
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Floor.obj",
+          "Translation": [
+            0,
+            0,
+            0
+          ],
+          "Scale": [
+            100,
+            1,
+            100
+          ],
+          "Rotation": [
+            0,
+            0,
+            0
+          ]
         },
-        "Objects": [
-            {
-                "Type": "Geometry",
-                "Shape": {
-                    "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/ball.obj",
-                    "Translation": [
-                        60,
-                        0,
-                        0
-                    ],
-                    "Scale": [
-                        1,
-                        1,
-                        1
-                    ],
-                    "Rotation": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                "Material": {
-                    "Type": "Micro",
-                    "Kd": "Test",
-                    "Color": [ 1, 1, 1 ],
-                    "Roughness": 0.1
-                },
-                "AreaLight": null
-            },
-            {
-                "Type": "Geometry",
-                "Shape": {
-                    "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/ball.obj",
-                    "Translation": [
-                        30,
-                        0,
-                        0
-                    ],
-                    "Scale": [
-                        1,
-                        1,
-                        1
-                    ],
-                    "Rotation": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                "Material": {
-                    "Type": "Micro",
-                    "Kd": "Test",
-                    "Color": [ 1, 1, 1 ],
-                    "Roughness": 0.2
-                },
-                "AreaLight": null
-            },
-            {
-                "Type": "Geometry",
-                "Shape": {
-                    "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/ball.obj",
-                    "Translation": [
-                        0,
-                        0,
-                        0
-                    ],
-                    "Scale": [
-                        1,
-                        1,
-                        1
-                    ],
-                    "Rotation": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                "Material": {
-                    "Type": "Micro",
-                    "Kd": "Test",
-                    "Color": [ 1, 1, 1 ],
-                    "Roughness": 0.4
-                },
-                "AreaLight": null
-            },
-            {
-                "Type": "Geometry",
-                "Shape": {
-                    "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/ball.obj",
-                    "Translation": [
-                        -30,
-                        0,
-                        0
-                    ],
-                    "Scale": [
-                        1,
-                        1,
-                        1
-                    ],
-                    "Rotation": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                "Material": {
-                    "Type": "Micro",
-                    "Kd": "Test",
-                    "Color": [ 1, 1, 1 ],
-                    "Roughness": 0.7
-                },
-                "AreaLight": null
-            },
-            {
-                "Type": "Geometry",
-                "Shape": {
-                    "Type": "TriangleMesh",
-                    "ObjFile": "../../../Models/ball.obj",
-                    "Translation": [
-                        -60,
-                        0,
-                        0
-                    ],
-                    "Scale": [
-                        1,
-                        1,
-                        1
-                    ],
-                    "Rotation": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                "Material": {
-                    "Type": "Micro",
-                    "Kd": "Test",
-                    "Color": [ 1, 1, 1 ],
-                    "Roughness": 1.0
-                },
-                "AreaLight": null
-            }
-        ]
-    }
+        "Material": {
+          "Type": "Diffuse",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Kd": "Grid"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            0,
+            0,
+            0
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Diffuse",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            8,
+            0,
+            0
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Glass",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "IOR": 1.45,
+          "Roughness": [ 0, 0 ]
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            -8,
+            0,
+            0
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Mirror",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            -8,
+            0,
+            -6
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Glass",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "IOR": 1.45,
+          "Roughness": [ 0.1, 0.1 ]
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            0,
+            0,
+            -6
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Micro",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0.1, 0.1 ],
+          "IOR": 1.45,
+          "NDF": "Beckmann"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            8,
+            0,
+            -6
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Micro",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0.1, 0.1 ],
+          "IOR": 1.45,
+          "NDF": "GGX"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            0,
+            0,
+            -12
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Plastic",
+          "Kd": [
+            1.0,
+            0.5,
+            0.5
+          ],
+          "Ks": [
+            0.05,
+            0.05,
+            0.05
+          ],
+          "Roughness": [ 0.1, 0.1 ],
+          "NDF": "GGX"
+        }
+      }
+    ]
+  }
 }

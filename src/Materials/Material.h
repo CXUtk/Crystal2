@@ -3,6 +3,12 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+enum class NDFType
+{
+    Beckmann,
+    GGX
+};
+
 class Material {
 public:
     static std::shared_ptr<Material> CreateMaterial(JsonNode_CPTR pNode, const Scene* scene);
