@@ -89,18 +89,19 @@ void Scene::loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& co
 		auto typeString = pNode->GetMember("Type")->GetString();
 		if (typeString == "Geometry")
 		{
-			auto shape = createShape(pNode->GetMember("Shape"));
+			auto shapes = createShapes(pNode->GetMember("Shape"));
 			const Material* material = nullptr;
-			const crystal::AreaLight* areaLight = nullptr;
 			if (pNode->HasMember("Material"))
 			{
 				material = createMaterial(pNode->GetMember("Material"));
 			}
-			if (pNode->HasMember("AreaLight"))
+			bool hasLight = pNode->HasMember("AreaLight");
+			for (auto& shape : shapes)
 			{
-				areaLight = createAreaLight(pNode->GetMember("AreaLight"), shape);
+				createGeometricEntity(shape, material, hasLight ?
+					createAreaLight(pNode->GetMember("AreaLight"), shape)
+				: nullptr);
 			}
-			createGeometricEntity(shape, material, areaLight);
 		}
 		else if (typeString == "Light")
 		{
@@ -131,26 +132,34 @@ void Scene::loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& conf
 		paths[3], paths[4], paths[5]);
 }
 
-const Shape* Scene::createShape(JsonNode_CPTR pShapeNode)
+std::vector<const Shape*> Scene::createShapes(JsonNode_CPTR pShapeNode)
 {
 	assert(pShapeNode->GetType() == SJson::SJsonNodeType::JSON_OBJECT);
 	auto shapeType = pShapeNode->GetMember("Type")->GetString();
+	std::vector<const Shape*> shapesPtr;
 	if (shapeType == "Sphere")
 	{
 		auto sphere = Sphere::CreateSphere(pShapeNode);
 		_shapes.push_back(sphere);
-		return cptr(sphere);
+		shapesPtr.push_back(cptr(sphere));
 	}
 	else if (shapeType == "TriangleMesh")
 	{
 		auto mesh = TriangleMesh::CreateTriangleMesh(pShapeNode);
-		_shapes.push_back(mesh);
-		return cptr(mesh);
+		_triangleMeshes.push_back(mesh);
+		auto triangles = mesh->GetTriangles();
+		_shapes.insert(_shapes.end(), triangles.begin(), triangles.end());
+
+		for (auto& triangle : triangles)
+		{
+			shapesPtr.push_back(cptr(triangle));
+		}
 	}
 	else
 	{
 		throw std::invalid_argument("Invalid Shape Type!");
 	}
+	return shapesPtr;
 }
 
 const Material* Scene::createMaterial(JsonNode_CPTR pNode)

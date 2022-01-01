@@ -9,10 +9,13 @@ namespace crystal
         PointLight(glm::vec3 pos, glm::vec3 flux);
         ~PointLight() override;
 
-        glm::vec3 Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const override;
-        glm::vec3 Flux() const override;
+        Spectrum Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, 
+            Point3f* endpoint, float* pdf) const override;
+        float Pdf_Li(const SurfaceInfo& surface, const Vector3f& wi) const override;
+        Spectrum Flux() const override;
 
     private:
-        glm::vec3 _pos, _flux;
+        Point3f _pos;
+        Spectrum _flux;
     };
 }

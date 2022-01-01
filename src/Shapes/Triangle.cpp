@@ -84,10 +84,11 @@ float Triangle::SurfaceArea() const
     return glm::length(glm::cross(_vertices[1]->Position - _vertices[0]->Position, _vertices[2]->Position - _vertices[0]->Position)) / 2.f;
 }
 
-SurfaceInfo Triangle::SampleSurface(const Vector2f& sample, float* pdf) const
+SurfaceInfo Triangle::SampleSurface(const Vector2f& sample) const
 {
-    Vector3f baryCoord = sampleTriangle(sample, pdf);
-    Point3f pos = baryCoord.x * _vertices[0]->Position + baryCoord.y * _vertices[1]->Position + baryCoord.z * _vertices[2]->Position;
+    Vector3f baryCoord = sampleTriangle(sample);
+    Point3f pos = baryCoord.x * _vertices[0]->Position + 
+        baryCoord.y * _vertices[1]->Position + baryCoord.z * _vertices[2]->Position;
     Normal3f N;
     if (FLAT_SHADING)
     {
@@ -100,12 +101,10 @@ SurfaceInfo Triangle::SampleSurface(const Vector2f& sample, float* pdf) const
     return SurfaceInfo(pos, N);
 }
 
-Vector3f Triangle::sampleTriangle(glm::vec2 sample, float* pdf) const
+Vector3f Triangle::sampleTriangle(glm::vec2 sample) const
 {
     auto u = 1 - std::sqrt(sample.x);
     auto v = sample.y * std::sqrt(sample.x);
-
-    *pdf = 1.f / SurfaceArea();
     return Vector3f(1.f - u - v, u, v);
 }
 

@@ -10,7 +10,7 @@ namespace crystal
     public:
         AreaLight(int numSamples, const Shape* attachedShape = nullptr) 
             : Light(LightFlags::Area, numSamples), _attached(attachedShape) {}
-        virtual Spectrum EvalEmission(const SurfaceInfo& surface, const Vector3f& w) const = 0;
+        virtual Spectrum EvalEmitRadiance(const SurfaceInfo& surface, const Vector3f& w) const = 0;
 
         const IIntersectable* GetAttachedObject() const override { return _attached; }
     private:

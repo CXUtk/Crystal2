@@ -6,109 +6,54 @@
 #include <Loaders/ObjLoader.h>
 #include <Accelerators/Accelerator.h>
 
-std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(JsonNode_CPTR pShapeNode) {
-    auto filePath = pShapeNode->GetMember("ObjFile")->GetString();
-    ObjLoader loader;
-    loader.load(filePath);
-
-    auto pos = loader::parse_vec3(pShapeNode->GetMember("Translation"));
-    auto scale = loader::parse_vec3(pShapeNode->GetMember("Scale"));
-    auto rotation = glm::radians(loader::parse_vec3(pShapeNode->GetMember("Rotation")));
-
-    auto matrix = glm::identity<glm::mat4>();
-    matrix = glm::translate(matrix, pos);
-    matrix = glm::rotate(matrix, rotation.x, glm::vec3(1, 0, 0));
-    matrix = glm::rotate(matrix, rotation.y, glm::vec3(0, 1, 0));
-    matrix = glm::rotate(matrix, rotation.z, glm::vec3(0, 0, 1));
-    matrix = glm::scale(matrix, scale);
-
-    return loader.GetMesh(matrix);
-}
-
-TriangleMesh::TriangleMesh(const std::vector<VertexData>& vertices, const std::vector<glm::ivec3> faceIndices, const glm::mat4& transform)
-    : _numVertices(vertices.size()), _transform(transform)
+std::shared_ptr<TriangleMesh> TriangleMesh::CreateTriangleMesh(JsonNode_CPTR pShapeNode)
 {
-    _vertices = std::unique_ptr<VertexData[]>(new VertexData[_numVertices]);
-    memcpy(_vertices.get(), vertices.data(), sizeof(VertexData) * _numVertices);
-    glm::mat4 normalTrans = glm::transpose(glm::inverse(transform));
+	auto filePath = pShapeNode->GetMember("ObjFile")->GetString();
+	ObjLoader loader;
+	loader.load(filePath);
 
-    glm::vec3 bbMinnPos = glm::vec3(std::numeric_limits<float>::infinity());
-    glm::vec3 bbMaxxPos = glm::vec3(-std::numeric_limits<float>::infinity());
-    for (int i = 0; i < _numVertices; i++)
-    {
-        auto& v = _vertices[i];
-        v.Position = glm::vec3(_transform * glm::vec4(v.Position, 1.0f));
-        v.Normal = glm::normalize(glm::vec3(normalTrans * glm::vec4(v.Normal, 0.0f)));
-        bbMinnPos = glm::min(bbMinnPos, v.Position);
-        bbMaxxPos = glm::max(bbMaxxPos, v.Position);
-    }
-    _boundingBox = BoundingBox(bbMinnPos, bbMaxxPos);
+	auto pos = loader::parse_vec3(pShapeNode->GetMember("Translation"));
+	auto scale = loader::parse_vec3(pShapeNode->GetMember("Scale"));
+	auto rotation = glm::radians(loader::parse_vec3(pShapeNode->GetMember("Rotation")));
 
-    int numFaces = faceIndices.size();
-    _surfaceArea = 0.f;
-    for (int i = 0; i < numFaces; i++)
-    {
-        auto& curFace = faceIndices[i];
-        auto triangle = std::make_shared<Triangle>(&_vertices[curFace[0]],
-            &_vertices[curFace[1]],
-            &_vertices[curFace[2]]);
-        _triangles.push_back(triangle);
-        _surfaceArea += triangle->SurfaceArea();
-    }
+	auto matrix = glm::identity<glm::mat4>();
+	matrix = glm::translate(matrix, pos);
+	matrix = glm::rotate(matrix, rotation.x, glm::vec3(1, 0, 0));
+	matrix = glm::rotate(matrix, rotation.y, glm::vec3(0, 1, 0));
+	matrix = glm::rotate(matrix, rotation.z, glm::vec3(0, 0, 1));
+	matrix = glm::scale(matrix, scale);
 
-    _accelStructure = Accelerator::GetAccelerator("BVH", false);
-    std::vector<const crystal::IIntersectable*> objects;
-    for (auto& triangle : _triangles)
-    {
-        objects.push_back(cptr(triangle));
-    }
-    _accelStructure->Build(objects);
+	return loader.GetMesh(matrix);
 }
 
-TriangleMesh::~TriangleMesh() {
-}
-
-bool TriangleMesh::Intersect(const Ray& ray, SurfaceInteraction* isec) const
+TriangleMesh::TriangleMesh(const std::vector<VertexData>& vertices, const std::vector<glm::ivec3> faceIndices,
+	const glm::mat4& transform) : _numVertices(vertices.size()), _transform(transform)
 {
-    return _accelStructure->Intersect(ray, isec);
-    /*bool hit = false;
-    for (auto& triangle : _triangles)
-    {
-        SurfaceInteraction tmp;
-        if (triangle->Intersect(ray, &tmp))
-        {
+	_vertices = std::unique_ptr<VertexData[]>(new VertexData[_numVertices]);
+	memcpy(_vertices.get(), vertices.data(), sizeof(VertexData) * _numVertices);
+	glm::mat4 normalTrans = glm::transpose(glm::inverse(transform));
 
-            auto dist = tmp.GetDistance();
-            if (dist < isec->GetDistance())
-            {
-                *isec = tmp;
-            }
-            if (std::isinf(isec->GetDistance()) || std::isnan(isec->GetDistance()))
-            {
-                printf("Invalid distance on triangle mesh intersection: %lf %lf\n", tmp.GetDistance(), 
-                    isec->GetDistance());
-                throw;
-            }
-            hit = true;
-        }
-    }
-    return hit;*/
+	for (int i = 0; i < _numVertices; i++)
+	{
+		auto& v = _vertices[i];
+		v.Position = glm::vec3(_transform * glm::vec4(v.Position, 1.0f));
+		v.Normal = glm::normalize(glm::vec3(normalTrans * glm::vec4(v.Normal, 0.0f)));
+	}
+	int numFaces = faceIndices.size();
+	for (int i = 0; i < numFaces; i++)
+	{
+		auto& curFace = faceIndices[i];
+		auto triangle = std::make_shared<Triangle>(&_vertices[curFace[0]],
+			&_vertices[curFace[1]],
+			&_vertices[curFace[2]]);
+		_triangles.push_back(triangle);
+	}
 }
 
-bool TriangleMesh::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
-    float tMin, float tMax) const
-{
-    return _accelStructure->IntersectTest(ray, ignoreShape, tMin, tMax);
-}
+TriangleMesh::~TriangleMesh()
+{}
 
-SurfaceInfo TriangleMesh::SampleSurface(const Vector2f& sample, float* pdf) const
+std::vector<std::shared_ptr<Triangle>> TriangleMesh::GetTriangles() const
 {
-    int size = _triangles.size();
-    *pdf = 1.f / size;
-
-    int v = (int)(std::min(0.9999999404f, sample.x) * size);
-    float pdf2;
-    auto surface = _triangles[v]->SampleSurface(sample, &pdf2);
-    *pdf *= pdf2;
-    return surface;
+	return _triangles;
 }

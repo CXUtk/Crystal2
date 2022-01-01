@@ -28,7 +28,7 @@ namespace crystal
 		auto lightType = pNode->GetMember("Type")->GetString();
 		if (lightType == "Diffused")
 		{
-			auto flux = loader::parse_vec3(pNode->GetMember("Flux"));
+			auto flux = loader::parse_vec3(pNode->GetMember("Lemit"));
 			auto numSamples = pNode->GetMember("Samples")->GetInt();
 			return std::make_shared<DiffusedAreaLight>(shape, flux, numSamples);
 		}

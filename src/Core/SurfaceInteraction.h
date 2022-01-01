@@ -18,7 +18,7 @@ class SurfaceInteraction {
 public:
     SurfaceInteraction();
 
-    Ray SpawnRay(glm::vec3 dir, bool pass = false) const;
+    Ray SpawnRay(glm::vec3 dir) const;
     void SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal, 
         glm::vec2 uv, bool frontFace, const glm::vec3& dpdu, const glm::vec3& dpdv);
 

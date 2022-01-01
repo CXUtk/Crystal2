@@ -19,9 +19,6 @@
     ]
   },
   "Scene": {
-    "Skybox": {
-      "Path": "Resources/Images/Skyboxes/Grace"
-    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -39,7 +36,7 @@
           "Translation": [
             0,
             20,
-            0
+            -15
           ],
           "Scale": [
             10,
@@ -47,14 +44,14 @@
             10
           ],
           "Rotation": [
-            0,
+            -45,
             0,
             0
           ]
         },
         "AreaLight": {
           "Type": "Diffused",
-          "Flux": [ 2000, 2000, 2000 ],
+          "Lemit": [ 10, 10, 10 ],
           "Samples": 1
         }
       },
@@ -313,6 +310,29 @@
             0.05
           ],
           "Roughness": [ 0.1, 0.1 ],
+          "NDF": "GGX"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "Sphere",
+          "Position": [
+            -8,
+            2,
+            -12
+          ],
+          "Radius": 2
+        },
+        "Material": {
+          "Type": "Micro",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0.1, 0.2 ],
+          "IOR": 1.45,
           "NDF": "GGX"
         }
       }

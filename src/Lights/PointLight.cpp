@@ -10,13 +10,20 @@ crystal::PointLight::PointLight(glm::vec3 pos, glm::vec3 power)
 crystal::PointLight::~PointLight() {
 }
 
-glm::vec3 crystal::PointLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const {
+Spectrum crystal::PointLight::Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample,
+    Point3f* endpoint, float* pdf) const {
     *endpoint = _pos;
     *pdf = 1.0f;
-    return Flux() / (4 * glm::pi<float>());
+    auto I = Flux() / (4 * glm::pi<float>());
+    return I / sqr(*endpoint - hit.GetHitPos());
+}
+
+float crystal::PointLight::Pdf_Li(const SurfaceInfo& surface, const Vector3f& wi) const
+{
+    return 0.0f;
 }
 
 
-glm::vec3 crystal::PointLight::Flux() const {
+Spectrum crystal::PointLight::Flux() const {
     return _flux;
 }

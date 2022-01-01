@@ -13,7 +13,14 @@ public:
     bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
         float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
-    SurfaceInfo SampleSurface(const Vector2f& sample, float* pdf) const override;
+
+    SurfaceInfo SampleSurface(const Vector2f& sample) const override;
+    // 采样目标点为半球的立体角
+    SurfaceInfo SampleSurfaceLight(const Vector2f& sample,
+        const SurfaceInteraction& ref) const override
+    {
+        return SampleSurface(sample);
+    }
 
 private:
     const VertexData* _vertices[3];
@@ -21,5 +28,5 @@ private:
     BoundingBox _bbox;
 
     void calculateDerivative();
-    Vector3f sampleTriangle(glm::vec2 sample, float* pdf) const;
+    Vector3f sampleTriangle(glm::vec2 sample) const;
 };

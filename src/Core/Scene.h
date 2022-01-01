@@ -15,7 +15,7 @@ public:
     ~Scene();
 
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
-    bool IntersectTest(const Ray& ray, float tMin, float tMax, 
+    bool IntersectTest(const Ray& ray, float tMin, float tMax,
         const crystal::IIntersectable* ignoreShape) const;
     std::vector<const crystal::Light*> GetLights() const
     {
@@ -46,6 +46,7 @@ private:
     std::vector<std::shared_ptr<crystal::Light>> _lights;
     std::vector<std::shared_ptr<Shape>> _shapes;
     std::vector<std::shared_ptr<Material>> _materials;
+    std::vector<std::shared_ptr<TriangleMesh>> _triangleMeshes;
 
     std::map<std::string, std::shared_ptr<Texture_RGB>> _defaultTextures;
     std::unique_ptr<CubemapTexture> _skybox;
@@ -55,7 +56,7 @@ private:
     void loadObjects(JsonNode_CPTR pObjectsNode, const config::ConfigInfo& configInfo);
     void loadSkybox(JsonNode_CPTR pSkyboxNode, const config::ConfigInfo& configInfo);
 
-    const Shape* createShape(JsonNode_CPTR pShapeNode);
+    std::vector<const Shape*> createShapes(JsonNode_CPTR pShapeNode);
     const Material* createMaterial(JsonNode_CPTR pNode);
     const crystal::AreaLight* createAreaLight(JsonNode_CPTR pNode, const Shape* shape);
     void createGeometricEntity(const Shape* shape, const Material* material, const crystal::AreaLight* areaLight);
