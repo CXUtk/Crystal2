@@ -27,12 +27,10 @@ Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInfo& surface_w,
 {
 	auto surface_light = _shape->SampleSurface(sample);
 	*endpoint = surface_light.GetPosition();
-	*pdf = _shape->Pdf(surface_light);
 
-	auto lvec = surface_w.GetPosition() - *endpoint;
-	auto dir = glm::normalize(lvec);
-	auto s = std::max(0.f, glm::dot(surface_light.GetNormal(), dir));
-	return EvalEmitRadiance(surface_light, dir) / sqr(lvec);
+	auto dir = glm::normalize(*endpoint - surface_w.GetPosition());
+	*pdf = _shape->PdfLight(surface_w, dir);
+	return EvalEmitRadiance(surface_light, -dir);
 }
 
 float crystal::DiffusedAreaLight::Pdf_Li(const SurfaceInfo& surface_w, const Vector3f& wi) const

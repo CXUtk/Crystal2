@@ -4,12 +4,12 @@
     "Position": [
       0,
       2,
-      -5
+      -8
     ],
-    "FOV": 90,
+    "FOV": 60,
     "LookAt": [
       0,
-      0,
+      2,
       0
     ],
     "Up": [
@@ -18,49 +18,66 @@
       0
     ]
   },
-  "Objects": [
-    {
-      "Type": "Geometry",
-      "Shape": {
-        "Type": "Sphere",
-        "Position": [
-          1.5,
-          1,
-          0
-        ],
-        "Radius": 1.0
-      },
-      "Material": {
-        "Type": "Micro",
-        "Color": [
-          1.0,
-          1.0,
-          1.0
-        ],
-        "Roughness": 0.1
-      },
-      "Light": null
+  "Scene": {
+    "Skybox": {
+      "Path": "Resources/Images/Skyboxes/Grace"
     },
-    {
-      "Type": "Geometry",
-      "Shape": {
-        "Type": "Sphere",
-        "Position": [
-          -1.5,
-          0,
-          0
-        ],
-        "Radius": 1.0
+    "Textures": {
+      "Test": {
+        "Path": "Resources/Images/White.jpg"
+      }
+    },
+    "Objects": [
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/Floor.obj",
+          "Translation": [
+            0,
+            4.95,
+            0
+          ],
+          "Scale": [
+            1.5,
+            -1,
+            1
+          ],
+          "Rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        "AreaLight": {
+          "Type": "Diffused",
+          "Lemit": [ 5, 5, 5 ],
+          "Samples": 1
+        }
       },
-      "Material": {
-        "Type": "Diffuse",
-        "Color": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      "Light": null
-    }
-  ]
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "Sphere",
+          "Position": [
+            1.5,
+            2,
+            0
+          ],
+          "Radius": 0.75
+        },
+        "Material": {
+          "Type": "Mirror",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0.1, 0.2 ],
+          "IOR": 1.45,
+          "NDF": "Beckmann"
+        }
+      }
+    ]
+  }
 }

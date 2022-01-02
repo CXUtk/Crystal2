@@ -36,7 +36,7 @@ float BSDF::Pdf(glm::vec3 wOut, glm::vec3 wIn, BxDFType flags) const
 	for (int i = 0; i < _numBxDF; i++)
 	{
 		auto& bxdf = _bxdfs[i];
-		if (bxdf->Contains(flags) && (reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION))
+		if (bxdf->Matches(flags) && (reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION))
 			|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
 		{
 			pdf += bxdf->Pdf(wOut, wIn);
@@ -78,7 +78,7 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 	for (int i = 0; i < _numBxDF; i++)
 	{
 		auto& bxdf = _bxdfs[i];
-		if (bxdf->Contains(flags))
+		if (bxdf->Matches(flags))
 		{
 			idMap[tot] = i;
 			++tot;
@@ -104,7 +104,7 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 		for (int i = 0; i < _numBxDF; i++)
 		{
 			auto& bxdf = _bxdfs[i];
-			if (bxdf != selectedBxdf && bxdf->Contains(flags))
+			if (bxdf != selectedBxdf && bxdf->Matches(flags))
 			{
 				*pdf += bxdf->Pdf(wOut, *wIn);
 			}
@@ -114,7 +114,7 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 		for (int i = 0; i < _numBxDF; i++)
 		{
 			auto& bxdf = _bxdfs[i];
-			if (bxdf != selectedBxdf && bxdf->Contains(flags) &&
+			if (bxdf != selectedBxdf && bxdf->Matches(flags) &&
 				((reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION))
 					|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION))))
 			{
@@ -124,16 +124,6 @@ Spectrum BSDF::SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOu
 	}
 	*wIn = _isec->GetTNB() * (*wIn);
 	fixVector(*wIn);
-
-
-	if (L != Spectrum(0.f) && (glm::isnan(*wIn) != glm::bvec3(false) || glm::isinf(*wIn) != glm::bvec3(false)))
-	{
-		printf("Invalid value on BSDF::SampleDirection: wIn is [%lf, %lf, %lf]\n", wIn->x, wIn->y, wIn->z);
-	}
-	if (L != Spectrum(0.f) && (glm::isnan(L) != glm::bvec3(false) || glm::isinf(L) != glm::bvec3(false)))
-	{
-		printf("Invalid value on BSDF::SampleDirection: L is [%lf, %lf, %lf]\n", L.r, L.g, L.b);
-	}
 
 	*pdf /= tot;
 	return L;

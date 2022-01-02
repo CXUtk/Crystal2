@@ -56,6 +56,7 @@ public:
     */
     virtual Spectrum SampleDirection(glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType* sampledType) const = 0;
 
+    bool Matches(BxDFType type) const { return (_bxdfType & type) == _bxdfType; }
     bool Contains(BxDFType type) const { return (_bxdfType & type); }
 
     BxDFType GetType() const { return _bxdfType; }

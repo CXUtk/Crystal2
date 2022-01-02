@@ -4,6 +4,7 @@
 #include <glm/gtx/transform.hpp>
 
 constexpr float EPS = 1e-6;
+constexpr float SHADOW_EPS = 1e-5;
 
 struct VertexData {
     Point3f Position;

@@ -59,6 +59,7 @@ glm::vec3 DirectLightingIntegrator::eval_rec(const Ray& ray, Scene* scene, Sampl
 	{
 		L += UniformSampleAllLights(isec, scene, sampler);
 	}
+
 	return L;
 }
 
@@ -82,6 +83,7 @@ Spectrum DirectLightingIntegrator::EsimateDirect(const SurfaceInteraction& isec,
 {
 	Spectrum L(0.f);
 
+	BxDFType sampleType = (BxDFType)(BxDFType::BxDF_ALL & ~BxDFType::BxDF_SPECULAR);
 	Point3f P = isec.GetHitPos();
 	Normal3f N = isec.GetNormal();
 	Vector3f wo = -isec.GetHitDir();
@@ -96,7 +98,7 @@ Spectrum DirectLightingIntegrator::EsimateDirect(const SurfaceInteraction& isec,
 	{
 		Spectrum f = isec.GetBSDF()->DistributionFunction(wo, wi) 
 			* std::max(0.f, glm::dot(N, wi));
-		float pdf_bsdf = isec.GetBSDF()->Pdf(wo, wi, BxDFType::BxDF_ALL);
+		float pdf_bsdf = isec.GetBSDF()->Pdf(wo, wi, sampleType);
 		if (f != Spectrum(0.f))
 		{
 			if (scene->IntersectTest(isec.SpawnRayTo(lightPos), 0, 1.f - EPS, light->GetAttachedObject()))
@@ -124,7 +126,7 @@ Spectrum DirectLightingIntegrator::EsimateDirect(const SurfaceInteraction& isec,
 		float pdf_bsdf;
 		BxDFType sampledType;
 		Spectrum f = isec.GetBSDF()->SampleDirection(sampler->Get1D(), sampleBSDF, wo, &wi, &pdf_bsdf, 
-			BxDFType::BxDF_ALL, &sampledType);
+			sampleType, &sampledType);
 		bool specularBSDF = sampledType & BxDF_SPECULAR;
 		
 		float weight = 1.0f;
@@ -147,8 +149,7 @@ Spectrum DirectLightingIntegrator::EsimateDirect(const SurfaceInteraction& isec,
 		}
 		else
 		{
-			if (scene->GetSkybox() == nullptr) return L;
-			Li = scene->GetSkybox()->Evaluate(wi);
+			Li = light->Le(wi);
 		}
 		if (Li != Spectrum(0.f))
 		{
