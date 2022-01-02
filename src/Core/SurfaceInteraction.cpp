@@ -18,7 +18,7 @@ Ray SurfaceInteraction::SpawnRayTo(const Point3f& pos) const
 {
     bool back = glm::dot(pos - _hitPos, _normal) < 0;
     Point3f origin = _hitPos + ((back) ? -_normal : _normal) * EPS;
-    return Ray(origin, pos - _hitPos);
+    return Ray(origin, pos - origin);
 }
 
 void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal,
@@ -46,8 +46,7 @@ glm::mat3 SurfaceInteraction::GetInverseTNB() const
 
 SurfaceInfo SurfaceInteraction::GetSurfaceInfo(bool actualNormal) const
 {
-    return SurfaceInfo(_hitPos, actualNormal ? _normal 
-        : (_frontFace ? _normal : -_normal));
+    return SurfaceInfo(_hitPos, actualNormal ? (_frontFace ? _normal : -_normal) : _normal);
 }
 
 Spectrum SurfaceInteraction::Le(const Vector3f& w) const

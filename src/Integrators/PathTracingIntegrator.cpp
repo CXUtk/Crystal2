@@ -71,7 +71,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 	Vector3f wIn;
 	float pdf;
 	BxDFType type;
-	auto brdf = bsdf.SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn, 
+	auto brdf = bsdf.SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn,
 		&pdf, BxDFType::BxDF_ALL, &type);
 	NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
 	INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
@@ -83,12 +83,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 	auto Lindir = eval_rec(isec.SpawnRay(wIn), scene, sampler, level + 1, isSpecular) * brdf * cosine / pdf;
 
 	// 计算从光源采样的radiance
-	auto lights = scene->GetLights();
-
-	for (auto& light : lights)
-	{
-		L += UniformSampleAllLights(isec, scene, sampler);
-	}
+	L += UniformSampleAllLights(isec, scene, sampler);
 
 	L += Lindir;
 	NAN_DETECT_V(L, "PathTracingIntegrator::L");
@@ -135,7 +130,8 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		float pdf_bsdf = isec.GetBSDF()->Pdf(wo, wi, sampleType);
 		if (f != Spectrum(0.f))
 		{
-			if (scene->IntersectTest(isec.SpawnRayTo(lightPos), 0, 1.f - SHADOW_EPS, light->GetAttachedObject()))
+			if (scene->IntersectTest(isec.SpawnRayTo(lightPos), 0, 1 - EPS, 
+				light->GetAttachedObject()))
 			{
 				Li_light = Spectrum(0.f);
 			}

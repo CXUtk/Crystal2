@@ -58,8 +58,8 @@ Vector3f GGXDistribution::Sample_wh(const Vector3f& wo, glm::vec2 sample) const
 
 		float sinPhi = glm::sin(phi), cosPhi = glm::cos(phi);
 		float A = square(cosPhi) / square(_alpha.x) + square(sinPhi) / square(_alpha.y);
-		
-		float cos2Theta = A * (1 - sample.x) / (A * (1 - sample.x) + 1);
+
+		float cos2Theta = A * (sample.x - 1) / (sample.x * (A - 1) - A);
 		cosTheta = std::sqrt(cos2Theta);
 	}
 	return GetUnitVectorUsingCos(cosTheta, phi);

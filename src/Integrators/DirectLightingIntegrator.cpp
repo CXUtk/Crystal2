@@ -53,12 +53,9 @@ glm::vec3 DirectLightingIntegrator::eval_rec(const Ray& ray, Scene* scene, Sampl
 		return eval_rec(isec.SpawnRay(ray.dir), scene, sampler, level, specular);
 	}
 
-	auto lights = scene->GetLights();
 
-	for (auto& light : lights)
-	{
 		L += UniformSampleAllLights(isec, scene, sampler);
-	}
+	
 
 	return L;
 }
