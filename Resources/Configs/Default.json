@@ -5,7 +5,7 @@
   "Threads": 8,
   "Acceleration": "BVH",
   "Integrator": {
-    "Type": "PathTracer",
+    "Type": "DirectLight",
     "Depth": 16,
     "Sampler": {
       "Type": "Default",

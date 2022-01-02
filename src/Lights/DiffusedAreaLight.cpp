@@ -10,9 +10,9 @@ crystal::DiffusedAreaLight::DiffusedAreaLight(const Shape* shape,
 	_area = _shape->SurfaceArea();
 }
 
-Spectrum crystal::DiffusedAreaLight::EvalEmitRadiance(const SurfaceInfo& surface, const Vector3f& w) const
+Spectrum crystal::DiffusedAreaLight::EvalEmitRadiance(const SurfaceInfo& surface_l, const Vector3f& w) const
 {
-	if (glm::dot(surface.GetNormal(), w) < 0)
+	if (glm::dot(surface_l.GetNormal(), w) < 0)
 	{
 		return Spectrum(0.f);
 	}
@@ -22,21 +22,22 @@ Spectrum crystal::DiffusedAreaLight::EvalEmitRadiance(const SurfaceInfo& surface
 	}
 }
 
-Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInteraction& hit, 
+Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInfo& surface_w,
 	const glm::vec2& sample, glm::vec3* endpoint, float* pdf) const
 {
-	auto surface = _shape->SampleSurface(sample);
-	*endpoint = surface.GetPosition();
-	*pdf = _shape->Pdf(surface);
+	auto surface_light = _shape->SampleSurface(sample);
+	*endpoint = surface_light.GetPosition();
+	*pdf = _shape->Pdf(surface_light);
 
-	auto lvec = hit.GetHitPos() - *endpoint;
+	auto lvec = surface_w.GetPosition() - *endpoint;
 	auto dir = glm::normalize(lvec);
-	return EvalEmitRadiance(surface, dir) / sqr(lvec) * std::max(0.f, glm::dot(surface.GetNormal(), dir));
+	auto s = std::max(0.f, glm::dot(surface_light.GetNormal(), dir));
+	return EvalEmitRadiance(surface_light, dir) / sqr(lvec);
 }
 
-float crystal::DiffusedAreaLight::Pdf_Li(const SurfaceInfo& surface, const Vector3f& wi) const
+float crystal::DiffusedAreaLight::Pdf_Li(const SurfaceInfo& surface_w, const Vector3f& wi) const
 {
-	return 0.0f;
+	return _shape->PdfLight(surface_w, wi);
 }
 
 Spectrum crystal::DiffusedAreaLight::Flux() const

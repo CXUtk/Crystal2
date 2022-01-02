@@ -20,6 +20,9 @@ public:
     void AddBxDF(const std::shared_ptr<BxDF>& bxdf);
     BxDFType Flags() const;
 
+    bool IsEmpty() const { return _numBxDF == 0; }
+
+    float Pdf(glm::vec3 wOut, glm::vec3 wIn, BxDFType flags) const;
     Spectrum DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const;
     Spectrum SampleDirection(float sampleBSDF, glm::vec2 sample, glm::vec3 wOut, glm::vec3* wIn, float* pdf, BxDFType flags, BxDFType* sampledType) const;
 

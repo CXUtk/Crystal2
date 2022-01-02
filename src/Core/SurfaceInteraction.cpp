@@ -11,7 +11,14 @@ SurfaceInteraction::SurfaceInteraction() {
 
 Ray SurfaceInteraction::SpawnRay(glm::vec3 dir) const {
     bool back = glm::dot(dir, _normal) < 0;
-    return Ray(_hitPos + (back ? -_normal : _normal) * EPS, dir);
+    return Ray(_hitPos + ((back) ? -_normal : _normal) * EPS, dir);
+}
+
+Ray SurfaceInteraction::SpawnRayTo(const Point3f& pos) const
+{
+    bool back = glm::dot(pos - _hitPos, _normal) < 0;
+    Point3f origin = _hitPos + ((back) ? -_normal : _normal) * EPS;
+    return Ray(origin, pos - _hitPos);
 }
 
 void SurfaceInteraction::SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal,
@@ -37,13 +44,19 @@ glm::mat3 SurfaceInteraction::GetInverseTNB() const
     return glm::transpose(GetTNB());
 }
 
-SurfaceInfo SurfaceInteraction::GetSurfaceInfo() const
+SurfaceInfo SurfaceInteraction::GetSurfaceInfo(bool actualNormal) const
 {
-    return SurfaceInfo(_hitPos, _frontFace ? _normal : -_normal);
+    return SurfaceInfo(_hitPos, actualNormal ? _normal 
+        : (_frontFace ? _normal : -_normal));
 }
 
 Spectrum SurfaceInteraction::Le(const Vector3f& w) const
 {
     auto areaLight = _hitEntity->GetAreaLight();
-    return areaLight ? areaLight->EvalEmitRadiance(GetSurfaceInfo(), w) : Spectrum(0.f);
+    return areaLight ? areaLight->EvalEmitRadiance(GetSurfaceInfo(true), w) : Spectrum(0.f);
+}
+
+Ray SurfaceInfo::SpawnRay(glm::vec3 dir) const
+{
+    return Ray(_pos + _normal * EPS, dir);
 }

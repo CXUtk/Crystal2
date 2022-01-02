@@ -30,15 +30,19 @@ namespace crystal
         virtual void Preprocess(const Scene* scene) const { }
 
         // Get the radiance value from the light to the object surface hit point
-        virtual Spectrum Sample_Li(const SurfaceInteraction& hit, const glm::vec2& sample, 
+        virtual Spectrum Sample_Li(const SurfaceInfo& surface_w, const glm::vec2& sample,
             Point3f* endpoint, float* pdf) const = 0;
 
-        virtual float Pdf_Li(const SurfaceInfo& surface, const Vector3f& wi) const = 0;
+        virtual float Pdf_Li(const SurfaceInfo& surface_w, const Vector3f& wi) const = 0;
 
         int GetNumSamples() const { return _numSamples; }
 
         LightFlags GetFlags() const { return _flags; }
 
+        bool IsDeltaLight() const
+        {
+            return (_flags & DeltaPosition) || (_flags & DeltaDirection);
+        }
 
     private:
         int _numSamples;

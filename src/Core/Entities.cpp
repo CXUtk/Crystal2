@@ -32,5 +32,6 @@ bool crystal::GeometricEntity::IntersectTest(const Ray& ray, const IIntersectabl
 
 void crystal::GeometricEntity::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera) const
 {
+	if (!_material) return;
 	_material->ComputeScatteringFunctions(isec, fromCamera);
 }

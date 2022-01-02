@@ -1,12 +1,12 @@
 #include "Shape.h"
 #include <Core/Utils.h>
 
-float Shape::PdfLight(const SurfaceInteraction& ref, const Vector3f& wi) const
+float Shape::PdfLight(const SurfaceInfo& surface_w, const Vector3f& wi) const
 {
-	Ray ray = ref.SpawnRay(wi);
-	SurfaceInteraction isec;
-	if (!Intersect(ray, &isec)) return 0.f;
+	Ray ray = surface_w.SpawnRay(wi);
+	SurfaceInteraction isec_l;
+	if (!Intersect(ray, &isec_l)) return 0.f;
 
-	return sqr(isec.GetHitPos() - ref.GetHitPos()) 
-		/ (std::max(0.f, glm::dot(-wi, isec.GetNormal())) * SurfaceArea());
+	return sqr(surface_w.GetPosition() - isec_l.GetHitPos())
+		/ (std::max(0.f, glm::dot(-wi, isec_l.GetNormal())) * SurfaceArea());
 }

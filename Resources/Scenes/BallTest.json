@@ -40,11 +40,11 @@
           ],
           "Scale": [
             10,
-            -1,
+            1,
             10
           ],
           "Rotation": [
-            -45,
+            180,
             0,
             0
           ]
@@ -316,23 +316,74 @@
       {
         "Type": "Geometry",
         "Shape": {
-          "Type": "Sphere",
-          "Position": [
-            -8,
-            2,
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            8,
+            0,
             -12
           ],
-          "Radius": 2
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
         },
         "Material": {
-          "Type": "Micro",
-          "Color": [
+          "Type": "Plastic",
+          "Kd": [
+            0.5,
             1.0,
-            1.0,
+            0.5
+          ],
+          "Ks": [
+            0.02,
+            0.02,
+            0.02
+          ],
+          "Roughness": [ 0.05, 0.05 ],
+          "NDF": "GGX"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "TriangleMesh",
+          "ObjFile": "Resources/Models/ball2.obj",
+          "Translation": [
+            -8,
+            0,
+            -12
+          ],
+          "Scale": [
+            1,
+            1,
+            1
+          ],
+          "Rotation": [
+            0,
+            180,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Plastic",
+          "Kd": [
+            0.5,
+            0.5,
             1.0
           ],
-          "Roughness": [ 0.1, 0.2 ],
-          "IOR": 1.45,
+          "Ks": [
+            0.03,
+            0.03,
+            0.03
+          ],
+          "Roughness": [ 0.2, 0.2 ],
           "NDF": "GGX"
         }
       }

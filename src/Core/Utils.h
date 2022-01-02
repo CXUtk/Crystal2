@@ -154,3 +154,9 @@ inline void fixVector(glm::vec3& vector)
 {
     vector = glm::clamp(vector, glm::vec3(-1.0), glm::vec3(1.0));
 }
+
+inline float PowerHeuristic(int nf, float fPdf, int ng, float gPdf)
+{
+    float f = nf * fPdf, g = ng * gPdf;
+    return (f * f) / (f * f + g * g);
+}

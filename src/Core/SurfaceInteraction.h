@@ -7,8 +7,10 @@ class SurfaceInfo
 {
 public:
     SurfaceInfo(const Point3f& position, const Normal3f& normal) :_pos(position), _normal(normal) {}
+    Ray SpawnRay(glm::vec3 dir) const;
     Point3f GetPosition() const { return _pos; }
     Normal3f GetNormal() const { return _normal; }
+
 private:
     Point3f _pos;
     Normal3f _normal;
@@ -19,6 +21,8 @@ public:
     SurfaceInteraction();
 
     Ray SpawnRay(glm::vec3 dir) const;
+    Ray SpawnRayTo(const Point3f& pos) const;
+
     void SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal, 
         glm::vec2 uv, bool frontFace, const glm::vec3& dpdu, const glm::vec3& dpdv);
 
@@ -37,7 +41,7 @@ public:
     glm::mat3 GetTNB() const;
     glm::mat3 GetInverseTNB() const;
 
-    SurfaceInfo GetSurfaceInfo() const;
+    SurfaceInfo GetSurfaceInfo(bool actualNormal) const;
 
     void SetBSDF(BSDF* bsdf) { _bsdf = bsdf; }
     BSDF* GetBSDF() const { return _bsdf; }

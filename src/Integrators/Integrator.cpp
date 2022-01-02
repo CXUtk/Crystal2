@@ -1,10 +1,11 @@
 ﻿#include "Integrator.h"
 #include "PathTracingIntegrator.h"
+#include "DirectLightingIntegrator.h"
 #include <Samplers/DefaultSampler.h>
 #include <SJson/SJson.h>
 
 bool isSamplerIntegrator(const std::string& type) {
-    return type == "WhittedStyle" || type == "PathTracer";
+    return true;
 }
 
 std::unique_ptr<Integrator> Integrator::LoadIntegrator(JsonNode_CPTR pConfigNode,
@@ -20,6 +21,11 @@ std::unique_ptr<Integrator> Integrator::LoadIntegrator(JsonNode_CPTR pConfigNode
         if (type == "PathTracer") {
             auto maxDepth = integratorNode->GetMember("Depth")->GetInt();
             return std::make_unique<PathTracingIntegrator>(sampler, configInfo.NumOfThreads, maxDepth);
+        }
+        else if (type == "DirectLight")
+        {
+            auto maxDepth = integratorNode->GetMember("Depth")->GetInt();
+            return std::make_unique<DirectLightingIntegrator>(sampler, configInfo.NumOfThreads, maxDepth);
         }
         else {
             throw std::invalid_argument("Invalid Integrator Type!");

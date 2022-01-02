@@ -41,7 +41,7 @@
           "ObjFile": "Resources/Models/Floor.obj",
           "Translation": [
             0,
-            4.99,
+            4.95,
             0
           ],
           "Scale": [
@@ -57,7 +57,7 @@
         },
         "AreaLight": {
           "Type": "Diffused",
-          "Flux": [ 50, 50, 50 ],
+          "Lemit": [ 5, 5, 5 ],
           "Samples": 1
         }
       },
@@ -295,7 +295,7 @@
           ],
           "Roughness": [ 0.1, 0.2 ],
           "IOR": 1.45,
-          "NDF": "GGX"
+          "NDF": "Beckmann"
         }
       }
     ]

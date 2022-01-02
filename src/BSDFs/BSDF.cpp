@@ -22,6 +22,30 @@ BxDFType BSDF::Flags() const
 	return (BxDFType)flag;
 }
 
+float BSDF::Pdf(glm::vec3 wOut, glm::vec3 wIn, BxDFType flags) const
+{
+	auto transform = _isec->GetInverseTNB();
+	wOut = transform * wOut;
+	wIn = transform * wIn;
+	fixVector(wOut);
+	fixVector(wIn);
+	
+	float pdf = 0.f;
+	int matched = 0;
+	bool reflect = wIn.y * wOut.y > 0;
+	for (int i = 0; i < _numBxDF; i++)
+	{
+		auto& bxdf = _bxdfs[i];
+		if (bxdf->Contains(flags) && (reflect && bxdf->Contains(BxDFType::BxDF_REFLECTION))
+			|| (!reflect && bxdf->Contains(BxDFType::BxDF_TRANSMISSION)))
+		{
+			pdf += bxdf->Pdf(wOut, wIn);
+			matched++;
+		}
+	}
+	return matched > 0 ? pdf / matched : 0;
+}
+
 Spectrum BSDF::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	auto transform = _isec->GetInverseTNB();
