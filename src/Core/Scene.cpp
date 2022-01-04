@@ -56,6 +56,14 @@ bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax,
 	return _accelStructure->IntersectTest(ray, ignoreShape, tMin, tMax);
 }
 
+void Scene::ForEachLights(std::function<void(const crystal::Light*)> action) const
+{
+	for (auto& light : _lights)
+	{
+		action(cptr(light));
+	}
+}
+
 const Texture_RGB* Scene::GetTextureByName(const std::string& name) const
 {
 	auto it = _defaultTextures.find(name);

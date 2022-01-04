@@ -63,15 +63,13 @@ glm::vec3 DirectLightingIntegrator::eval_rec(const Ray& ray, Scene* scene, Sampl
 Spectrum DirectLightingIntegrator::UniformSampleAllLights(const SurfaceInteraction& isec, Scene* scene, Sampler* sampler)
 {
 	Spectrum L(0.f);
-	for (auto& light : scene->GetLights())
-	{
-		if (light->Flux() == Spectrum(0.f)) continue;
-		// One sample for each light
-		glm::vec2 sampleLight = sampler->Get2D();
-		glm::vec2 sampleBSDF = sampler->Get2D();
-
+	// One sample for each light
+	glm::vec2 sampleLight = sampler->Get2D();
+	glm::vec2 sampleBSDF = sampler->Get2D();
+	scene->ForEachLights([&](const crystal::Light* light) {
+		if (light->Flux() == Spectrum(0.f)) return;
 		L += EsimateDirect(isec, scene, sampleLight, sampleBSDF, light, sampler);
-	}
+	});
 	return L;
 }
 

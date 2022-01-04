@@ -157,7 +157,6 @@ bool BVH::_intersectP(int p, const Ray& ray, const crystal::IIntersectable* igno
 	// 如果是叶子节点就是暴力判定一下
 	if (objCnt != 0)
 	{
-		SurfaceInteraction isec;
 		const crystal::IIntersectable* const* startP = &_objects[_nodes[p].entitiesStartOffset];
 		for (int i = 0; i < objCnt; i++)
 		{

@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <functional>
+
 #include <Core/ConfigInfo.h>
 #include <Core/Geometry.h>
 
@@ -17,15 +19,9 @@ public:
     bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
     bool IntersectTest(const Ray& ray, float tMin, float tMax,
         const crystal::IIntersectable* ignoreShape) const;
-    std::vector<const crystal::Light*> GetLights() const
-    {
-        std::vector<const crystal::Light*> lights;
-        for (auto& light : _lights)
-        {
-            lights.push_back(cptr(light));
-        }
-        return lights;
-    }
+
+    void ForEachLights(std::function<void(const crystal::Light*)> action) const;
+
 
     std::vector<const crystal::Entity*> GetObjects() const
     {

@@ -23,11 +23,79 @@ PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sam
 
 
 // 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
+// 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
 glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
-    Sampler* sampler) {
-    return eval_rec(ray, scene, sampler, 0, true);
-}
+	Sampler* sampler)
+{
+	int bounces = 0;
+	bool specularPath = true;
+	Spectrum beta(1.f), L(0.f);
+	Ray currentRay(ray);
 
+	for (; bounces < _maxDepth; bounces++)
+	{
+		SurfaceInteraction isec;
+		if (!scene->Intersect(currentRay, &isec))
+		{
+			if (scene->GetSkybox() != nullptr)
+			{
+				L += beta * scene->GetSkybox()->Evaluate(currentRay.dir);
+			}
+			break;
+		}
+
+		Vector3f wo = -currentRay.dir;
+		Normal3f N = isec.GetNormal();
+		Point3f P = isec.GetHitPos();
+		auto E = isec.GetHitEntity();
+
+		// 如果是自发光物体就把发光项加上
+		if (specularPath)
+		{
+			L += beta * isec.Le(-currentRay.dir);
+		}
+
+		BSDF bsdf(&isec);
+		isec.SetBSDF(&bsdf);
+		isec.GetHitEntity()->ComputeScatteringFunctions(isec, true);
+
+		// No bsdf function, means the object is transparent, go through it
+		if (bsdf.IsEmpty())
+		{
+			currentRay = isec.SpawnRay(currentRay.dir);
+			continue;
+		}
+
+		// 计算从光源采样的radiance
+		L += beta * UniformSampleAllLights(isec, scene, sampler);
+
+		// 进行一次路径追踪采样
+		Vector3f wIn;
+		float pdf;
+		BxDFType type;
+		auto brdf = bsdf.SampleDirection(sampler->Get1D(), sampler->Get2D(), wo, &wIn,
+			&pdf, BxDFType::BxDF_ALL, &type);
+		NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+		INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+		if (std::abs(pdf) == 0.f || brdf == glm::vec3(0))
+		{
+			break;
+		}
+
+		specularPath = (type & BxDF_SPECULAR);
+		auto cosine = specularPath ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
+		   ? glm::dot(-N, wIn) : glm::dot(N, wIn));
+		currentRay = isec.SpawnRay(wIn);
+		beta *= brdf * cosine / pdf;
+
+		NAN_DETECT_V(L, "PathTracingIntegrator::L");
+		INF_DETECT_V(L, "PathTracingIntegrator::L");
+
+		NAN_DETECT_V(beta, "PathTracingIntegrator::beta");
+		INF_DETECT_V(beta, "PathTracingIntegrator::beta");
+	}
+	return L;
+}
 
 glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 	Sampler* sampler, int level, bool specular)
@@ -86,8 +154,7 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 	L += UniformSampleAllLights(isec, scene, sampler);
 
 	L += Lindir;
-	NAN_DETECT_V(L, "PathTracingIntegrator::L");
-	INF_DETECT_V(L, "PathTracingIntegrator::L");
+
 	return L;
 }
 
@@ -95,15 +162,13 @@ glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
 Spectrum PathTracingIntegrator::UniformSampleAllLights(const SurfaceInteraction& isec, Scene* scene, Sampler* sampler)
 {
 	Spectrum L(0.f);
-	for (auto& light : scene->GetLights())
-	{
-		if (light->Flux() == Spectrum(0.f)) continue;
-		// One sample for each light
-		glm::vec2 sampleLight = sampler->Get2D();
-		glm::vec2 sampleBSDF = sampler->Get2D();
-
+	// One sample for each light
+	glm::vec2 sampleLight = sampler->Get2D();
+	glm::vec2 sampleBSDF = sampler->Get2D();
+	scene->ForEachLights([&](const crystal::Light* light) {
+		if (light->Flux() == Spectrum(0.f)) return;
 		L += EsimateDirect(isec, scene, sampleLight, sampleBSDF, light, sampler);
-	}
+	});
 	return L;
 }
 
@@ -116,11 +181,12 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 	Point3f P = isec.GetHitPos();
 	Normal3f N = isec.GetNormal();
 	Vector3f wo = -isec.GetHitDir();
+	SurfaceInfo surface = isec.GetSurfaceInfo(false);
 
 	// Sample light source with MIS (Specular BSDF will not have value)
 	Point3f lightPos;
 	float pdf_light;
-	auto Li_light = light->Sample_Li(isec.GetSurfaceInfo(false), sampleLight, &lightPos, &pdf_light);
+	auto Li_light = light->Sample_Li(surface, sampleLight, &lightPos, &pdf_light);
 
 	Vector3f wi = glm::normalize(lightPos - P);
 	if (pdf_light != 0.f && Li_light != Spectrum(0.f))
@@ -163,7 +229,7 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		if (!specularBSDF)
 		{
 			f *= std::max(0.f, glm::dot(N, wi));
-			pdf_light = light->Pdf_Li(isec.GetSurfaceInfo(false), wi);
+			pdf_light = light->Pdf_Li(surface, wi);
 			if (pdf_light == 0.f) return L;
 			weight = PowerHeuristic(1, pdf_bsdf, 1, pdf_light);
 		}
