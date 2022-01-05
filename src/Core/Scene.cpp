@@ -10,6 +10,7 @@
 #include <Shapes/Triangle.h>
 #include <Shapes/Sphere.h>
 #include <Shapes/TriangleMesh.h>
+#include <Shapes/Disk.h>
 #include <Lights/PointLight.h>
 #include <Lights/AreaLight.h>
 #include <Materials/Material.h>
@@ -150,6 +151,12 @@ std::vector<const Shape*> Scene::createShapes(JsonNode_CPTR pShapeNode)
 		auto sphere = Sphere::CreateSphere(pShapeNode);
 		_shapes.push_back(sphere);
 		shapesPtr.push_back(cptr(sphere));
+	}
+	else if (shapeType == "Disk")
+	{
+		auto disk = crystal::Disk::CreateDisk(pShapeNode);
+		_shapes.push_back(disk);
+		shapesPtr.push_back(cptr(disk));
 	}
 	else if (shapeType == "TriangleMesh")
 	{

@@ -17,7 +17,7 @@ $ ./Crystal2 <config file> <scene file>
 ## Features
 1. Integrators
 - [x] Path Tracing
-- [ ] Path Tracing + MIS
+- [x] Path Tracing + MIS Lighting
 - [x] Photon Mapping
 - [ ] Bidirectional Path Tracing
 
@@ -45,8 +45,8 @@ $ ./Crystal2 <config file> <scene file>
 5. Geometry
 - [x] Sphere
 - [x] Triangle Mesh
-- [x] Cylinder
-- [ ] Disk 
+- [x] Triangle
+- [x] Disk 
 
 6. Acceleators
 - [x] Brute force
@@ -69,6 +69,7 @@ $ ./Crystal2 <config file> <scene file>
 ![](Resources/Images/PBR1.png)
 ![](Resources/Images/PBR2.png)
 ![](Resources/Images/result.png)
+![](Resources/Images/anisotrophic.png)
 ![](Resources/Images/result-glass3.png)
 ![](Resources/Images/result-glass2.png)
 ![](Resources/Images/result-glass1.png)

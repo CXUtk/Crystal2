@@ -31,24 +31,6 @@ private:
 };
 
 
-class GGXRTDistribution : public MicrofacetDistribution
-{
-public:
-	GGXRTDistribution(const glm::mat3& TNB, float roughness);
-	~GGXRTDistribution() override;
-
-	float D(const Vector3f& wh) const override;
-	float G(const Vector3f& wo, const Vector3f& wi) const override;
-	glm::vec3 Sample_wh(const Vector3f& wo, glm::vec2 sample) const override;
-	float Pdf(const Vector3f& wo, const Vector3f& wh) const override;
-
-private:
-	float _roughness;
-
-	float G1(glm::vec3 w) const;
-};
-
-
 class BeckmannDistribution : public MicrofacetDistribution
 {
 public:

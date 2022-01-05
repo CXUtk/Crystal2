@@ -17,7 +17,7 @@ MicrofacetReflection::~MicrofacetReflection()
 float MicrofacetReflection::Pdf(glm::vec3 wOut, glm::vec3 wIn) const
 {
 	auto H = glm::normalize(wOut + wIn);
-	return _microDistribution->Pdf(wOut, H) / (4 * glm::dot(wIn, H));
+	return _microDistribution->Pdf(wOut, H) / (4 * glm::dot(wOut, H));
 }
 
 glm::vec3 MicrofacetReflection::DistributionFunction(glm::vec3 wOut, glm::vec3 wIn) const

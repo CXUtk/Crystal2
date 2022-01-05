@@ -7,7 +7,13 @@
 std::shared_ptr<Shape> Sphere::CreateSphere(JsonNode_CPTR pShapeNode) {
     auto pos = loader::parse_vec3(pShapeNode->GetMember("Position"));
     auto r = pShapeNode->GetMember("Radius")->GetFloat();
-    return std::make_shared<Sphere>(pos, r, glm::vec3(0));
+
+    Vector3f rotation = glm::vec3(0);
+    if (pShapeNode->HasMember("Rotation"))
+    {
+        rotation = loader::parse_vec3(pShapeNode->GetMember("Rotation"));
+    }
+    return std::make_shared<Sphere>(pos, r, rotation);
 }
 
 Sphere::Sphere(glm::vec3 pos, 
@@ -15,9 +21,9 @@ Sphere::Sphere(glm::vec3 pos,
     : _pos(pos), _radius(radius), _rot(rotation) {
 
     glm::mat4 rotMatrix = glm::identity<glm::mat4>();
-    rotMatrix = glm::rotate(rotMatrix, rotation.x, glm::vec3(1, 0, 0));
-    rotMatrix = glm::rotate(rotMatrix, rotation.y, glm::vec3(0, 1, 0));
-    rotMatrix = glm::rotate(rotMatrix, rotation.z, glm::vec3(0, 0, 1));
+    rotMatrix = glm::rotate(rotMatrix, rotation.x / 180.f * glm::pi<float>(), glm::vec3(1, 0, 0));
+    rotMatrix = glm::rotate(rotMatrix, rotation.y / 180.f * glm::pi<float>(), glm::vec3(0, 1, 0));
+    rotMatrix = glm::rotate(rotMatrix, rotation.z / 180.f * glm::pi<float>(), glm::vec3(0, 0, 1));
 
     _local2World = glm::mat3(rotMatrix);
     _world2Local = glm::transpose(_local2World);
