@@ -301,15 +301,38 @@
       {
         "Type": "Geometry",
         "Shape": {
+          "Type": "Sphere",
+          "Position": [
+            -1.5,
+            0,
+            -2
+          ],
+          "Radius": 0.75
+        },
+        "Material": {
+          "Type": "Glass",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0, 0 ],
+          "IOR": 1.45,
+          "NDF": "GGX"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
           "Type": "Disk",
           "Position": [
             0,
             3,
-            2
+            1.5
           ],
           "Radius": 2,
           "Rotation": [
-            -45,
+            -55,
             0,
             0
           ]
@@ -321,7 +344,7 @@
             1.0,
             1.0
           ],
-          "Roughness": [ 0.2, 0.1 ],
+          "Roughness": [ 0.5, 0.1 ],
           "IOR": 1.45,
           "NDF": "GGX"
         }

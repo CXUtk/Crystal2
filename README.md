@@ -69,6 +69,7 @@ $ ./Crystal2 <config file> <scene file>
 ![](Resources/Images/PBR1.png)
 ![](Resources/Images/PBR2.png)
 ![](Resources/Images/result.png)
+![](Resources/Images/anisotrophic.png)
 ![](Resources/Images/result-glass3.png)
 ![](Resources/Images/result-glass2.png)
 ![](Resources/Images/result-glass1.png)

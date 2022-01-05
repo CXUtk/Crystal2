@@ -230,6 +230,8 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 			sampleType, &sampledType);
 		bool specularBSDF = sampledType & BxDF_SPECULAR;
 
+		if (f == Spectrum(0.f)) return L;
+
 		float weight = 1.0f;
 		if (!specularBSDF)
 		{
