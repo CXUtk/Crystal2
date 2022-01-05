@@ -68,6 +68,8 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 
 		// 计算从光源采样的radiance
 		L += beta * UniformSampleAllLights(isec, scene, sampler);
+		NAN_DETECT_V(L, "PathTracingIntegrator::L::UniformSampleAllLights");
+		INF_DETECT_V(L, "PathTracingIntegrator::L::UniformSampleAllLights");
 
 		// 进行一次路径追踪采样
 		Vector3f wIn;
@@ -216,6 +218,9 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		}
 	}
 
+	NAN_DETECT_V(L, "PathTracingIntegrator::EsimateDirect::L::Light");
+	INF_DETECT_V(L, "PathTracingIntegrator::EsimateDirect::L::Light");
+
 	// Sample BSDF (Delta light should not have any value in BSDF sample)
 	if (!light->IsDeltaLight())
 	{
@@ -247,10 +252,16 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		{
 			Li = light->Le(wi);
 		}
+		if (glm::isnan(f * Li * weight / pdf_bsdf )!=glm::bvec3(false))
+		{
+			printf("%lf %lf\n", pdf_bsdf, pdf_light);
+		}
 		if (Li != Spectrum(0.f))
 		{
 			L += f * Li * weight / pdf_bsdf;
 		}
 	}
+	NAN_DETECT_V(L, "PathTracingIntegrator::EsimateDirect::L::BSDF");
+	INF_DETECT_V(L, "PathTracingIntegrator::EsimateDirect::L::BSDF");
 	return L;
 }

@@ -7,7 +7,13 @@
 std::shared_ptr<Shape> Sphere::CreateSphere(JsonNode_CPTR pShapeNode) {
     auto pos = loader::parse_vec3(pShapeNode->GetMember("Position"));
     auto r = pShapeNode->GetMember("Radius")->GetFloat();
-    return std::make_shared<Sphere>(pos, r, glm::vec3(0));
+
+    Vector3f rotation = glm::vec3(0);
+    if (pShapeNode->HasMember("Rotation"))
+    {
+        rotation = loader::parse_vec3(pShapeNode->GetMember("Rotation"));
+    }
+    return std::make_shared<Sphere>(pos, r, rotation);
 }
 
 Sphere::Sphere(glm::vec3 pos, 

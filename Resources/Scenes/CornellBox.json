@@ -19,6 +19,9 @@
     ]
   },
   "Scene": {
+    "Skybox": {
+      "Path": "Resources/Images/Skyboxes/Grace"
+    },
     "Textures": {
       "Test": {
         "Path": "Resources/Images/White.jpg"
@@ -291,6 +294,34 @@
             1.0
           ],
           "Roughness": [ 0.1, 0.2 ],
+          "IOR": 1.45,
+          "NDF": "GGX"
+        }
+      },
+      {
+        "Type": "Geometry",
+        "Shape": {
+          "Type": "Disk",
+          "Position": [
+            0,
+            3,
+            2
+          ],
+          "Radius": 2,
+          "Rotation": [
+            -45,
+            0,
+            0
+          ]
+        },
+        "Material": {
+          "Type": "Micro",
+          "Color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "Roughness": [ 0.2, 0.1 ],
           "IOR": 1.45,
           "NDF": "GGX"
         }
