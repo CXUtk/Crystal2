@@ -28,7 +28,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 	Sampler* sampler)
 {
 	int bounces = 0;
-	bool specularPath = true;
+	bool lightPath = true;
 	Spectrum beta(1.f), L(0.f);
 	Ray currentRay(ray);
 
@@ -50,7 +50,7 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 		auto E = isec.GetHitEntity();
 
 		// 如果是自发光物体就把发光项加上
-		if (specularPath)
+		if (lightPath)
 		{
 			L += beta * isec.Le(-currentRay.dir);
 		}
@@ -84,9 +84,11 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 			break;
 		}
 
-		specularPath = (type & BxDF_SPECULAR);
-		auto cosine = specularPath ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
+		bool specular = (type & BxDF_SPECULAR);
+		auto cosine = specular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
 		   ? glm::dot(-N, wIn) : glm::dot(N, wIn));
+
+		lightPath = specular || (type & BxDF_TRANSMISSION);
 		currentRay = isec.SpawnRay(wIn);
 		beta *= brdf * cosine / pdf;
 
@@ -168,7 +170,7 @@ Spectrum PathTracingIntegrator::UniformSampleAllLights(const SurfaceInteraction&
 	glm::vec2 sampleLight = sampler->Get2D();
 	glm::vec2 sampleBSDF = sampler->Get2D();
 	scene->ForEachLights([&](const crystal::Light* light) {
-		if (light->Flux() == Spectrum(0.f)) return;
+		if (light->Flux() == Spectrum(0.f) || light == isec.GetHitEntity()->GetAreaLight()) return;
 		L += EsimateDirect(isec, scene, sampleLight, sampleBSDF, light, sampler);
 	});
 	return L;
@@ -228,7 +230,7 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		BxDFType sampledType;
 		Spectrum f = isec.GetBSDF()->SampleDirection(sampler->Get1D(), sampleBSDF, wo, &wi, &pdf_bsdf,
 			sampleType, &sampledType);
-		bool specularBSDF = sampledType & BxDF_SPECULAR;
+		bool specularBSDF = (sampledType & BxDF_SPECULAR);
 
 		if (f == Spectrum(0.f)) return L;
 
