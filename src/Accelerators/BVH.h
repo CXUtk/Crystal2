@@ -19,15 +19,16 @@ private:
 	std::vector<const crystal::IIntersectable*> _objects;
 
 	void _build(int& p, int l, int r);
-	int newNode(int startOffset, int cnt, int splitAxis, const BoundingBox& box);
+	//int newNode(int startOffset, int cnt, int splitAxis, const BoundingBox& box);
 
-	bool _intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const;
-	bool _intersectP(int p, const Ray& ray, const crystal::IIntersectable* ignoreShape, 
-		float tMin, float tMax) const;
+	//bool _intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const;
+	//bool _intersectP(int p, const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+	//	float tMin, float tMax) const;
 
 
 	int splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos);
 	bool splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& splitPos);
 
-	void createLeaf(int& p, int l, int r);
+	int createLeaf(int& p, int l, int r);
+	int createInternal(int splitAxis, const BoundingBox& box);
 };

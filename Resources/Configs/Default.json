@@ -3,7 +3,7 @@
   "Height": 600,
   "SamplesPerPixel": 1024,
   "Threads": 8,
-  "Acceleration": "KDTree",
+  "Acceleration": "BVH",
   "Integrator": {
     "Type": "PathTracer",
     "Depth": 16,

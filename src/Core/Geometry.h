@@ -39,6 +39,27 @@ private:
     glm::vec3 _minPos, _maxPos;
 };
 
+inline bool RayBoxTest(const Ray& ray, bool inv[3], const glm::vec3& invD, 
+    const BoundingBox& box, float& tMin, float& tMax)
+{
+    auto minP = (box.GetMinPos() - ray.start) * invD;
+    auto maxP = (box.GetMaxPos() - ray.start) * invD;
+    if (inv[0]) std::swap(minP[0], maxP[0]);
+    tMin = std::max(tMin, minP[0]);
+    tMax = std::min(tMax, maxP[0]);
+    if (tMax < tMin) return false;
+
+    if (inv[1]) std::swap(minP[1], maxP[1]);
+    tMin = std::max(tMin, minP[1]);
+    tMax = std::min(tMax, maxP[1]);
+    if (tMax < tMin) return false;
+
+    if (inv[2]) std::swap(minP[2], maxP[2]);
+    tMin = std::max(tMin, minP[2]);
+    tMax = std::min(tMax, maxP[2]);
+    if (tMax < tMin) return false;
+    return true;
+}
 
 inline bool RayBoxTest(const Ray& ray, const BoundingBox& box, float& tMin, float& tMax) {
     bool inv[3] = { ray.dir[0] < 0, ray.dir[1] < 0 , ray.dir[2] < 0 };
