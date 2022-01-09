@@ -91,7 +91,6 @@ Spectrum MicrofacetTransmission::DistributionFunction(glm::vec3 wOut, glm::vec3 
 	auto v = _R * D * G * F 
 		* std::abs(glm::dot(H, wOut)) 
 		* std::abs(glm::dot(H, wIn))
-		 * eta * eta
 		/ (bot * std::max(0.f, -wIn.y) * std::max(0.f, wOut.y));
 	if (glm::isnan(v) != glm::bvec3(false))
 	{

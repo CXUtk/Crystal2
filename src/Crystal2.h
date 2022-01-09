@@ -2,6 +2,8 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+constexpr bool SHOW_DEBUG = true;
+
 namespace SJson {
     // Loaders
     class SJsonNode;
@@ -130,5 +132,5 @@ inline void reportINF(float v, const char* title, int lineNum, const char* fileN
 
 
 // Micro definitions
-#define NAN_DETECT_V(vec, name) reportNaN(vec, name, __LINE__, __FILE__)
-#define INF_DETECT_V(vec, name) reportINF(vec, name, __LINE__, __FILE__)
+#define NAN_DETECT_V(vec, name) if constexpr(SHOW_DEBUG) {reportNaN(vec, name, __LINE__, __FILE__);}
+#define INF_DETECT_V(vec, name) if constexpr(SHOW_DEBUG) {reportINF(vec, name, __LINE__, __FILE__);}

@@ -310,9 +310,9 @@
           "Position": [
             -1.5,
             0,
-            0
+            -0.5
           ],
-          "Radius": 0.75
+          "Radius": 1
         },
         "Material": {
           "Type": "Glass",
@@ -321,7 +321,7 @@
             1.0,
             1.0
           ],
-          "Roughness": [ 0.2, 0.2 ],
+          "Roughness": [ 0.05, 0.05 ],
           "IOR": 1.45,
           "NDF": "GGX"
         }

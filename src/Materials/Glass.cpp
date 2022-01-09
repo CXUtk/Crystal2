@@ -26,7 +26,7 @@ void Glass::ComputeScatteringFunctions(SurfaceInteraction& isec, bool fromCamera
     }
     else
     {
-        auto d = std::make_shared<BeckmannDistribution>(_roughness);
+        auto d = std::make_shared<GGXDistribution>(_roughness);
         // auto dggx = std::make_shared<GGXDistribution>(_roughness);
         isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetReflection>(_color, etaA, etaB, F, d));
         isec.GetBSDF()->AddBxDF(std::make_shared<MicrofacetTransmission>(_color, etaA, etaB, F, d));

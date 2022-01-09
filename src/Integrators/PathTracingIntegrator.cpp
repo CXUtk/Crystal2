@@ -22,8 +22,6 @@ PathTracingIntegrator::PathTracingIntegrator(const std::shared_ptr<Sampler>& sam
 }
 
 
-// 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
-// 路径追踪渲染器一开始使用选定sampler，在经过一次transport以后变成随机sampler
 glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 	Sampler* sampler)
 {
@@ -91,6 +89,14 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 		lightPath = specular || (type & BxDF_TRANSMISSION);
 		currentRay = isec.SpawnRay(wIn);
 		beta *= brdf * cosine / pdf;
+
+		if (bounces > 3)
+		{
+			float q = std::max(.05f, 1.f - glm::length(beta));
+			if (sampler->Get1D(0)< q)
+				break;
+			beta /= 1 - q;
+		}
 
 		NAN_DETECT_V(L, "PathTracingIntegrator::L");
 		INF_DETECT_V(L, "PathTracingIntegrator::L");

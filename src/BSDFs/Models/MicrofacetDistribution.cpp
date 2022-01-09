@@ -20,7 +20,6 @@ GGXDistribution::~GGXDistribution()
 
 float GGXDistribution::D(const Vector3f & wh) const
 {
-	if (wh.y < 0) return 0.f;
 	float cos2Theta = wh.y * wh.y;
 	assert(1.f - cos2Theta >= 0.f);
 	float sin2Theta = std::max(0.f, 1.f - cos2Theta);
