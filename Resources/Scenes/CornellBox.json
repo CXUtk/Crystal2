@@ -220,7 +220,7 @@
         "Type": "Geometry",
         "Shape": {
           "Type": "TriangleMesh",
-          "ObjFile": "Resources/Models/Cube.obj",
+          "ObjFile": "Resources/Models/Cube1.obj",
           "Translation": [
             1,
             1,
@@ -252,7 +252,7 @@
         "Type": "Geometry",
         "Shape": {
           "Type": "TriangleMesh",
-          "ObjFile": "Resources/Models/Cube.obj",
+          "ObjFile": "Resources/Models/Cube1.obj",
           "Translation": [
             -1.2,
             0,

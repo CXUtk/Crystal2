@@ -1,14 +1,11 @@
 ﻿#pragma once
 #include "Accelerator.h"
-
-
 struct BVHNode;
-
 
 class BVH : public Accelerator
 {
 public:
-	BVH(bool shouldSetHitEntity);
+	BVH();
 	~BVH() override;
 	void Build(const std::vector<const crystal::IIntersectable*>& objects) override;
 	bool Intersect(const Ray& ray, SurfaceInteraction* info, 

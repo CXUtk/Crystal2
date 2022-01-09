@@ -3,7 +3,7 @@
 
 class Brute : public Accelerator {
 public:
-    Brute(bool shouldSetHitEntity);
+    Brute();
     ~Brute() override;
     void Build(const std::vector<const crystal::IIntersectable*>& objects) override;
     bool Intersect(const Ray& ray, SurfaceInteraction* info, 

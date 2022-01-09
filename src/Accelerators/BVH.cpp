@@ -10,7 +10,7 @@ enum class SplitMethod
 	EQUAL_COUNTS,
 	SAH
 };
-constexpr int MAX_OBJ_IN_NODE = 4;
+constexpr int MAX_OBJ_IN_NODE = 2;
 constexpr SplitMethod SLILT_METHOD = SplitMethod::EQUAL_COUNTS;
 constexpr float TRAV_COST = 0.5f;
 constexpr float INTERSECT_COST = 1.0f;
@@ -24,7 +24,7 @@ struct BVHNode
 };
 
 
-BVH::BVH(bool shouldSetHitEntity) : Accelerator(shouldSetHitEntity), _nodes(nullptr), _tot(0), _root(0)
+BVH::BVH() : _nodes(nullptr), _tot(0), _root(0)
 {}
 
 BVH::~BVH()
@@ -122,16 +122,13 @@ bool BVH::_intersect(int p, const Ray& ray, SurfaceInteraction* info, float tMin
 			}
 			if (dis < info->GetDistance())
 			{
-				if (_shouldSetHitEntity)
-				{
-					isec.SetHitEntity(dynamic_cast<const crystal::Entity*>(startP[i]));
-				}
+				isec.SetHitEntity(dynamic_cast<const crystal::Entity*>(startP[i]));
+
 				*info = std::move(isec);
 			}
 		}
 		return hit;
 	}
-
 
 	int initDir = ray.dir[_nodes[p].splitAxis] > 0 ? 0 : 1;
 

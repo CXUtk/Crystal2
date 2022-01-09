@@ -51,7 +51,7 @@ $ ./Crystal2 <config file> <scene file>
 6. Acceleators
 - [x] Brute force
 - [x] BVH with SAH
-- [ ] K-D Tree
+- [x] K-D Tree
 - [ ] ?
 
 7. Lights
