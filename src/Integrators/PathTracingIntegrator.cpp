@@ -39,6 +39,10 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 			{
 				L += beta * scene->GetSkybox()->Evaluate(currentRay.dir);
 			}
+			else
+			{
+				L += beta * 0.5f;
+			}
 			break;
 		}
 
@@ -106,67 +110,67 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 	}
 	return L;
 }
-
-glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
-	Sampler* sampler, int level, bool specular)
-{
-	Spectrum L(0.f);
-	if (level == _maxDepth) return L;
-
-	SurfaceInteraction isec;
-	if (!scene->Intersect(ray, &isec))
-	{
-		if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
-		return scene->GetSkybox()->Evaluate(ray.dir);
-	}
-
-	Normal3f N = isec.GetNormal();
-	Point3f P = isec.GetHitPos();
-	auto E = isec.GetHitEntity();
-
-	// 如果是自发光物体就把发光项加上
-	if (specular)
-	{
-		L += isec.Le(-ray.dir);
-	}
-
-	BSDF bsdf(&isec);
-	isec.SetBSDF(&bsdf);
-	isec.GetHitEntity()->ComputeScatteringFunctions(isec, true);
-
-	// No bsdf function, means the object is transparent
-	if (bsdf.IsEmpty())
-	{
-		if (isec.GetHitEntity()->GetAreaLight() != nullptr)
-		{
-			return L;
-		}
-		return eval_rec(isec.SpawnRay(ray.dir), scene, sampler, level, specular);
-	}
-
-
-	// 进行一次路径追踪采样
-	Vector3f wIn;
-	float pdf;
-	BxDFType type;
-	auto brdf = bsdf.SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn,
-		&pdf, BxDFType::BxDF_ALL, &type);
-	NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
-	INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
-	if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return L;
-	bool isSpecular = (type & BxDF_SPECULAR);
-
-	auto cosine = isSpecular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
-	   ? glm::dot(-N, wIn) : glm::dot(N, wIn));
-	auto Lindir = eval_rec(isec.SpawnRay(wIn), scene, sampler, level + 1, isSpecular) * brdf * cosine / pdf;
-
-	// 计算从光源采样的radiance
-	L += UniformSampleAllLights(isec, scene, sampler);
-
-	L += Lindir;
-
-	return L;
-}
+//
+//glm::vec3 PathTracingIntegrator::eval_rec(const Ray& ray, Scene* scene,
+//	Sampler* sampler, int level, bool specular)
+//{
+//	Spectrum L(0.f);
+//	if (level == _maxDepth) return L;
+//
+//	SurfaceInteraction isec;
+//	if (!scene->Intersect(ray, &isec))
+//	{
+//		if (scene->GetSkybox() == nullptr) return glm::vec3(0.f);
+//		return scene->GetSkybox()->Evaluate(ray.dir);
+//	}
+//
+//	Normal3f N = isec.GetNormal();
+//	Point3f P = isec.GetHitPos();
+//	auto E = isec.GetHitEntity();
+//
+//	// 如果是自发光物体就把发光项加上
+//	if (specular)
+//	{
+//		L += isec.Le(-ray.dir);
+//	}
+//
+//	BSDF bsdf(&isec);
+//	isec.SetBSDF(&bsdf);
+//	isec.GetHitEntity()->ComputeScatteringFunctions(isec, true);
+//
+//	// No bsdf function, means the object is transparent
+//	if (bsdf.IsEmpty())
+//	{
+//		if (isec.GetHitEntity()->GetAreaLight() != nullptr)
+//		{
+//			return L;
+//		}
+//		return eval_rec(isec.SpawnRay(ray.dir), scene, sampler, level, specular);
+//	}
+//
+//
+//	// 进行一次路径追踪采样
+//	Vector3f wIn;
+//	float pdf;
+//	BxDFType type;
+//	auto brdf = bsdf.SampleDirection(sampler->Get1D(), sampler->Get2D(), -ray.dir, &wIn,
+//		&pdf, BxDFType::BxDF_ALL, &type);
+//	NAN_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+//	INF_DETECT_V(brdf, "PathTracingIntegrator::BSDF");
+//	if (std::abs(pdf) == 0.f || brdf == glm::vec3(0)) return L;
+//	bool isSpecular = (type & BxDF_SPECULAR);
+//
+//	auto cosine = isSpecular ? 1.0f : std::max(0.f, (type & BxDF_TRANSMISSION)
+//	   ? glm::dot(-N, wIn) : glm::dot(N, wIn));
+//	auto Lindir = eval_rec(isec.SpawnRay(wIn), scene, sampler, level + 1, isSpecular) * brdf * cosine / pdf;
+//
+//	// 计算从光源采样的radiance
+//	L += UniformSampleAllLights(isec, scene, sampler);
+//
+//	L += Lindir;
+//
+//	return L;
+//}
 
 
 Spectrum PathTracingIntegrator::UniformSampleAllLights(const SurfaceInteraction& isec, Scene* scene, Sampler* sampler)
