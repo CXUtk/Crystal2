@@ -20,9 +20,9 @@ int main(int argc, char** argv) {
 
 			try
 			{
-				auto renderer = std::make_shared<crystal::CrystalEngine>(configNode, sceneNode);
+				auto renderer = std::make_unique<crystal::CrystalEngine>(configNode, sceneNode);
 				//auto brdf = std::make_shared<crystal::BRDFDemo>(configNode);
-				trv2::Engine engine(argc, argv, renderer);
+				trv2::Engine engine(argc, argv, std::move(renderer));
 				engine.Run();
 			}
 			catch (std::exception ex)

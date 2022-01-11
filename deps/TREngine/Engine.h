@@ -13,7 +13,7 @@ class Engine
 {
 public:
 
-    Engine(int argc, char** argv, const std::shared_ptr<Application>& application);
+    Engine(int argc, char** argv, std::unique_ptr<Application>&& application);
     ~Engine();
 
     /**
@@ -26,7 +26,7 @@ public:
      * @brief Manually set current application instance
      * @param application The application instance to run
     */
-    void SetApplication(const std::shared_ptr<Application>& application);
+    void SetApplication(std::unique_ptr<Application>& application);
 
     /**
      * @brief Start game loop and application update and draw process
@@ -105,7 +105,7 @@ private:
     std::shared_ptr<SpriteRenderer> _spriteRenderer;
     std::shared_ptr<AssetsManager> _assetsManager;
     std::shared_ptr<InputController> _inputController;
-    std::shared_ptr<Application> _application;
+    std::unique_ptr<Application> _application;
     std::shared_ptr<GameTimer> 	_gameTimer;
     std::shared_ptr<UniversalRenderer> _universalRenderer;
 

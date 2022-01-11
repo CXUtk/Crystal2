@@ -15,11 +15,11 @@ TRV2_NAMESPACE_BEGIN
 
 Engine* Engine::_instance = nullptr;
 
-void Engine::SetApplication(const std::shared_ptr<Application>& application)
+void Engine::SetApplication(std::unique_ptr<Application>& application)
 {
 	assert(application != nullptr);
 
-	_application = application;
+	_application = std::move(application);
 	useApplication();
 }
 
@@ -71,7 +71,7 @@ void Engine::Run()
         throw;
     }
 }
-Engine::Engine(int argc, char** argv, const std::shared_ptr<Application>& application)
+Engine::Engine(int argc, char** argv, std::unique_ptr<Application>&& application)
 {
     _instance = this;
     _logger = std::make_unique<Logger>();

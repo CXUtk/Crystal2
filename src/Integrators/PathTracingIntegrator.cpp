@@ -39,10 +39,6 @@ glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
 			{
 				L += beta * scene->GetSkybox()->Evaluate(currentRay.dir);
 			}
-			else
-			{
-				L += beta * 0.5f;
-			}
 			break;
 		}
 
