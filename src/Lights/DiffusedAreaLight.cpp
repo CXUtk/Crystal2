@@ -28,7 +28,7 @@ Spectrum crystal::DiffusedAreaLight::Sample_Li(const SurfaceInfo& surface_w,
 	auto surface_light = _shape->SampleSurface(sample);
 	*endpoint = surface_light.GetPosition();
 
-	auto dir = glm::normalize(*endpoint - surface_w.GetPosition());
+	auto dir = *endpoint - surface_w.GetPosition();
 	*pdf = _shape->PdfLight(surface_w, dir);
 	return EvalEmitRadiance(surface_light, -dir);
 }

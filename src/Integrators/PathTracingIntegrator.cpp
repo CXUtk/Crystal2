@@ -262,10 +262,8 @@ Spectrum PathTracingIntegrator::EsimateDirect(const SurfaceInteraction& isec, Sc
 		{
 			Li = light->Le(wi);
 		}
-		if (glm::isnan(f * Li * weight / pdf_bsdf )!=glm::bvec3(false))
-		{
-			printf("%lf %lf\n", pdf_bsdf, pdf_light);
-		}
+		NAN_DETECT_V(f * Li * weight / pdf_bsdf, "PathTracingIntegrator::EsimateDirect::L::BSDF::f*Li");
+		INF_DETECT_V(f * Li * weight / pdf_bsdf, "PathTracingIntegrator::EsimateDirect::L::BSDF::f*Li");
 		if (Li != Spectrum(0.f))
 		{
 			L += f * Li * weight / pdf_bsdf;
