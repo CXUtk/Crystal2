@@ -9,7 +9,10 @@ namespace crystal
     {
     public:
         StratifiedSampler(Point2i pixelSamples, int sampledDimensions);
-        ~StratifiedSampler();
+        ~StratifiedSampler() override;
+
+        void Preprocess() override;
+        virtual std::shared_ptr<Sampler> Clone(int seed) const override;
 
         void StartPixel(const Point2i& pt) override;
 

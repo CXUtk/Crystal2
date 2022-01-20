@@ -14,6 +14,8 @@ namespace crystal
 		Point2f Get2D() override;
 
 		void Preprocess() override;
+
+		std::shared_ptr<Sampler> Clone(int seed) const override;
 	private:
 		RNG _rng;
 	};

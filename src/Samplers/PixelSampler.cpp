@@ -3,7 +3,8 @@
 
 namespace crystal
 {
-	PixelSampler::PixelSampler(int samplesPerPixel, int dimensions) : Sampler(samplesPerPixel)
+	PixelSampler::PixelSampler(int samplesPerPixel, int dimensions) 
+		: Sampler(samplesPerPixel), _dimensions(dimensions)
 	{
 		for (int i = 0; i < dimensions; i++)
 		{

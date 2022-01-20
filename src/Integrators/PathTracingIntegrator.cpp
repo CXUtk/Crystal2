@@ -96,7 +96,7 @@ namespace crystal
 			if (bounces > 3)
 			{
 				float q = std::max(.05f, 1.f - glm::length(beta));
-				if (sampler->Get1D(0) < q)
+				if (sampler->Get1D() < q)
 					break;
 				beta /= 1 - q;
 			}

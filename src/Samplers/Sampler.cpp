@@ -20,6 +20,7 @@ namespace crystal
         else if (samplerType == "Stratified")
         {
             bool isSQR = false;
+            int side = 0;
             for (int i = 1; i <= configInfo.SamplesPerPixel; i++)
             {
                 if ((long long)i * i > configInfo.SamplesPerPixel)
@@ -28,6 +29,7 @@ namespace crystal
                 }
                 if (i * i == configInfo.SamplesPerPixel)
                 {
+                    side = i;
                     isSQR = true;
                 }
             }
@@ -35,7 +37,7 @@ namespace crystal
             {
                 throw std::exception("Stratified sampler should have a square number of SamplesPerPixel");
             }
-            return std::make_shared<StratifiedSampler>(configInfo.SamplesPerPixel, samplerSeed);
+            return std::make_shared<StratifiedSampler>(Point2i(side, side), 10);
         }
         else
         {

@@ -13,13 +13,13 @@ namespace crystal
 			const config::ConfigInfo& configInfo);
 
 		Sampler(int samplesPerPixel) : _samplesPerPixel(samplesPerPixel) {}
-		virtual ~Sampler() = 0 {};
-
 		int GetSamplesPerPixel() const { return _samplesPerPixel; }
 
+		virtual ~Sampler() = 0 {};
 		virtual float Get1D() = 0;
 		virtual Point2f Get2D() = 0;
 		virtual void Preprocess() = 0;
+		virtual std::shared_ptr<Sampler> Clone(int seed) const = 0;
 
 		void Request1DArray(int N);
 		void Request2DArray(int N);
@@ -36,8 +36,6 @@ namespace crystal
 			_currentPixel = pt, _currentSampleIndex = 0;
 			_array1DOffset = _array2DOffset = 0;
 		}
-
-		virtual std::shared_ptr<Sampler> Clone(int seed) const = 0;
 
 	protected:
 		int _samplesPerPixel, _currentSampleIndex = 0;
