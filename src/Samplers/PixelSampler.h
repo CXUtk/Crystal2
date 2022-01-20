@@ -19,6 +19,6 @@ namespace crystal
 		std::vector<std::vector<float>> _samples1D;
 		std::vector<std::vector<Point2f>> _samples2D;
 		int _current1DDimension = 0, _current2DDimension = 0;
-		std::mt19937 _rng;
+		RNG _rng{};
 	};
 }

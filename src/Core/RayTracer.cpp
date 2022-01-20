@@ -18,7 +18,7 @@ RayTracer::RayTracer(const config::ConfigInfo& configInfo, JsonNode_CPTR pConfig
 
 	_scene = Scene::CreateScene(pSceneNode->GetMember("Scene"), configInfo);
 	_camera = Camera::CreateCamera(pSceneNode->GetMember("Camera"), configInfo);
-	_integrator = Integrator::LoadIntegrator(pConfigNode, configInfo);
+	_integrator = crystal::Integrator::LoadIntegrator(pConfigNode, configInfo);
 
 	_integrator->Preprocess(ptr(_scene));
 }

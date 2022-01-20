@@ -16,7 +16,7 @@ public:
 
 private:
     std::unique_ptr<Scene> _scene;
-    std::unique_ptr<Integrator> _integrator;
+    std::unique_ptr<crystal::Integrator> _integrator;
     std::unique_ptr<Camera> _camera;
 
     std::unique_ptr<FrameBuffer> _frameBuffer;

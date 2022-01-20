@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <memory>
+#include <random>
 #include <glm/glm.hpp>
 
 constexpr bool SHOW_DEBUG = true;
@@ -15,6 +16,7 @@ namespace crystal
     class Entity;
     class Light;
     class AreaLight;
+    class Integrator;
 }
 
 // Core
@@ -26,7 +28,6 @@ class SurfaceInfo;
 
 class FrameBuffer;
 class Scene;
-class Integrator;
 class Camera;
 class Shape;
 class Accelerator;
@@ -57,6 +58,7 @@ using Texture_RGB = Texture<Color3f>;
 using Texture_Float = Texture<float>;
 using Texture_Int = Texture<int>;
 
+using RNG = std::mt19937;
 
 
 /**

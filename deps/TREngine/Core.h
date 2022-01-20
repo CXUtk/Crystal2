@@ -97,9 +97,10 @@ inline T* ptr(const std::unique_ptr<T>& ptr) { return static_cast<T*>(ptr.get())
 template<typename T>
 inline const T* cptr(const std::unique_ptr<T>& ptr) { return static_cast<const T*>(ptr.get()); }
 
-TRV2_NAMESPACE_END
-
 
 constexpr float OneMinusEpsilon = 0.99999994f;
 using byte8 = unsigned char;
 using uint = unsigned int;
+
+TRV2_NAMESPACE_END
+

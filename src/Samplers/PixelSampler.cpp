@@ -23,7 +23,7 @@ namespace crystal
 	{
 		if (_current2DDimension < _samples2D.size())
 		{
-			return _samples2D[_current1DDimension++][_currentSampleIndex];
+			return _samples2D[_current2DDimension++][_currentSampleIndex];
 		}
 		return Point2f(uniformRandomFloat(_rng), uniformRandomFloat(_rng));
 	}

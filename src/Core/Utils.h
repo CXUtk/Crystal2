@@ -9,7 +9,7 @@ constexpr float SHADOW_EPS = 1e-5;
 
 constexpr float OneMinusEpsilon = 0x1.fffffep-1;
 
-inline float uniformRandomFloat(std::mt19937& mt)
+inline float uniformRandomFloat(RNG& mt)
 {
     return std::min(OneMinusEpsilon, mt() * 2.3283064365386963e-10f);
 }
