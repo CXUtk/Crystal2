@@ -28,4 +28,14 @@ namespace crystal
 		}
 		return Point2f(uniformRandomFloat(_rng), uniformRandomFloat(_rng));
 	}
+	bool PixelSampler::StartNextSample()
+	{
+		_current1DDimension = 0, _current2DDimension = 0;
+		return Sampler::StartNextSample();
+	}
+	void PixelSampler::StartPixel(const Point2i& pt)
+	{
+		_current1DDimension = 0, _current2DDimension = 0;
+		Sampler::StartPixel(pt);
+	}
 }

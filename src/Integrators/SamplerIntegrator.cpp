@@ -46,19 +46,21 @@ namespace crystal
                         sampler_thread->StartPixel(Point2i(i, j));
                         do
                         {
-                            glm::vec2 pos = glm::vec2(j, i) + sampler_thread->Get2D();
+                            auto s = sampler_thread->Get2D();
+                            glm::vec2 pos = glm::vec2(j, i) + s;
                             pos.x = pos.x / w;
                             pos.y = pos.y / h;
 
                             auto ray = camera->GenerateRay(pos);
-                            auto color = Evaluate(ray, scene, ptr(_sampler));
+                            auto color = Evaluate(ray, scene, ptr(sampler_thread));
 
                             frameBuffer->AddSample(j, i, color);
+                            //printf("%lf %lf\n", s.x, s.y);
                         } while (sampler_thread->StartNextSample());
 
                         mutexLock.lock();
                         totalSampled += SPP;
-                        fprintf(stdout, "Tracing: %.2lf%%\n", (double)totalSampled / total * 100.0);
+                        fprintf(stdout, "Tracing: %.2lf%%, %lld/%lld\n", (double)totalSampled / total * 100.0, totalSampled, total);
                         mutexLock.unlock();
                     }
                 }

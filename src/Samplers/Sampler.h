@@ -28,6 +28,7 @@ namespace crystal
 
 		virtual bool StartNextSample()
 		{
+			_array1DOffset = _array2DOffset = 0;
 			return ++_currentSampleIndex < _samplesPerPixel;
 		}
 

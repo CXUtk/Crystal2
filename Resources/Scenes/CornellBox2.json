@@ -315,13 +315,13 @@
           "Radius": 1
         },
         "Material": {
-          "Type": "Glass",
+          "Type": "Diffuse",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
-          "Roughness": [ 0.05, 0.05 ],
+          "Roughness": [ 0.1, 0.1 ],
           "IOR": 1.45,
           "NDF": "GGX"
         }
@@ -343,7 +343,7 @@
           ]
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Diffuse",
           "Color": [
             1.0,
             1.0,

@@ -10,6 +10,8 @@ namespace crystal
 
 		float Get1D() override;
 		Point2f Get2D() override;
+		bool StartNextSample() override;
+		void StartPixel(const Point2i& pt) override;
 
 		virtual std::shared_ptr<Sampler> Clone(int seed) const = 0;
 
