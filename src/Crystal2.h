@@ -17,6 +17,7 @@ namespace crystal
     class Light;
     class AreaLight;
     class Integrator;
+    class Sampler;
 }
 
 // Core

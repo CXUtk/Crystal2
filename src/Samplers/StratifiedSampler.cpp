@@ -11,14 +11,12 @@ namespace crystal
 
 	}
 
-	void StratifiedSampler::Preprocess()
-	{
-
-	}
 
 	std::shared_ptr<Sampler> StratifiedSampler::Clone(int seed) const
 	{
-		return std::make_shared<StratifiedSampler>(_pixelSamples, _dimensions);
+		auto other = std::make_shared<StratifiedSampler>(*this);
+		other->_rng.seed(seed);
+		return other;
 	}
 
 	void StratifiedSample1D(float* A, int size, RNG& rng)

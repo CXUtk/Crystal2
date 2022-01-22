@@ -12,7 +12,7 @@ namespace crystal
     public:
         SamplerIntegrator(const std::shared_ptr<Sampler>& sampler, int threads);
 
-        void Preprocess(Scene* scene) override;
+        virtual void Preprocess(Scene* scene, Sampler* sampler) = 0;
         void Render(Scene* scene, Camera* camera,
             FrameBuffer* frameBuffer) override;
         virtual glm::vec3 Evaluate(const Ray& ray, Scene* scene,

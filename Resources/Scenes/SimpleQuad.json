@@ -137,15 +137,16 @@
           ]
         },
         "Material": {
-          "Type": "Micro",
+          "Type": "Glass",
           "Color": [
             1.0,
             1.0,
             1.0
           ],
-          "Roughness": [ 0.3, 0.3 ],
+          "Roughness": [ 0.05, 0.05 ],
           "IOR": 1.45,
-          "Kd": "Test"
+          "Kd": "Test",
+          "NDF": "GGX"
         }
       }
     ]

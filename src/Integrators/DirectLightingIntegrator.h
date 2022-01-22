@@ -9,6 +9,7 @@ namespace crystal
     public:
         DirectLightingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads, int maxDepth);
 
+        void Preprocess(Scene* scene, Sampler* sampler) override {};
         Spectrum Evaluate(const Ray& ray, Scene* scene, Sampler* sampler) override;
 
     private:

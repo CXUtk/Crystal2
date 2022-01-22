@@ -10,10 +10,8 @@ namespace crystal
 		~DefaultSampler() override;
 
 		float Get1D() override;
-
 		Point2f Get2D() override;
 
-		void Preprocess() override;
 
 		std::shared_ptr<Sampler> Clone(int seed) const override;
 	private:

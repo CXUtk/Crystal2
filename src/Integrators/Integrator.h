@@ -13,8 +13,6 @@ namespace crystal
 
         Integrator() {}
         virtual ~Integrator() = 0 {}
-
-        virtual void Preprocess(Scene* scene) {}
         virtual void Render(Scene* scene, Camera* camera,
             FrameBuffer* frameBuffer) = 0;
     };

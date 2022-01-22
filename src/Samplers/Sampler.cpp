@@ -76,4 +76,16 @@ namespace crystal
         return &_sampleArray2D[_array2DOffset++][_currentSampleIndex * N];
     }
 
+    bool Sampler::StartNextSample()
+    {
+        _array1DOffset = _array2DOffset = 0;
+        return ++_currentSampleIndex < _samplesPerPixel;
+    }
+
+    void Sampler::StartPixel(const Point2i& pt)
+    {
+        _currentPixel = pt, _currentSampleIndex = 0;
+        _array1DOffset = _array2DOffset = 0;
+    }
+
 }

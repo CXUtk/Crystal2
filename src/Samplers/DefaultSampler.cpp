@@ -21,11 +21,10 @@ namespace crystal
 	}
 
 
-	void DefaultSampler::Preprocess()
-	{}
-
 	std::shared_ptr<Sampler> DefaultSampler::Clone(int seed) const
 	{
-		return std::make_shared<DefaultSampler>(_samplesPerPixel, seed);
+		auto other = std::make_shared<DefaultSampler>(*this);
+		other->_rng.seed(seed);
+		return other;
 	}
 }

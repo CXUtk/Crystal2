@@ -14,15 +14,11 @@ namespace crystal
         _threadPool = std::make_unique<FixedThreadPool>(threads);
     }
 
-    void SamplerIntegrator::Preprocess(Scene* scene)
-    {
-        _sampler->Preprocess();
-    }
-
     void SamplerIntegrator::Render(Scene* scene,
         Camera* camera,
         FrameBuffer* frameBuffer)
     {
+        Preprocess(scene, ptr(_sampler));
         int w = frameBuffer->Width(), h = frameBuffer->Height();
         int SPP = _sampler->GetSamplesPerPixel();
 
@@ -34,11 +30,12 @@ namespace crystal
         //int split = h % _numThreads;
         //int blockLower = h / _numThreads;
         //int blockUpper = (h + _numThreads - 1) / _numThreads;
-        std::atomic<bool> canExit = false;
+        std::atomic<int> finishedCount = 0;
         for (int mod = 0; mod < _numThreads; mod++)
         {
             auto task = [&, mod, w, h]() {
-                auto sampler_thread = _sampler->Clone(0);
+                auto sampler_thread = _sampler->Clone(mod);
+                
                 for (int i = mod; i < h; i += _numThreads)
                 {
                     for (int j = 0; j < w; j++)
@@ -58,10 +55,10 @@ namespace crystal
                             //printf("%lf %lf\n", s.x, s.y);
                         } while (sampler_thread->StartNextSample());
 
-                        mutexLock.lock();
-                        totalSampled += SPP;
-                        fprintf(stdout, "Tracing: %.2lf%%, %lld/%lld\n", (double)totalSampled / total * 100.0, totalSampled, total);
-                        mutexLock.unlock();
+                        //mutexLock.lock();
+                        //totalSampled += SPP;
+                        //fprintf(stdout, "Tracing: %.2lf%%, %lld/%lld\n", (double)totalSampled / total * 100.0, totalSampled, total);
+                        //mutexLock.unlock();
                     }
                 }
 
@@ -83,10 +80,7 @@ namespace crystal
                 //        }
                 //    }
                 // }
-                if (totalSampled == total)
-                {
-                    canExit = true;
-                }
+                finishedCount++;
             };
             if (mod < _numThreads - 1)
             {
@@ -98,6 +92,6 @@ namespace crystal
             }
         }
         // Wait until finish a frame
-        while (!canExit) {}
+        while (finishedCount < _numThreads) {}
     }
 }
