@@ -55,7 +55,10 @@ namespace crystal
                                 auto color = Evaluate(ray, scene, ptr(sampler_thread));
 
                                 frameBuffer->AddSample(xx, yy, color);
+                                //printf("%lf, %lf\n", s.x, s.y);
                             } while (sampler_thread->StartNextSample());
+
+                            //printf("================\n");
                         }
                     }
                     

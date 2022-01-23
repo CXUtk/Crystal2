@@ -5,9 +5,10 @@ namespace crystal
 {
 
 	static constexpr int PrimeTableSize = 1000;
+	static constexpr int kMaxResolution = 128;
 	const int Primes[PrimeTableSize] = {
 		2, 3, 5, 7, 11,
-		   13,     17,     19,     23,     29,
+		13,     17,     19,     23,     29,
 				31,     37,     41,     43,     47,     53,     59,     61,     67,     71,
 				73,     79,     83,     89,     97,    101,    103,    107,    109,    113,
 			   127,    131,    137,    139,    149,    151,    157,    163,    167,    173,
@@ -112,11 +113,7 @@ namespace crystal
 
 	static std::vector<std::vector<int>> PermutationTable;
 	static bool IsPermutationTableGenerated = false;
-
-	HaltonSampler::HaltonSampler()
-	{
-
-	}
+	static std::mt19937 mt;
 
 	float RadicalInverseSpecialized(int index, uint64_t v)
 	{
@@ -127,7 +124,7 @@ namespace crystal
 		while (v)
 		{
 			uint64_t digit = v % base;
-			result = result * invBase + digit;
+			result = result * base + digit;
 			invN *= invBase;
 			v /= base;
 		}
@@ -143,7 +140,7 @@ namespace crystal
 		while (v)
 		{
 			uint64_t digit = PermutationTable[index][v % base];
-			result = result * invBase + digit;
+			result = result * base + digit;
 			invN *= invBase;
 			v /= base;
 		}
@@ -171,12 +168,125 @@ namespace crystal
 		for (int i = 0; i < maxDimension; i++)
 		{
 			permTables.push_back(std::vector<int>(Primes[i]));
-			for (int j = 0; j < Primes[j]; j++)
+			for (int j = 0; j < Primes[i]; j++)
 			{
 				permTables[i][j] = j;
 			}
 			std::shuffle(permTables[i].begin(), permTables[i].end(), rng);
 		}
 		return permTables;
+	}
+
+	void extgcd(uint64_t a, uint64_t b, uint64_t& d, uint64_t& x, uint64_t& y)
+	{
+		if (!b)
+		{
+			d = a;
+			x = 1;
+			y = 0;
+		}
+		else
+		{
+			extgcd(b, a % b, d, y, x);
+			y -= x * (a / b);
+		}
+	}
+
+
+	uint64_t getInverse(uint64_t A, uint64_t M)
+	{
+		uint64_t d, x, y;
+		extgcd(A, M, d, x, y);
+		return d == 1 ? (x + M) % M : -1;
+	}
+
+
+	HaltonSampler::HaltonSampler(int samplesPerPixel, Bound2i sampleBound)
+		: GlobalSampler(samplesPerPixel)
+	{
+		if (!IsPermutationTableGenerated)
+		{
+			IsPermutationTableGenerated = true;
+			PermutationTable = GeneratePermutationTables(100, mt);
+		}
+		Point2i res = sampleBound.GetMaxPos() - sampleBound.GetMinPos();
+		for (int i = 0; i < 2; ++i)
+		{
+			int base = (i == 0) ? 2 : 3;
+			int scale = 1, exp = 0;
+			while (scale < std::min(res[i], kMaxResolution))
+			{
+				scale *= base;
+				++exp;
+			}
+			_baseScales[i] = scale;
+			_baseExponents[i] = exp;
+		}
+		_sampleStride = _baseScales[0] * _baseScales[1];
+
+		_multInverse[0] = getInverse(_baseScales[1], _baseScales[0]);
+		_multInverse[1] = getInverse(_baseScales[0], _baseScales[1]);
+	}
+
+	HaltonSampler::~HaltonSampler()
+	{}
+
+	std::shared_ptr<Sampler> HaltonSampler::Clone(int seed) const
+	{
+		auto other = std::make_shared<HaltonSampler>(*this);
+		return other;
+	}
+
+	uint64_t ReverseDigits(uint64_t v, int base, int n)
+	{
+		uint64_t result = 0;
+		for (int i = 0; i < n; i++)
+		{
+			result = result * base + (v % base);
+			v = v / base;
+		}
+		return result;
+	}
+
+	int HaltonSampler::GetVectorIndexForSample(int sampleNum) const
+	{
+		if (_currentPixel != _oldPixel)
+		{
+			_offsetForCurrentPixel = 0;
+			if (_sampleStride > 1)
+			{
+				Point2i pixelMod(_currentPixel.x % kMaxResolution, 
+					_currentPixel.y % kMaxResolution);
+				
+				for (int i = 0; i < 2; i++)
+				{
+					uint64_t remainder = ReverseDigits(pixelMod[i], i == 0 ? 2 : 3, _baseExponents[i]);
+					_offsetForCurrentPixel += remainder * _baseScales[!i] * _multInverse[i];
+				}
+			}
+			_oldPixel = _currentPixel;
+		}
+		return _offsetForCurrentPixel + sampleNum * _sampleStride;
+	}
+
+	float HaltonSampler::SampleValue(int vectorIndex, int dimension) const
+	{
+
+		if (dimension == 0)
+		{
+			return RadicalInverse(dimension, vectorIndex >> _baseExponents[0]);
+		}
+		else if (dimension == 1)
+		{
+			return RadicalInverse(dimension, vectorIndex / _baseScales[1]);
+		}
+		else
+		{
+			if (dimension >= PermutationTable.size())
+			{
+				return uniformRandomFloat(mt);
+			}
+			return RadicalInverseScrambled(dimension, vectorIndex);
+		}
 	}
 }

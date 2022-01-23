@@ -2,6 +2,7 @@
 #include <SJson/SJson.h>
 #include "DefaultSampler.h"
 #include "StratifiedSampler.h"
+#include "HaltonSampler.h"
 
 namespace crystal
 {
@@ -37,7 +38,12 @@ namespace crystal
             {
                 throw std::exception("Stratified sampler should have a square number of SamplesPerPixel");
             }
-            return std::make_shared<StratifiedSampler>(Point2i(side, side), 5);
+            return std::make_shared<StratifiedSampler>(Point2i(side, side), 18);
+        }
+        else if (samplerType == "Halton")
+        {
+            return std::make_shared<HaltonSampler>(configInfo.SamplesPerPixel, 
+                Bound2i(Point2i(0, 0), Point2i(configInfo.Width, configInfo.Height)));
         }
         else
         {

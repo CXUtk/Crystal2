@@ -56,7 +56,7 @@ void BVH::Build(const std::vector<const crystal::IIntersectable*>& objects)
 bool BVH::Intersect(const Ray3f& ray, SurfaceInteraction* info, float tMin, float tMax) const
 {
 	bool hit = false;
-	Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
+	Vector3f invDir(1.f / ray.dir.x, 1.f / ray.dir.y, 1.f / ray.dir.z);
 	bool dirIsNeg[3] = { invDir.x < 0, invDir.y < 0, invDir.z < 0 };
 	SurfaceInteraction isec;
 	int nodesStack[64]{}, top = 0;
@@ -110,7 +110,7 @@ bool BVH::Intersect(const Ray3f& ray, SurfaceInteraction* info, float tMin, floa
 bool BVH::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
 	float tMin, float tMax) const
 {
-	Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
+	Vector3f invDir(1.f / ray.dir.x, 1.f / ray.dir.y, 1.f / ray.dir.z);
 	bool dirIsNeg[3] = { invDir.x < 0, invDir.y < 0, invDir.z < 0 };
 
 	int nodesStack[64]{}, top = 0;
@@ -118,7 +118,8 @@ bool BVH::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreS
 	while (true)
 	{
 		auto& current = _nodes[currentNode];
-		if (RayBoxTest(ray, dirIsNeg, invDir, current.bound, tMin, tMax))
+		float t1 = tMin, t2 = tMax;
+		if (RayBoxTest(ray, dirIsNeg, invDir, current.bound, t1, t2))
 		{	
 			// 如果是叶子节点就是暴力判定一下
 			if (current.splitAxis == -1)
@@ -128,7 +129,7 @@ bool BVH::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreS
 				for (int i = 0; i < objCnt; i++)
 				{
 					if (startP[i] == ignoreShape) continue;
-					float t1 = tMin, t2 = tMax;
+					t1 = tMin, t2 = tMax;
 					if (!RayBoxTest(ray, dirIsNeg, invDir, startP[i]->GetBoundingBox(), t1, t2)) continue;
 					if (!startP[i]->IntersectTest(ray, ignoreShape, t1, t2)) continue;
 					return true;

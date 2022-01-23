@@ -22,7 +22,8 @@ namespace crystal
         {
             auto samplerNode = integratorNode->GetMember("Sampler");
             auto sampler = Sampler::LoadSampler(samplerNode, configInfo);
-
+            printf("Loaded Integrator: %s\n", type.c_str());
+            printf("Loaded Sampler: %s\n", samplerNode->GetMember("Type")->GetString().c_str());
             if (type == "PathTracer")
             {
                 auto maxDepth = integratorNode->GetMember("Depth")->GetInt();

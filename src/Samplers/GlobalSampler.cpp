@@ -13,7 +13,7 @@ namespace crystal
 		{
 			_currentDimension = _arrayEndDim;
 		}
-		return SampleDimension(_intervalSampleIndex, _currentDimension++);
+		return SampleValue(_startVectorIndex, _currentDimension++);
 	}
 
 	Point2f GlobalSampler::Get2D()
@@ -22,8 +22,8 @@ namespace crystal
 		{
 			_currentDimension = _arrayEndDim;
 		}
-		auto sample = Point2f(SampleDimension(_intervalSampleIndex, _currentDimension),
-			SampleDimension(_intervalSampleIndex, _currentDimension + 1));
+		auto sample = Point2f(SampleValue(_startVectorIndex, _currentDimension),
+			SampleValue(_startVectorIndex, _currentDimension + 1));
 		_currentDimension += 2;
 		return sample;
 	}
@@ -31,7 +31,7 @@ namespace crystal
 	bool GlobalSampler::StartNextSample()
 	{
 		_currentDimension = 0;
-		_intervalSampleIndex = GetIndexForSample(_currentSampleIndex + 1);
+		_startVectorIndex = GetVectorIndexForSample(_currentSampleIndex + 1);
 		return Sampler::StartNextSample();
 	}
 
@@ -39,7 +39,7 @@ namespace crystal
 	{
 		Sampler::StartPixel(pt);
 		_currentDimension = 0;
-		_intervalSampleIndex = GetIndexForSample(0);
+		_startVectorIndex = GetVectorIndexForSample(0);
 		_arrayEndDim = ArrayStartDim +
 			_sampleArray1D.size() + 2 * _sampleArray2D.size();
 
@@ -48,8 +48,8 @@ namespace crystal
 			int count = _samples1DArraySizes[i] * _samplesPerPixel;
 			for (int j = 0; j < count; j++)
 			{
-				int index = GetIndexForSample(j);
-				_sampleArray1D[i][j] = SampleDimension(index, ArrayStartDim + i);
+				int index = GetVectorIndexForSample(j);
+				_sampleArray1D[i][j] = SampleValue(index, ArrayStartDim + i);
 			}
 		}
 
@@ -59,12 +59,12 @@ namespace crystal
 			int count = _samples2DArraySizes[i] * _samplesPerPixel;
 			for (int j = 0; j < count; j++)
 			{
-				int index = GetIndexForSample(j);
-				_sampleArray2D[i][j].x = SampleDimension(index, dim);
-				_sampleArray2D[i][j].y = SampleDimension(index, dim + 1);
+				int index = GetVectorIndexForSample(j);
+				_sampleArray2D[i][j].x = SampleValue(index, dim);
+				_sampleArray2D[i][j].y = SampleValue(index, dim + 1);
 			}
 			dim += 2;
 		}
-		assert(dim == arrayEndDim);
+		assert(dim == _arrayEndDim);
 	}
 }

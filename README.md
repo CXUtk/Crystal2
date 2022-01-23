@@ -33,7 +33,7 @@ $ ./Crystal2 <config file> <scene file>
 3. Samplers
 - [x] Random Sampler
 - [x] Stratified Sampler
-- [ ] Halton Sampler
+- [x] Halton Sampler
 
 4. Textures
 - [x] 2D Texture

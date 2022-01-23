@@ -335,7 +335,7 @@
             3,
             1.5
           ],
-          "Radius": 0,
+          "Radius": 1,
           "Rotation": [
             -55,
             0,
@@ -343,7 +343,7 @@
           ]
         },
         "Material": {
-          "Type": "Diffuse",
+          "Type": "Micro",
           "Color": [
             1.0,
             1.0,
