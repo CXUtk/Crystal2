@@ -16,7 +16,7 @@ void Brute::Build(const std::vector<const crystal::IIntersectable*>& objects)
 	}
 }
 
-bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec,
+bool Brute::Intersect(const Ray3f& ray, SurfaceInteraction* isec,
 	float tMin, float tMax) const
 {
 	bool hit = false;
@@ -40,7 +40,7 @@ bool Brute::Intersect(const Ray& ray, SurfaceInteraction* isec,
 }
 
 
-bool Brute::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape,
+bool Brute::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape,
 	float tMin, float tMax) const
 {
 	for (auto& obj : _objects)

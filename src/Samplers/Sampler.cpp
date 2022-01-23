@@ -37,7 +37,7 @@ namespace crystal
             {
                 throw std::exception("Stratified sampler should have a square number of SamplesPerPixel");
             }
-            return std::make_shared<StratifiedSampler>(Point2i(side, side), 10);
+            return std::make_shared<StratifiedSampler>(Point2i(side, side), 5);
         }
         else
         {

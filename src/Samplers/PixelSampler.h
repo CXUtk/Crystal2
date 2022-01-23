@@ -16,6 +16,7 @@ namespace crystal
 		virtual std::shared_ptr<Sampler> Clone(int seed) const = 0;
 
 	protected:
+		// Each dimension is stratified according to samplesPerPixel
 		std::vector<std::vector<float>> _samples1D;
 		std::vector<std::vector<Point2f>> _samples2D;
 		int _dimensions;

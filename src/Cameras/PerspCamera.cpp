@@ -20,10 +20,10 @@ glm::mat4 PerspCamera::GetProjectionTransform() const {
     return glm::perspective(fov, aspect, zNear, zFar);
 }
 
-Ray PerspCamera::GenerateRay(glm::vec2 pos) {
+Ray3f PerspCamera::GenerateRay(glm::vec2 pos) {
     pos.x = pos.x * 2 - 1;
     pos.y = pos.y * 2 - 1;
     pos.x *= W, pos.y *= H;
     auto dir = glm::normalize(_right * pos.x + _up * pos.y + _look * zNear);
-    return Ray(eyePos, dir);
+    return Ray3f(eyePos, dir);
 }

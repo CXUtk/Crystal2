@@ -13,17 +13,17 @@ crystal::GeometricEntity::~GeometricEntity()
 	
 }
 
-BoundingBox crystal::GeometricEntity::GetBoundingBox() const
+Bound3f crystal::GeometricEntity::GetBoundingBox() const
 {
 	return _shape->GetBoundingBox();
 }
 
-bool crystal::GeometricEntity::Intersect(const Ray& ray, SurfaceInteraction* info) const
+bool crystal::GeometricEntity::Intersect(const Ray3f& ray, SurfaceInteraction* info) const
 {
 	return _shape->Intersect(ray, info);
 }
 
-bool crystal::GeometricEntity::IntersectTest(const Ray& ray, const IIntersectable* ignoreShape, 
+bool crystal::GeometricEntity::IntersectTest(const Ray3f& ray, const IIntersectable* ignoreShape, 
 	float tMin, float tMax) const
 {
 	if (ignoreShape == _shape) return false;

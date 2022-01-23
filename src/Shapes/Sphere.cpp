@@ -32,11 +32,11 @@ Sphere::Sphere(glm::vec3 pos,
 Sphere::~Sphere() {
 }
 
-BoundingBox Sphere::GetBoundingBox() const {
-    return BoundingBox(glm::vec3(_pos - _radius), glm::vec3(_pos + _radius));
+Bound3f Sphere::GetBoundingBox() const {
+    return Bound3f(glm::vec3(_pos - _radius), glm::vec3(_pos + _radius));
 }
 
-bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
+bool Sphere::Intersect(const Ray3f& ray, SurfaceInteraction* info) const {
     glm::vec3 P = _world2Local * (ray.start - _pos);
     glm::vec3 d = _world2Local * ray.dir;
     float a = glm::dot(d, d);
@@ -74,7 +74,7 @@ bool Sphere::Intersect(const Ray& ray, SurfaceInteraction* info) const {
     return true;
 }
 
-bool Sphere::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+bool Sphere::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
     float tMin, float tMax) const {
     if (tMin > tMax) return false;
     glm::vec3 P = _world2Local * (ray.start - _pos);

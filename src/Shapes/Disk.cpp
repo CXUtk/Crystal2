@@ -31,7 +31,7 @@ crystal::Disk::Disk(const Point3f& pos, float radius, const Vector3f& rotation)
 crystal::Disk::~Disk()
 {}
 
-BoundingBox crystal::Disk::GetBoundingBox() const
+Bound3f crystal::Disk::GetBoundingBox() const
 {
     Normal3f worldNormal = _local2World * Vector3f(0, 1, 0);
     float sinTheta = std::sqrt(1.f - worldNormal.y * worldNormal.y);
@@ -39,10 +39,10 @@ BoundingBox crystal::Disk::GetBoundingBox() const
     NAN_DETECT_V(sinTheta, "Disk::SinTheta");
 
     Vector3f offset = Vector3f(_radius, _radius * sinTheta, _radius);
-    return BoundingBox(_pos - offset, _pos + offset);
+    return Bound3f(_pos - offset, _pos + offset);
 }
 
-bool crystal::Disk::Intersect(const Ray& ray, SurfaceInteraction* isec) const
+bool crystal::Disk::Intersect(const Ray3f& ray, SurfaceInteraction* isec) const
 {
     glm::vec3 P = _world2Local * (ray.start - _pos);
     glm::vec3 d = _world2Local * ray.dir;
@@ -65,7 +65,7 @@ bool crystal::Disk::Intersect(const Ray& ray, SurfaceInteraction* isec) const
     return true;
 }
 
-bool crystal::Disk::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
+bool crystal::Disk::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
 {
     glm::vec3 P = _world2Local * (ray.start - _pos);
     glm::vec3 d = _world2Local * ray.dir;

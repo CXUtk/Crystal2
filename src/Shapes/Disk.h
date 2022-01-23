@@ -13,9 +13,9 @@ namespace crystal
 
         Disk(const Point3f& pos, float radius, const Vector3f& rotation);
         ~Disk() override;
-        BoundingBox GetBoundingBox() const override;
-        bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
-        bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, float tMin = 0,
+        Bound3f GetBoundingBox() const override;
+        bool Intersect(const Ray3f& ray, SurfaceInteraction* isec) const override;
+        bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, float tMin = 0,
             float tMax = std::numeric_limits<float>::infinity()) const override;
         float SurfaceArea() const override;
 

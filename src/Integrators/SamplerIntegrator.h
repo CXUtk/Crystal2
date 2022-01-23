@@ -15,7 +15,7 @@ namespace crystal
         virtual void Preprocess(Scene* scene, Sampler* sampler) = 0;
         void Render(Scene* scene, Camera* camera,
             FrameBuffer* frameBuffer) override;
-        virtual glm::vec3 Evaluate(const Ray& ray, Scene* scene,
+        virtual Spectrum Evaluate(const Ray3f& ray, Scene* scene,
             Sampler* sampler) = 0;
 
     private:

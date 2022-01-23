@@ -8,9 +8,9 @@ namespace crystal
 	{
 	public:
 		virtual ~IIntersectable() = 0 {}
-		virtual BoundingBox GetBoundingBox() const = 0;
-		virtual bool Intersect(const Ray& ray, SurfaceInteraction* info) const = 0;
-		virtual bool IntersectTest(const Ray& ray, const IIntersectable* ignoreShape, 
+		virtual Bound3f GetBoundingBox() const = 0;
+		virtual bool Intersect(const Ray3f& ray, SurfaceInteraction* info) const = 0;
+		virtual bool IntersectTest(const Ray3f& ray, const IIntersectable* ignoreShape, 
 			float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const = 0;
 	};
 
@@ -32,9 +32,9 @@ namespace crystal
 		GeometricEntity(const Shape* shape, const Material* material, const AreaLight* areaLight);
 		~GeometricEntity() override;
 
-		BoundingBox GetBoundingBox() const override;
-		bool Intersect(const Ray& ray, SurfaceInteraction* info) const override;
-		bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+		Bound3f GetBoundingBox() const override;
+		bool Intersect(const Ray3f& ray, SurfaceInteraction* info) const override;
+		bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
 			float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 
 		const Material* GetMaterial() const override { return _material; }

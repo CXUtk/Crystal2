@@ -10,10 +10,10 @@ namespace crystal
         PathTracingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads, int maxDepth);
 
         void Preprocess(Scene* scene, Sampler* sampler) override {};
-        glm::vec3 Evaluate(const Ray& ray, Scene* scene, Sampler* sampler) override;
+        glm::vec3 Evaluate(const Ray3f& ray, Scene* scene, Sampler* sampler) override;
 
     private:
-        glm::vec3 eval_rec(const Ray& ray, Scene* scene, Sampler* sampler, int level, bool specular);
+        glm::vec3 eval_rec(const Ray3f& ray, Scene* scene, Sampler* sampler, int level, bool specular);
 
         int _maxDepth;
 

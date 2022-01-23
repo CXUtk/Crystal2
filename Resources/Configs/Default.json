@@ -1,14 +1,14 @@
 {
   "Width": 700,
   "Height": 600,
-  "SamplesPerPixel": 1024,
+  "SamplesPerPixel": 16,
   "Threads": 8,
   "Acceleration": "BVH",
   "Integrator": {
     "Type": "PathTracer",
     "Depth": 16,
     "Sampler": {
-      "Type": "Stratified",
+      "Type": "Default",
       "Seed": 0
     }
   }

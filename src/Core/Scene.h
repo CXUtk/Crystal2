@@ -16,8 +16,8 @@ public:
     Scene();
     ~Scene();
 
-    bool Intersect(const Ray& ray, SurfaceInteraction* info) const;
-    bool IntersectTest(const Ray& ray, float tMin, float tMax,
+    bool Intersect(const Ray3f& ray, SurfaceInteraction* info) const;
+    bool IntersectTest(const Ray3f& ray, float tMin, float tMax,
         const crystal::IIntersectable* ignoreShape) const;
 
     void ForEachLights(std::function<void(const crystal::Light*)> action) const;

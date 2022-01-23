@@ -19,12 +19,12 @@ namespace crystal
 		int threads, int maxDepth) : SamplerIntegrator(sampler, threads), _maxDepth(maxDepth)
 	{}
 
-	glm::vec3 DirectLightingIntegrator::Evaluate(const Ray& ray, Scene* scene, Sampler* sampler)
+	glm::vec3 DirectLightingIntegrator::Evaluate(const Ray3f& ray, Scene* scene, Sampler* sampler)
 	{
 		return eval_rec(ray, scene, sampler, 0, true);
 	}
 
-	glm::vec3 DirectLightingIntegrator::eval_rec(const Ray& ray, Scene* scene, Sampler* sampler,
+	glm::vec3 DirectLightingIntegrator::eval_rec(const Ray3f& ray, Scene* scene, Sampler* sampler,
 		int level, bool specular)
 	{
 		Spectrum L(0.f);

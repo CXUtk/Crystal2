@@ -8,9 +8,9 @@ public:
     Triangle(const VertexData* a, const VertexData* b, const VertexData* c);
     ~Triangle() override;
 
-    BoundingBox GetBoundingBox() const override;
-    bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
-    bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+    Bound3f GetBoundingBox() const override;
+    bool Intersect(const Ray3f& ray, SurfaceInteraction* isec) const override;
+    bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
         float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
 
@@ -25,7 +25,7 @@ public:
 private:
     const VertexData* _vertices[3];
     glm::vec3 _dpdu, _dpdv;
-    BoundingBox _bbox;
+    Bound3f _bbox;
 
     void calculateDerivative();
     Vector3f sampleTriangle(glm::vec2 sample) const;

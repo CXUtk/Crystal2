@@ -7,7 +7,7 @@ class SurfaceInfo
 {
 public:
     SurfaceInfo(const Point3f& position, const Normal3f& normal) :_pos(position), _normal(normal) {}
-    Ray SpawnRay(glm::vec3 dir) const;
+    Ray3f SpawnRay(glm::vec3 dir) const;
     Point3f GetPosition() const { return _pos; }
     Normal3f GetNormal() const { return _normal; }
 
@@ -20,8 +20,8 @@ class SurfaceInteraction {
 public:
     SurfaceInteraction();
 
-    Ray SpawnRay(glm::vec3 dir) const;
-    Ray SpawnRayTo(const Point3f& pos) const;
+    Ray3f SpawnRay(glm::vec3 dir) const;
+    Ray3f SpawnRayTo(const Point3f& pos) const;
 
     void SetHitInfo(float t, const glm::vec3& hitPos, const glm::vec3& hitDir, const glm::vec3& normal, 
         glm::vec2 uv, bool frontFace, const glm::vec3& dpdu, const glm::vec3& dpdv);

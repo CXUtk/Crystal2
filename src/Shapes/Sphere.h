@@ -10,9 +10,9 @@ public:
     static std::shared_ptr<Shape> CreateSphere(JsonNode_CPTR pShapeNode);
     Sphere(glm::vec3 pos, float radius, glm::vec3 rotation);
     ~Sphere() override;
-    BoundingBox GetBoundingBox() const override;
-    bool Intersect(const Ray& ray, SurfaceInteraction* isec) const override;
-    bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, float tMin = 0,
+    Bound3f GetBoundingBox() const override;
+    bool Intersect(const Ray3f& ray, SurfaceInteraction* isec) const override;
+    bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, float tMin = 0,
         float tMax = std::numeric_limits<float>::infinity()) const override;
     float SurfaceArea() const override;
     

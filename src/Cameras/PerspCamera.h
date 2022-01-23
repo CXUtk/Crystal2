@@ -14,7 +14,7 @@ public:
 
     void SetEyePos(glm::vec3 pos) { eyePos = pos; }
     glm::vec3 GetEyePos() const { return eyePos; }
-    Ray GenerateRay(glm::vec2 pos) override;
+    Ray3f GenerateRay(glm::vec2 pos) override;
 
 private:
     glm::vec3 eyePos, lookAt, up;

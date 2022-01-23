@@ -22,76 +22,49 @@ namespace crystal
         int w = frameBuffer->Width(), h = frameBuffer->Height();
         int SPP = _sampler->GetSamplesPerPixel();
 
-        size_t total = (size_t)w * h * SPP;
-        size_t totalSampled = 0;
+        constexpr int TILE_SIZE = 32;
+        Point2i nTiles((w + TILE_SIZE - 1) / TILE_SIZE, (h + TILE_SIZE - 1) / TILE_SIZE);
 
-        std::mutex mutexLock;
-
-        //int split = h % _numThreads;
-        //int blockLower = h / _numThreads;
-        //int blockUpper = (h + _numThreads - 1) / _numThreads;
         std::atomic<int> finishedCount = 0;
-        for (int mod = 0; mod < _numThreads; mod++)
+
+        for (int x = 0; x < nTiles.x; x++)
         {
-            auto task = [&, mod, w, h]() {
-                auto sampler_thread = _sampler->Clone(mod);
-                
-                for (int i = mod; i < h; i += _numThreads)
-                {
-                    for (int j = 0; j < w; j++)
+            for (int y = 0; y < nTiles.y; y++)
+            {
+                auto task = [&, x, y]() {
+                    int x0 = TILE_SIZE * x;
+                    int x1 = std::min(x0 + TILE_SIZE, w);
+                    int y0 = TILE_SIZE * y;
+                    int y1 = std::min(y0 + TILE_SIZE, h);
+
+                    auto sampler_thread = _sampler->Clone(x * nTiles.y + y);
+
+                    for (int xx = x0; xx < x1; xx++)
                     {
-                        sampler_thread->StartPixel(Point2i(i, j));
-                        do
+                        for (int yy = y0; yy < y1; yy++)
                         {
-                            auto s = sampler_thread->Get2D();
-                            glm::vec2 pos = glm::vec2(j, i) + s;
-                            pos.x = pos.x / w;
-                            pos.y = pos.y / h;
+                            sampler_thread->StartPixel(Point2i(xx, yy));
+                            do
+                            {
+                                auto s = sampler_thread->Get2D();
+                                glm::vec2 pos = glm::vec2(xx, yy) + s;
+                                pos.x = pos.x / w;
+                                pos.y = pos.y / h;
 
-                            auto ray = camera->GenerateRay(pos);
-                            auto color = Evaluate(ray, scene, ptr(sampler_thread));
+                                auto ray = camera->GenerateRay(pos);
+                                auto color = Evaluate(ray, scene, ptr(sampler_thread));
 
-                            frameBuffer->AddSample(j, i, color);
-                            //printf("%lf %lf\n", s.x, s.y);
-                        } while (sampler_thread->StartNextSample());
-
-                        //mutexLock.lock();
-                        //totalSampled += SPP;
-                        //fprintf(stdout, "Tracing: %.2lf%%, %lld/%lld\n", (double)totalSampled / total * 100.0, totalSampled, total);
-                        //mutexLock.unlock();
+                                frameBuffer->AddSample(xx, yy, color);
+                            } while (sampler_thread->StartNextSample());
+                        }
                     }
-                }
-
-                //size_t totalSamplesThisTask = (size_t)w * ((mod < split) ? (blockUpper) : (blockLower));
-                //for (int k = 0; k < SPP; k++)
-                //{
-                //    for (int i = mod; i < h; i += _numThreads)
-                //    {
-                //        for (int j = 0; j < w; j++)
-                //        {
-                //            glm::vec2 pos = glm::vec2(j, i) + _sampler->GetFrame2D(glm::ivec2(j, i));
-                //            pos.x = pos.x / w;
-                //            pos.y = pos.y / h;
-
-                //            auto ray = camera->GenerateRay(pos);
-                //            auto color = Evaluate(ray, scene, ptr(_sampler));
-
-                //            frameBuffer->AddSample(j, i, color);
-                //        }
-                //    }
-                // }
-                finishedCount++;
-            };
-            if (mod < _numThreads - 1)
-            {
+                    
+                    finishedCount++;
+                };
                 _threadPool->RunAsync(task);
-            }
-            else
-            {
-                task();
             }
         }
         // Wait until finish a frame
-        while (finishedCount < _numThreads) {}
+        while (finishedCount < nTiles.x * nTiles.y) {}
     }
 }

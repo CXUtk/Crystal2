@@ -60,7 +60,7 @@ KDTree::~KDTree()
 
 void KDTree::Build(const std::vector<const crystal::IIntersectable*>& objects)
 {
-	_masterBox = BoundingBox();
+	_masterBox = Bound3f();
 	_nodes = new KDTreeNode[MAX_NODES];
 	for (const auto& obj : objects)
 	{
@@ -72,13 +72,13 @@ void KDTree::Build(const std::vector<const crystal::IIntersectable*>& objects)
 }
 
 
-bool KDTree::Intersect(const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const
+bool KDTree::Intersect(const Ray3f& ray, SurfaceInteraction* info, float tMin, float tMax) const
 {
 	if (!RayBoxTest(ray, _masterBox, tMin, tMax)) return false;
 	return ray_test(_root, ray, info, tMin, tMax);
 }
 
-bool KDTree::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
+bool KDTree::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
 {
 	return ray_test_p(_root, ray, ignoreShape, tMin, tMax);
 }
@@ -87,7 +87,7 @@ bool KDTree::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignore
 
 
 int KDTree::newNode(const std::vector<const crystal::IIntersectable*>& objs,
-	const BoundingBox& box, int split, float splitPos)
+	const Bound3f& box, int split, float splitPos)
 {
 	++_tot;
 	_nodes[_tot] = KDTreeNode(objs, split, splitPos);
@@ -97,7 +97,7 @@ int KDTree::newNode(const std::vector<const crystal::IIntersectable*>& objs,
 void KDTree::push_up(int p)
 {}
 
-void KDTree::_build(int& p, const BoundingBox& outerBox, std::vector<const crystal::IIntersectable*>& objs, int depth)
+void KDTree::_build(int& p, const Bound3f& outerBox, std::vector<const crystal::IIntersectable*>& objs, int depth)
 {
 	if (objs.size() <= 2 || depth == MAX_DEPTH)
 	{
@@ -190,7 +190,7 @@ void KDTree::_build(int& p, const BoundingBox& outerBox, std::vector<const cryst
 	push_up(p);
 }
 
-bool KDTree::ray_test(int p, const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const
+bool KDTree::ray_test(int p, const Ray3f& ray, SurfaceInteraction* info, float tMin, float tMax) const
 {
 	if (!p || tMin > tMax) return false;
 	//if (!outerBox.rayIntersect(ray, tMin, tMax)) return false;
@@ -231,7 +231,7 @@ bool KDTree::ray_test(int p, const Ray& ray, SurfaceInteraction* info, float tMi
 	return hit;
 }
 
-bool KDTree::ray_test_p(int p, const Ray& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
+bool KDTree::ray_test_p(int p, const Ray3f& ray, const crystal::IIntersectable* ignoreShape, float tMin, float tMax) const
 {
 	if (!p || tMin > tMax) return false;
 	//if (!outerBox.rayIntersect(ray, tMin, tMax)) return false;

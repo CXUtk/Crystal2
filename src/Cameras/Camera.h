@@ -11,5 +11,5 @@ public:
     static std::unique_ptr<Camera> CreateCamera(JsonNode_CPTR pCameraNode,
         const config::ConfigInfo& configInfo);
 
-    virtual Ray GenerateRay(glm::vec2 pos) = 0;
+    virtual Ray3f GenerateRay(glm::vec2 pos) = 0;
 };

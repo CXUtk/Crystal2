@@ -17,7 +17,7 @@ constexpr float INTERSECT_COST = 1.0f;
 
 struct BVHNode
 {
-	BoundingBox bound;
+	Bound3f bound;
 	union
 	{
 		// Leaf
@@ -53,7 +53,7 @@ void BVH::Build(const std::vector<const crystal::IIntersectable*>& objects)
 	_build(_root, 0, objects.size() - 1);
 }
 
-bool BVH::Intersect(const Ray& ray, SurfaceInteraction* info, float tMin, float tMax) const
+bool BVH::Intersect(const Ray3f& ray, SurfaceInteraction* info, float tMin, float tMax) const
 {
 	bool hit = false;
 	Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
@@ -107,7 +107,7 @@ bool BVH::Intersect(const Ray& ray, SurfaceInteraction* info, float tMin, float 
 	return hit;
 }
 
-bool BVH::IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+bool BVH::IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
 	float tMin, float tMax) const
 {
 	Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
@@ -265,7 +265,7 @@ void BVH::_build(int& p, int l, int r)
 //	return hit;
 //}
 
-int BVH::splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos)
+int BVH::splitByEqualCount(int l, int r, const Bound3f& box, int& splitPos)
 {
 	int splitAxis = box.MaxExtent();
 	// 按照某种方式分割物体，并且排序
@@ -277,7 +277,7 @@ int BVH::splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos)
 	return splitAxis;
 }
 
-bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& splitPos)
+bool BVH::splitBySAH(int l, int r, const Bound3f& box, int& splitAxis, int& splitPos)
 {
 	splitAxis = 0, splitPos = l;
 	float minCost = std::numeric_limits<float>::infinity();
@@ -292,7 +292,7 @@ bool BVH::splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& 
 		};
 		std::sort(_objects.begin() + l, _objects.begin() + r + 1, cmp);
 
-		BoundingBox currentBox;
+		Bound3f currentBox;
 		// 求后缀包围盒表面积和
 		sufArea[r - l + 1] = 0.f;
 		for (int j = r - l; j >= 0; j--)
@@ -342,7 +342,7 @@ int BVH::createLeaf(int& p, int l, int r)
 	return _tot;
 }
 
-int BVH::createInternal(int splitAxis, const BoundingBox& box)
+int BVH::createInternal(int splitAxis, const Bound3f& box)
 {
 	_tot++;
 	// Internal Part

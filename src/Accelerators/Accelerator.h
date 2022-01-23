@@ -12,9 +12,9 @@ public:
 	virtual ~Accelerator() = 0 {}
 
 	virtual void Build(const std::vector<const crystal::IIntersectable*>& objects) = 0;
-	virtual bool Intersect(const Ray& ray, SurfaceInteraction* info,
+	virtual bool Intersect(const Ray3f& ray, SurfaceInteraction* info,
 		float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const = 0;
-	virtual bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+	virtual bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
 		float tMin = 0,
 		float tMax = std::numeric_limits<float>::infinity()) const = 0;
 

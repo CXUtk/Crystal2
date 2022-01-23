@@ -47,12 +47,12 @@ std::unique_ptr<Scene> Scene::CreateScene(JsonNode_CPTR pSceneNode,
 Scene::~Scene()
 {}
 
-bool Scene::Intersect(const Ray& ray, SurfaceInteraction* info) const
+bool Scene::Intersect(const Ray3f& ray, SurfaceInteraction* info) const
 {
 	return _accelStructure->Intersect(ray, info);
 }
 
-bool Scene::IntersectTest(const Ray& ray, float tMin, float tMax, 
+bool Scene::IntersectTest(const Ray3f& ray, float tMin, float tMax, 
 	const crystal::IIntersectable* ignoreShape) const
 {
 	return _accelStructure->IntersectTest(ray, ignoreShape, tMin, tMax);

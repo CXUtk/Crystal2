@@ -10,10 +10,10 @@ namespace crystal
         DirectLightingIntegrator(const std::shared_ptr<Sampler>& sampler, int threads, int maxDepth);
 
         void Preprocess(Scene* scene, Sampler* sampler) override {};
-        Spectrum Evaluate(const Ray& ray, Scene* scene, Sampler* sampler) override;
+        Spectrum Evaluate(const Ray3f& ray, Scene* scene, Sampler* sampler) override;
 
     private:
-        Spectrum eval_rec(const Ray& ray, Scene* scene, Sampler* sampler, int level, bool specular);
+        Spectrum eval_rec(const Ray3f& ray, Scene* scene, Sampler* sampler, int level, bool specular);
 
         int _maxDepth;
 

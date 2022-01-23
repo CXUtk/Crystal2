@@ -25,13 +25,13 @@ namespace crystal
 	}
 
 
-	glm::vec3 PathTracingIntegrator::Evaluate(const Ray& ray, Scene* scene,
+	glm::vec3 PathTracingIntegrator::Evaluate(const Ray3f& ray, Scene* scene,
 		Sampler* sampler)
 	{
 		int bounces = 0;
 		bool lightPath = true;
 		Spectrum beta(1.f), L(0.f);
-		Ray currentRay(ray);
+		Ray3f currentRay(ray);
 
 		for (; bounces < _maxDepth; bounces++)
 		{

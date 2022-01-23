@@ -8,9 +8,9 @@ public:
 	BVH();
 	~BVH() override;
 	void Build(const std::vector<const crystal::IIntersectable*>& objects) override;
-	bool Intersect(const Ray& ray, SurfaceInteraction* info, 
+	bool Intersect(const Ray3f& ray, SurfaceInteraction* info, 
 		float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
-	bool IntersectTest(const Ray& ray, const crystal::IIntersectable* ignoreShape, 
+	bool IntersectTest(const Ray3f& ray, const crystal::IIntersectable* ignoreShape, 
 		float tMin = 0, float tMax = std::numeric_limits<float>::infinity()) const override;
 
 private:
@@ -26,9 +26,9 @@ private:
 	//	float tMin, float tMax) const;
 
 
-	int splitByEqualCount(int l, int r, const BoundingBox& box, int& splitPos);
-	bool splitBySAH(int l, int r, const BoundingBox& box, int& splitAxis, int& splitPos);
+	int splitByEqualCount(int l, int r, const Bound3f& box, int& splitPos);
+	bool splitBySAH(int l, int r, const Bound3f& box, int& splitAxis, int& splitPos);
 
 	int createLeaf(int& p, int l, int r);
-	int createInternal(int splitAxis, const BoundingBox& box);
+	int createInternal(int splitAxis, const Bound3f& box);
 };

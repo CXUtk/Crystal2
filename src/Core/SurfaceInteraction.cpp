@@ -9,12 +9,12 @@ SurfaceInteraction::SurfaceInteraction() {
 
 }
 
-Ray SurfaceInteraction::SpawnRay(glm::vec3 dir) const {
+Ray3f SurfaceInteraction::SpawnRay(glm::vec3 dir) const {
     bool back = glm::dot(dir, _normal) < 0;
     return Ray(_hitPos + ((back) ? -_normal : _normal) * EPS, dir);
 }
 
-Ray SurfaceInteraction::SpawnRayTo(const Point3f& pos) const
+Ray3f SurfaceInteraction::SpawnRayTo(const Point3f& pos) const
 {
     bool back = glm::dot(pos - _hitPos, _normal) < 0;
     Point3f origin = _hitPos + ((back) ? -_normal : _normal) * EPS;
@@ -55,7 +55,7 @@ Spectrum SurfaceInteraction::Le(const Vector3f& w) const
     return areaLight ? areaLight->EvalEmitRadiance(GetSurfaceInfo(true), w) : Spectrum(0.f);
 }
 
-Ray SurfaceInfo::SpawnRay(glm::vec3 dir) const
+Ray3f SurfaceInfo::SpawnRay(glm::vec3 dir) const
 {
-    return Ray(_pos + _normal * EPS, dir);
+    return Ray3f(_pos + _normal * EPS, dir);
 }
